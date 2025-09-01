@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Skynet.Core.Time;
 
 namespace Skynet.Core.Localization
 {
@@ -12,10 +13,11 @@ namespace Skynet.Core.Localization
             _cultureProvider = cultureProvider;
         }
 
-        public string Format(DateTime value, string patternAliasOrCustom)
+        public string Format(IClock clock, string patternAliasOrCustom)
         {
             var culture = _cultureProvider.GetCulture();
-            return value.ToString(patternAliasOrCustom, culture);
+            var now = clock.UtcNow; 
+            return now.ToString(patternAliasOrCustom, culture);
         }
     }
 }

@@ -1,9 +1,9 @@
-using System;
+using Skynet.Core.Time;
 
 namespace Skynet.Core.Localization
 {
     public interface IDateTimeFormatter
     {
-        string Format(DateTime value, string patternAliasOrCustom);
+        string Format(IClock value, string patternAliasOrCustom);
     }
 }

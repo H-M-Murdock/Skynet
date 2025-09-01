@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Skynet.Core.Localization;
+using Skynet.Core.Time;
 using Xunit;
 
 namespace Skynet.Tests.Localization
@@ -47,13 +48,21 @@ namespace Skynet.Tests.Localization
             var provider = new CurrentCultureProvider(store, options);
             var formatter = new DateTimeFormatter(provider);
 
-            var dt = new DateTime(2025, 7, 4, 13, 5, 0); // 4th of July
+            // 4th of July
+            var fixedUtc = new DateTime(2025, 7, 4, 13, 5, 0, DateTimeKind.Utc);
+            IClock clock = new FrozenClock(fixedUtc);
+
             // en-US short date is typically 7/4/2025
-            Assert.Equal(dt.ToString("d", new CultureInfo("en-US")), formatter.Format(dt, DateTimePattern.ShortDate));
+            Assert.Equal(
+                fixedUtc.ToString("d", new CultureInfo("en-US")),
+                formatter.Format(clock, DateTimePattern.ShortDate));
 
             store.SetCulture("de-DE");
+
             // de-DE short date is typically 04.07.2025
-            Assert.Equal(dt.ToString("d", new CultureInfo("de-DE")), formatter.Format(dt, DateTimePattern.ShortDate));
+            Assert.Equal(
+                fixedUtc.ToString("d", new CultureInfo("de-DE")),
+                formatter.Format(clock, DateTimePattern.ShortDate));
         }
 
         [Fact]
@@ -65,8 +74,12 @@ namespace Skynet.Tests.Localization
             var provider = new CurrentCultureProvider(store, options);
             var formatter = new DateTimeFormatter(provider);
 
-            var dt = new DateTime(2025, 12, 31, 23, 59, 30);
-            Assert.Equal(dt.ToString("F", new CultureInfo("de-DE")), formatter.Format(dt, DateTimePattern.LongDateTime));
+            var fixedUtc = new DateTime(2025, 12, 31, 23, 59, 30, DateTimeKind.Utc);
+            IClock clock = new FrozenClock(fixedUtc);
+
+            Assert.Equal(
+                fixedUtc.ToString("F", new CultureInfo("de-DE")),
+                formatter.Format(clock, DateTimePattern.LongDateTime));
         }
 
         [Fact]
@@ -77,9 +90,14 @@ namespace Skynet.Tests.Localization
             var provider = new CurrentCultureProvider(store, new LocalizationOptions());
             var formatter = new DateTimeFormatter(provider);
 
-            var dt = new DateTime(2025, 1, 2, 3, 4, 5);
+            var fixedUtc = new DateTime(2025, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+            IClock clock = new FrozenClock(fixedUtc);
+
             var custom = "yyyy-MM-dd HH:mm";
-            Assert.Equal(dt.ToString(custom, new CultureInfo("en-GB")), formatter.Format(dt, custom));
+
+            Assert.Equal(
+                fixedUtc.ToString(custom, new CultureInfo("en-GB")),
+                formatter.Format(clock, custom));
         }
         
         /// <summary>
@@ -138,9 +156,12 @@ namespace Skynet.Tests.Localization
             var provider = new CurrentCultureProvider(store, new LocalizationOptions());
             var formatter = new DateTimeFormatter(provider);
 
-            var dt = new DateTime(2025, 07, 04, 13, 05, 00);
-            var expected = dt.ToString(pattern, new CultureInfo(culture));
-            Assert.Equal(expected, formatter.Format(dt, pattern));
+            var fixedUtc = new DateTime(2025, 07, 04, 13, 05, 00, DateTimeKind.Utc);
+            IClock clock = new FrozenClock(fixedUtc);
+
+            var expected = fixedUtc.ToString(pattern, new CultureInfo(culture));
+
+            Assert.Equal(expected, formatter.Format(clock, pattern));
         }
 
         

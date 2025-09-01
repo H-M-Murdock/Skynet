@@ -11,7 +11,7 @@ namespace Skynet.Tests.Localization
         public void Factory_Creates_Scope_That_Applies_Culture()
         {
             var services = new ServiceCollection();
-            services.AddSkynetLocalizationCore(new LocalizationOptions { DefaultCulture = "en-US" });
+            services.AddLocalizationCore(new LocalizationOptions { DefaultCulture = "en-US" });
 
             using var sp = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
             using var scope = sp.CreateScope();

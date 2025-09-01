@@ -5,33 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScope.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimePattern.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ICurrentCultureProvider.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Localization.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/InvariantCultureFixture.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationStoreTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CurrentCultureProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CurrentCultureProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ILocalizationStore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ILocalizationStore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/InMemoryLocalizationStore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/InMemoryLocalizationStore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/UnitTest1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,18 +27,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "H-M-Murdock"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;H-M-Murdock&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/H-M-Murdock/Skynet.git",
-    "accountId": "acfe776d-1a24-465e-9245-5aa33fa56398"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/H-M-Murdock/Skynet.git&quot;,
+    &quot;accountId&quot;: &quot;acfe776d-1a24-465e-9245-5aa33fa56398&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
@@ -70,17 +56,23 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/InvariantCultureFixture.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationStoreTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="325pHELQYctmMmqhgYlDYbdpRRK" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -95,7 +87,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feature/localization-datetime",
+    "git-widget-placeholder": "feature/clock",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -112,7 +104,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756720198204</updated>
-      <workItem from="1756720199993" duration="5395000" />
+      <workItem from="1756720199993" duration="5954000" />
+      <workItem from="1756726244591" duration="3041000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />

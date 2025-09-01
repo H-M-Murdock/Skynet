@@ -11,7 +11,7 @@ namespace Skynet.Tests.Localization
         public void AddSkynetLocalizationCore_Resolves_All_Services()
         {
             var services = new ServiceCollection();
-            services.AddSkynetLocalizationCore(new LocalizationOptions { DefaultCulture = "en-US" });
+            services.AddLocalizationCore(new LocalizationOptions { DefaultCulture = "en-US" });
 
             // validateScopes: true -> verhindert Resolve von Scoped aus Root
             using var sp = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
@@ -31,7 +31,7 @@ namespace Skynet.Tests.Localization
         public void ResolvingScopedFromRoot_Throws_WhenValidateScopesEnabled()
         {
             var services = new ServiceCollection();
-            services.AddSkynetLocalizationCore();
+            services.AddLocalizationCore();
             using var sp = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
 
             Assert.Throws<InvalidOperationException>(() => sp.GetRequiredService<ICurrentCultureProvider>());

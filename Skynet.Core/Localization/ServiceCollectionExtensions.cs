@@ -7,7 +7,7 @@ namespace Skynet.Core.Localization
         /// <summary>
         /// Registers localization primitives. You can bind LocalizationOptions via Options pattern later.
         /// </summary>
-        public static IServiceCollection AddSkynetLocalizationCore(
+        public static IServiceCollection AddLocalizationCore(
             this IServiceCollection services,
             LocalizationOptions? options = null)
         {
