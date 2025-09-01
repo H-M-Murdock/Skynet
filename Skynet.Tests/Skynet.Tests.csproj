@@ -18,4 +18,8 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Skynet.Core\Skynet.Core.csproj" />
+    </ItemGroup>
+
 </Project>
