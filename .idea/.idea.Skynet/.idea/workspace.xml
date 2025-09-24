@@ -5,19 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceQueryOptions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +55,15 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceQueryOptions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceRequest.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
@@ -81,22 +89,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feature/clock",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/resource-locator&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="" />
@@ -105,7 +113,9 @@
       <option name="presentableId" value="Default" />
       <updated>1756720198204</updated>
       <workItem from="1756720199993" duration="5954000" />
-      <workItem from="1756726244591" duration="3041000" />
+      <workItem from="1756726244591" duration="4779000" />
+      <workItem from="1758698069066" duration="238000" />
+      <workItem from="1758698428420" duration="9254000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />

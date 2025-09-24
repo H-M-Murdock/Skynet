@@ -1,10 +1,23 @@
-// Skynet.Core/Localization/CultureThreadScopeFactory.cs
-namespace Skynet.Core.Localization
+using System.Globalization;
+
+namespace Skynet.Core.Localization;
+
+public sealed class CultureThreadScopeFactory : ICultureThreadScopeFactory
 {
-    public class CultureThreadScopeFactory : ICultureThreadScopeFactory
+    private sealed class OverrideProvider : ICurrentCultureProvider
     {
-        private readonly ICurrentCultureProvider _provider;
-        public CultureThreadScopeFactory(ICurrentCultureProvider provider) => _provider = provider;
-        public CultureThreadScope BeginScope() => new CultureThreadScope(_provider);
+        private readonly CultureInfo _culture;
+        public OverrideProvider(CultureInfo culture) => _culture = culture;
+        public CultureInfo GetCulture() => _culture;
     }
+
+    private readonly ICurrentCultureProvider _provider;
+
+    public CultureThreadScopeFactory(ICurrentCultureProvider provider)
+        => _provider = provider;
+
+    public IDisposable BeginScope() => new CultureThreadScope(_provider);
+
+    public IDisposable BeginScope(CultureInfo overrideCulture)
+        => new CultureThreadScope(new OverrideProvider(overrideCulture));
 }
