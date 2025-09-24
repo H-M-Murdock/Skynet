@@ -1,3 +1,4 @@
+// Skynet.Core/ResourceProvider/ResourceLocator.cs
 namespace Skynet.Core.ResourceProvider;
 
 using System;
@@ -6,14 +7,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Skynet.Core.Tenant;
 using Skynet.Core.Localization;
+using Skynet.Core.Tenant;
 
-/// <summary>
-/// The locator iterates the tenant resolution chain and provider list in order, returning the first hit.
-/// It propagates cancellation correctly and wraps the operation in an optional culture scope,
-/// so providers can read the ambient CultureInfo without polluting the core request contract.
-/// </summary>
 public sealed class ResourceLocator : IResourceLocator
 {
     private readonly ImmutableArray<IResourceProvider> _providers;
@@ -26,15 +22,16 @@ public sealed class ResourceLocator : IResourceLocator
         ICultureThreadScopeFactory? cultureScopeFactory = null)
     {
         ArgumentNullException.ThrowIfNull(providers);
-        _providers = [..providers];
+        _providers = providers.ToImmutableArray();
         _tenantContext = tenantContext ?? throw new ArgumentNullException(nameof(tenantContext));
         _cultureScopeFactory = cultureScopeFactory; // optional
     }
 
+    // Convenience: Overloads ohne Options delegieren auf die Options-Varianten
     public Task<IResourceResult> GetAsync(ResourceRequest request, CancellationToken cancellationToken = default)
         => GetAsync(request, new ResourceQueryOptions(), cancellationToken);
 
-    public Task<(bool found, IResourceResult? result)> TryGetAsync(ResourceRequest request, CancellationToken cancellationToken = default)
+    public Task<ResourceLookupResult> TryGetAsync(ResourceRequest request, CancellationToken cancellationToken = default)
         => TryGetAsync(request, new ResourceQueryOptions(), cancellationToken);
 
     public async Task<IResourceResult> GetAsync(
@@ -42,21 +39,23 @@ public sealed class ResourceLocator : IResourceLocator
         ResourceQueryOptions options,
         CancellationToken cancellationToken = default)
     {
-        var (found, result) = await TryGetAsync(request, options, cancellationToken).ConfigureAwait(false);
-        if (found) return result!;
+        var res = await TryGetAsync(request, options, cancellationToken).ConfigureAwait(false);
+        if (res.Status is ResourceLookupStatus.Found or ResourceLookupStatus.NotModified)
+            return res.Resource!;
+
         var chain = string.Join("->", _tenantContext.ResolutionChain.Select(t => t.ToString()));
         throw new KeyNotFoundException($"Resource not found for key '{request.Key}' (tenant chain: {chain})");
     }
 
-    public async Task<(bool found, IResourceResult? result)> TryGetAsync(
+    public async Task<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
         ResourceQueryOptions options,
         CancellationToken cancellationToken = default)
     {
-        // Öffne optional einen Culture-Scope – nur wenn Factory vorhanden
         IDisposable? scope = null;
         try
         {
+            // Kultur-Scope optional öffnen (Default oder Override)
             if (_cultureScopeFactory is not null)
             {
                 scope = options?.CultureOverride is { } ci
@@ -67,25 +66,35 @@ public sealed class ResourceLocator : IResourceLocator
             foreach (var tenant in _tenantContext.ResolutionChain)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                var scoped = request with { TenantId = tenant };
 
-                var scopedRequest = request with { TenantId = tenant };
-
-                // definierte Provider-Reihenfolge – erster Treffer gewinnt
                 foreach (var provider in _providers)
                 {
-                    if (!provider.CanHandle(scopedRequest))
-                        continue;
+                    if (!provider.CanHandle(scoped)) continue;
 
-                    var (found, result) = await provider
-                        .TryGetAsync(scopedRequest, cancellationToken)
-                        .ConfigureAwait(false);
+                    var lookup = await provider.TryGetAsync(scoped, cancellationToken).ConfigureAwait(false);
 
-                    if (found)
-                        return (true, result);
+                    switch (lookup.Status)
+                    {
+                        case ResourceLookupStatus.Found:
+                        case ResourceLookupStatus.NotModified:
+                            // Tenant auffüllen, falls Provider ihn nicht gesetzt hat
+                            return lookup.ResolvedTenant is null
+                                ? ResourceLookupResult.Found(
+                                    lookup.Resource!,
+                                    provider: lookup.Provider,
+                                    t: tenant) 
+                                : lookup;
+
+                        case ResourceLookupStatus.NotFound:
+                        default:
+                            // Nächsten Provider / nächsten Tenant versuchen
+                            break;
+                    }
                 }
             }
 
-            return (false, null);
+            return ResourceLookupResult.NotFound();
         }
         finally
         {

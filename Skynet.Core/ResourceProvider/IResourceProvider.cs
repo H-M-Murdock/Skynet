@@ -1,14 +1,14 @@
+// Skynet.Core/ResourceProvider/IResourceProvider.cs
 namespace Skynet.Core.ResourceProvider;
-using System;
-using System.IO;
+
+using System.Threading;
+using System.Threading.Tasks;
 
 public interface IResourceProvider
 {
-    /// <summary>Fast, synchronous capability check (avoid I/O).</summary>
     bool CanHandle(ResourceRequest request);
 
-    /// <summary>Asynchronously tries to resolve a resource for the given request.</summary>
-    Task<(bool found, IResourceResult? result)> TryGetAsync(
+    ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
         CancellationToken cancellationToken = default);
 }

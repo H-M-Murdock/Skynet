@@ -1,3 +1,4 @@
+// Skynet.Core/ResourceProvider/MemoryResourceProvider.cs
 namespace Skynet.Core.ResourceProvider;
 
 using System;
@@ -10,8 +11,8 @@ using System.Threading.Tasks;
 using Skynet.Core.Tenant;
 
 /// <summary>
-/// Simple in-memory provider for bootstrapping and tests.
-/// Stores resources in a concurrent dictionary keyed by (TenantId, Key).
+/// Simple memory-backed provider for tests and bootstrapping.
+/// Stores resources per (TenantId, Key) with metadata and SHA-256 version.
 /// </summary>
 public sealed class MemoryResourceProvider : IResourceProvider
 {
@@ -23,9 +24,9 @@ public sealed class MemoryResourceProvider : IResourceProvider
 
     private readonly ConcurrentDictionary<(TenantId TenantId, string Key), Entry> _store = new();
 
-    public bool CanHandle(ResourceRequest request) => true; // Handles all keys
+    public bool CanHandle(ResourceRequest request) => true; // handles all keys by design
 
-    public Task<(bool found, IResourceResult? result)> TryGetAsync(
+    public ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -34,22 +35,27 @@ public sealed class MemoryResourceProvider : IResourceProvider
         if (_store.TryGetValue((request.TenantId, request.Key), out var e))
         {
             var ms = new MemoryStream(e.Bytes, writable: false);
-            IResourceResult result = new ResourceResult(
+            IResourceResult rr = new ResourceResult(
                 tenantId: request.TenantId,
                 key: request.Key,
                 content: ms,
                 contentType: e.ContentType,
                 lastModified: e.LastModified,
                 contentLength: e.Bytes.LongLength,
-                version: e.Version
-            );
-            return Task.FromResult((true, result));
+                version: e.Version);
+
+            return ValueTask.FromResult(
+                ResourceLookupResult.Found(
+                    rr,
+                    provider: nameof(MemoryResourceProvider),
+                    t: request.TenantId));
+
         }
 
-        return Task.FromResult((false, (IResourceResult?)null));
+        return ValueTask.FromResult(ResourceLookupResult.NotFound());
     }
 
-    // Helpers for populating the provider -----------------
+    // --- Convenience writers (for tests/dev/bootstrap) ---
 
     public void PutText(TenantId tenantId, string key, string text, string contentType = "text/plain")
     {
@@ -59,6 +65,7 @@ public sealed class MemoryResourceProvider : IResourceProvider
 
     public void PutBytes(TenantId tenantId, string key, byte[] data, string? contentType = null)
     {
+        // store reference as-is; if mutation is a concern, copy: data = data.ToArray();
         _store[(tenantId, key)] = new Entry(data, contentType, DateTimeOffset.UtcNow, ComputeHash(data));
     }
 
