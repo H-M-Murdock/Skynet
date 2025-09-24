@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceQueryOptions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +30,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -58,7 +50,9 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceQueryOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceRequest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
@@ -115,7 +109,7 @@
       <workItem from="1756720199993" duration="5954000" />
       <workItem from="1756726244591" duration="4779000" />
       <workItem from="1758698069066" duration="238000" />
-      <workItem from="1758698428420" duration="9254000" />
+      <workItem from="1758698428420" duration="10623000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -125,7 +119,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756720677127</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat(resources): implement ResourceLocator with tenant fallback, cancellation, and optional culture scope">
+      <option name="closed" value="true" />
+      <created>1758713795386</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1758713795386</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,7 +138,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Add Projekts" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Projekts" />
+    <MESSAGE value="feat(resources): implement ResourceLocator with tenant fallback, cancellation, and optional culture scope" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(resources): implement ResourceLocator with tenant fallback, cancellation, and optional culture scope" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
