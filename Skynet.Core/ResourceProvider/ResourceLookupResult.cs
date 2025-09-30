@@ -14,7 +14,7 @@ public readonly struct ResourceLookupResult
         string? reason = null)
         => (Status, Resource, Reason) = (status, resource, reason);
 
-    public static ResourceLookupResult Found(IResourceResult r, ProviderId? provider = null, TenantId? t = null)
+    public static ResourceLookupResult Found(IResourceResult r, TenantId? t = null)
         => new(ResourceLookupStatus.Found, r);
 
     public static ResourceLookupResult NotFound(string? reason = null)

@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ProviderId.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ProgramTenantContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +114,7 @@
       <workItem from="1758698069066" duration="238000" />
       <workItem from="1758698428420" duration="11873000" />
       <workItem from="1759211487678" duration="57000" />
-      <workItem from="1759211594118" duration="2776000" />
+      <workItem from="1759211594118" duration="4366000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -154,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758716383530</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="ProviderID inerted">
+      <option name="closed" value="true" />
+      <created>1759214407241</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1759214407241</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,7 +170,8 @@
     <MESSAGE value="feat(resources): implement ResourceLocator with tenant fallback, cancellation, and optional culture scope" />
     <MESSAGE value="refactor(api): replace tuple with ResourceLookupResult (status + payload), return ValueTask to reduce allocations" />
     <MESSAGE value="fix(locator): use Found(...) factory and pass tenant via 't' named argument" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(locator): use Found(...) factory and pass tenant via 't' named argument" />
+    <MESSAGE value="ProviderID inerted" />
+    <option name="LAST_COMMIT_MESSAGE" value="ProviderID inerted" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

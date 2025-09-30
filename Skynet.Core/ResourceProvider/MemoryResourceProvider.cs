@@ -33,27 +33,20 @@ public sealed class MemoryResourceProvider : IResourceProvider
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (_store.TryGetValue((request.TenantId, request.Key), out var e))
-        {
-            var ms = new MemoryStream(e.Bytes, writable: false);
-            IResourceResult rr = new ResourceResult(
-                tenantId: request.TenantId,
-                key: request.Key,
-                content: ms,
-                contentType: e.ContentType,
-                lastModified: e.LastModified,
-                contentLength: e.Bytes.LongLength,
-                version: e.Version);
+        if (!_store.TryGetValue((request.TenantId, request.Key), out var e))
+            return ValueTask.FromResult(ResourceLookupResult.NotFound());
+        var ms = new MemoryStream(e.Bytes, writable: false);
+        IResourceResult rr = new ResourceResult(
+            tenantId: request.TenantId,
+            key: request.Key,
+            content: ms,
+            contentType: e.ContentType,
+            lastModified: e.LastModified,
+            contentLength: e.Bytes.LongLength,
+            version: e.Version,
+            providerId: Id); // ProviderId im Result setzen
 
-            return ValueTask.FromResult(
-                ResourceLookupResult.Found(
-                    rr,
-                    provider: Id,
-                    t: request.TenantId));
-
-        }
-
-        return ValueTask.FromResult(ResourceLookupResult.NotFound());
+        return ValueTask.FromResult(ResourceLookupResult.Found(rr));
     }
 
     // --- Convenience writers (for tests/dev/bootstrap) ---
