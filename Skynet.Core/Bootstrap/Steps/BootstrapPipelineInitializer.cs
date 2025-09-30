@@ -1,6 +1,8 @@
 // Skynet.Core.Bootstrap/Steps/BootstrapPipeline.cs
 
+
 namespace Skynet.Core.Bootstrap;
+
 
 public static class BootstrapPipeline
 {
@@ -11,7 +13,7 @@ public static class BootstrapPipeline
             RuntimeLevel.Core,
             new IBootStep[]
             {
-                new BootstrapLoggingStep(bootstrapDirectory: bootstrapDir),
+                new BootstrapLoggingStep(bootstrapDirectory: bootstrapDir ?? "./bootstrap/log"),
                 new BootstrapLifecycleStep(),
                 new BootstrapClockStep(),
                 new BootstrapConfigStep(),

@@ -10,44 +10,71 @@ public sealed class BootstrapLoggingStep : IBootStep, IStepReport
     public RuntimeLevel MinLevel => RuntimeLevel.Bootstrap;
     public RuntimeLevel TargetLevel => RuntimeLevel.Core;
 
-    private readonly string _bootstrapDir;
-    private bool _canWrite;
+    private readonly string _logDir;
+    private bool _fileEnabled;
     private string? _path;
 
     public BootstrapLoggingStep(string? bootstrapDirectory = null)
     {
-        _bootstrapDir = string.IsNullOrWhiteSpace(bootstrapDirectory) ? "./bootstrap" : bootstrapDirectory;
+        // Default: ./bootstrap/log
+        _logDir = string.IsNullOrWhiteSpace(bootstrapDirectory) ? "./bootstrap/log" : bootstrapDirectory;
     }
 
     public Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
+        // 1) Minimal: Console-Logger aktivieren (Fallback für frühe Ausgaben)
         services.AddLogging(b => b.ClearProviders().AddSimpleConsole());
 
+        // 2) Verzeichnis anlegen und Probe schreiben
         var state = new BootstrapLoggingState();
         try
         {
-            Directory.CreateDirectory(_bootstrapDir);
+            Directory.CreateDirectory(_logDir);
 
-            var probeFile = Path.Combine(_bootstrapDir, ".write_probe");
+            var probeFile = Path.Combine(_logDir, ".write_probe");
             File.WriteAllText(probeFile, $"probe:{DateTime.UtcNow:O}");
             File.Delete(probeFile);
 
             state.CanWriteFiles = true;
-            state.LogDirectory = _bootstrapDir;
+            state.LogDirectory = _logDir;
         }
-        catch
+        catch (Exception ex)
         {
             state.CanWriteFiles = false;
             state.LogDirectory = null;
+
+            throw new InvalidOperationException(
+                $"BootstrapLoggingStep: Log-Verzeichnis nicht nutzbar ('{_logDir}'). Beende Start.", ex);
         }
 
-        _canWrite = state.CanWriteFiles;
+        _fileEnabled = state.CanWriteFiles;
         _path = state.LogDirectory;
 
         services.AddSingleton(state);
+
+        var opts = new CoreFileLoggerOptions
+        {
+            DirectoryPath = _logDir,
+            FileNamePrefix = "core",
+            Enabled = true,
+            MaxFileSizeMb = 10,
+            RetentionDays = 7,
+            FlushIntervalMs = 500,
+            UseUtcTimestamps = true
+        };
+        services.AddSingleton(opts);
+
+        services.AddLogging(b =>
+        {
+            b.ClearProviders();
+            b.AddProvider(new CoreFileLoggerProvider(opts));
+        });
+
         return Task.CompletedTask;
     }
 
     public string GetReport()
-        => $"bootstrap directory writable={_canWrite}, path={_path ?? "<none>"}";
+        => _fileEnabled
+            ? $"logging: file-enabled, path={_path}"
+            : "logging: file-disabled";
 }

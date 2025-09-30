@@ -8,8 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLogger.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLoggerOptions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLoggerProvider.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapLoggingState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +43,6 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/App.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BarrierBootStep.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapLoggingState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" root0="FORCE_HIGHLIGHTING" />
@@ -49,6 +53,10 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapTempDirectoryHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapVersionInfoStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLogger.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLoggerOptions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreLoggingStepImplementation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/IStepReport.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
@@ -160,6 +168,7 @@
       <workItem from="1758698428420" duration="11873000" />
       <workItem from="1759211487678" duration="57000" />
       <workItem from="1759211594118" duration="12381000" />
+      <workItem from="1759224054447" duration="6094000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -249,7 +258,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759223597826</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Rename Namespace">
+      <option name="closed" value="true" />
+      <created>1759224177562</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1759224177562</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,7 +287,8 @@
     <MESSAGE value="Report Steps Message" />
     <MESSAGE value="Temp Bootstrap" />
     <MESSAGE value="Verion und doku" />
-    <option name="LAST_COMMIT_MESSAGE" value="Verion und doku" />
+    <MESSAGE value="Rename Namespace" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename Namespace" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
