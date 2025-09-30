@@ -12,10 +12,11 @@ public static class BootstrapPipeline
             new IBootStep[]
             {
                 new BootstrapLoggingStep(bootstrapDirectory: bootstrapDir),
+                new BootstrapLifecycleStep(),
                 new BootstrapClockStep(),
                 new BootstrapConfigStep(),
-                // nutzt OS-Temp + Unterordner "Skynet"
-                new BootstrapTempStep(appSubfolderName: "Skynet")
+                new BootstrapTempStep(appSubfolderName: "Skynet"),
+                new BootstrapVersionStep()
             });
     }
 }
