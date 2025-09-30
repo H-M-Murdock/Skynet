@@ -4,7 +4,6 @@ namespace Skynet.Core.Bootstrap.Steps;
 
 public static class BootstrapPipeline
 {
-    // Erstellt die initiale Pipeline (Bootstrap -> Core)
     public static IEnumerable<IBootStep> CreateInitialPipeline(string? bootstrapDir = null)
     {
         yield return new BarrierBootStep(
@@ -13,7 +12,10 @@ public static class BootstrapPipeline
             new IBootStep[]
             {
                 new BootstrapLoggingStep(bootstrapDirectory: bootstrapDir),
-                new BootstrapClockStep()
+                new BootstrapClockStep(),
+                new BootstrapConfigStep(),
+                // nutzt OS-Temp + Unterordner "Skynet"
+                new BootstrapTempStep(appSubfolderName: "Skynet")
             });
     }
 }
