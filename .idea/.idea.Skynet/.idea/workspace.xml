@@ -8,20 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BarrierBootStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapLoggingState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/App.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapClockStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Runner/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Runner/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -40,12 +39,15 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/App.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BarrierBootStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapLoggingState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapClockStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -155,7 +157,7 @@
       <workItem from="1758698069066" duration="238000" />
       <workItem from="1758698428420" duration="11873000" />
       <workItem from="1759211487678" duration="57000" />
-      <workItem from="1759211594118" duration="8123000" />
+      <workItem from="1759211594118" duration="8526000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -205,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759216228293</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Bootstrap console logger probe read write logfile">
+      <option name="closed" value="true" />
+      <created>1759219817687</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1759219817687</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,7 +231,8 @@
     <MESSAGE value="fix(locator): use Found(...) factory and pass tenant via 't' named argument" />
     <MESSAGE value="ProviderID inerted" />
     <MESSAGE value="Performance fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Performance fixes" />
+    <MESSAGE value="Bootstrap console logger probe read write logfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bootstrap console logger probe read write logfile" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
