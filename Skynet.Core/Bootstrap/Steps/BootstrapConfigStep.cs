@@ -1,8 +1,9 @@
 // C#
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Skynet.Core.Bootstrap.Steps;
+namespace Skynet.Core.Bootstrap;
 
 public sealed class BootstrapConfigStep : IBootStep, IStepReport
 {

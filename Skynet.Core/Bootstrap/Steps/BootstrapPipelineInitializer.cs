@@ -1,6 +1,6 @@
 // Skynet.Core.Bootstrap/Steps/BootstrapPipeline.cs
 
-namespace Skynet.Core.Bootstrap.Steps;
+namespace Skynet.Core.Bootstrap;
 
 public static class BootstrapPipeline
 {

@@ -1,11 +1,8 @@
 // Skynet.Core.Bootstrap/Steps/BootstrapLifecycleStep.cs
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Skynet.Core.Bootstrap.Steps;
+namespace Skynet.Core.Bootstrap;
 
 public sealed class BootstrapLifecycleStep : IBootStep, IStepReport
 {

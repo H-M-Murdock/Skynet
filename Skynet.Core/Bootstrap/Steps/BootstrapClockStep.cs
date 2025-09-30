@@ -1,8 +1,9 @@
 // Skynet.Core.Bootstrap/Steps/BootstrapClockStep.cs
+
 using Microsoft.Extensions.DependencyInjection;
 using Skynet.Core.Time;
 
-namespace Skynet.Core.Bootstrap.Steps;
+namespace Skynet.Core.Bootstrap;
 
 public sealed class BootstrapClockStep : IBootStep, IStepReport
 {

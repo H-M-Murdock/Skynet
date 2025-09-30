@@ -8,13 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/AppCancellation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLifecycleHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPhaseOverview.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapVersionInfoStep.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapLoggingState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingState.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,23 +105,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.Skynet.Runner.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feat/resource-locator",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.Skynet.Runner.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/resource-locator&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Skynet.Runner" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -164,7 +159,7 @@
       <workItem from="1758698069066" duration="238000" />
       <workItem from="1758698428420" duration="11873000" />
       <workItem from="1759211487678" duration="57000" />
-      <workItem from="1759211594118" duration="11932000" />
+      <workItem from="1759211594118" duration="12381000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -246,7 +241,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759222168342</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Verion und doku">
+      <option name="closed" value="true" />
+      <created>1759223597826</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1759223597826</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,7 +269,8 @@
     <MESSAGE value="App runner" />
     <MESSAGE value="Report Steps Message" />
     <MESSAGE value="Temp Bootstrap" />
-    <option name="LAST_COMMIT_MESSAGE" value="Temp Bootstrap" />
+    <MESSAGE value="Verion und doku" />
+    <option name="LAST_COMMIT_MESSAGE" value="Verion und doku" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,4 +1,4 @@
-namespace Skynet.Core.Bootstrap.Steps;
+namespace Skynet.Core.Bootstrap;
 
 public sealed class AppCancellation(CancellationToken token)
 {

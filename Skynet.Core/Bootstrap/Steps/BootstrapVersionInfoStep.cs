@@ -1,8 +1,9 @@
 // Skynet.Core.Bootstrap/Steps/BootstrapVersionStep.cs
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
-namespace Skynet.Core.Bootstrap.Steps;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Skynet.Core.Bootstrap;
 
 public sealed class BootstrapVersionStep : IBootStep, IStepReport
 {

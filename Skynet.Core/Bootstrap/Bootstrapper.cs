@@ -2,7 +2,6 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Skynet.Core.Bootstrap.Steps;
 
 namespace Skynet.Core.Bootstrap;
 
