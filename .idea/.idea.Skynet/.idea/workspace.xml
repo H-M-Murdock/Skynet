@@ -8,26 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/RegisterSystemTenantResourcesStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/License/LicenseInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/AssetData.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/AppCancellation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/AppCancellation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapClockStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapConfigStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapConfigStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLifecycleHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLifecycleHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapLoggingStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPhaseOverview.md" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapPhaseOverview.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapPipelineInitializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapTempDirectoryHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapTempDirectoryHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapVersionInfoStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapVersionInfoStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLogger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/CoreFileLogger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLoggerOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/CoreFileLoggerOptions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/CoreFileLoggerProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/CoreFileLoggerProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/IStepReport.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IStepReport.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +166,7 @@
       <workItem from="1758698428420" duration="11873000" />
       <workItem from="1759211487678" duration="57000" />
       <workItem from="1759211594118" duration="12381000" />
-      <workItem from="1759224054447" duration="11079000" />
+      <workItem from="1759224054447" duration="11979000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -291,7 +272,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759230619577</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Template Resources">
+      <option name="closed" value="true" />
+      <created>1759236000156</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1759236000156</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,7 +303,8 @@
     <MESSAGE value="Verion und doku" />
     <MESSAGE value="Rename Namespace" />
     <MESSAGE value="Merged Logging Step" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged Logging Step" />
+    <MESSAGE value="Template Resources" />
+    <option name="LAST_COMMIT_MESSAGE" value="Template Resources" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
