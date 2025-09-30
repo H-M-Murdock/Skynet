@@ -15,11 +15,17 @@ public sealed class BarrierBootStep : IBootStep
     {
         MinLevel = minLevel;
         TargetLevel = targetLevel;
-        _steps = steps ?? throw new ArgumentNullException(nameof(steps));
+        ArgumentNullException.ThrowIfNull(steps);
+        _steps = steps;
     }
+
+    // Zugriff für Logging im Bootstrapper
+    public IReadOnlyList<IBootStep> GetInnerSteps() => _steps;
 
     public async Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
+        // Wird nicht mehr für die einzelnen Steps genutzt; Ausführung erfolgt im Bootstrapper,
+        // damit Vor/Nach-Logging pro Step gelingt. (Barrier-API bleibt kompatibel)
         foreach (var s in _steps)
         {
             if (s.MinLevel > MinLevel)

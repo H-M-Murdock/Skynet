@@ -5,25 +5,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Skynet.Core.Bootstrap.Steps;
 
-public sealed class BootstrapLoggingStep : IBootStep
+public sealed class BootstrapLoggingStep : IBootStep, IStepReport
 {
     public RuntimeLevel MinLevel => RuntimeLevel.Bootstrap;
     public RuntimeLevel TargetLevel => RuntimeLevel.Core;
 
     private readonly string _bootstrapDir;
+    private bool _canWrite;
+    private string? _path;
 
     public BootstrapLoggingStep(string? bootstrapDirectory = null)
     {
-        // Standard: lokales Bootstrap-Verzeichnis
         _bootstrapDir = string.IsNullOrWhiteSpace(bootstrapDirectory) ? "./bootstrap" : bootstrapDirectory;
     }
 
     public Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
-        // 1) Minimal: Console-Logging
         services.AddLogging(b => b.ClearProviders().AddSimpleConsole());
 
-        // 2) Bootstrap-Verzeichnis anlegen und Schreibprobe
         var state = new BootstrapLoggingState();
         try
         {
@@ -42,7 +41,13 @@ public sealed class BootstrapLoggingStep : IBootStep
             state.LogDirectory = null;
         }
 
+        _canWrite = state.CanWriteFiles;
+        _path = state.LogDirectory;
+
         services.AddSingleton(state);
         return Task.CompletedTask;
     }
+
+    public string GetReport()
+        => $"bootstrap directory writable={_canWrite}, path={_path ?? "<none>"}";
 }
