@@ -25,6 +25,7 @@ public sealed class MemoryResourceProvider : IResourceProvider
     private readonly ConcurrentDictionary<(TenantId TenantId, string Key), Entry> _store = new();
 
     public bool CanHandle(ResourceRequest request) => true; // handles all keys by design
+    public ProviderId Id => new ProviderId(new Guid("2A73B3F3-E629-44AC-8153-7B4A077B9B08"));
 
     public ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
@@ -47,7 +48,7 @@ public sealed class MemoryResourceProvider : IResourceProvider
             return ValueTask.FromResult(
                 ResourceLookupResult.Found(
                     rr,
-                    provider: nameof(MemoryResourceProvider),
+                    provider: Id,
                     t: request.TenantId));
 
         }

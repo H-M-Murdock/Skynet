@@ -10,21 +10,32 @@ using System.Threading.Tasks;
 using Skynet.Core.Localization;
 using Skynet.Core.Tenant;
 
+/// <summary>
+/// Orchestriert Ressourcensuchen über eine geordnete Menge von IResourceProvider
+/// und entlang der vom ITenantContext vorgegebenen Tenant-Resolution-Chain.
+/// Bietet TryGetAsync (ohne Exceptions bei Nichttreffer) sowie GetAsync (wirft bei Nichtfund).
+/// Optional wird für die Dauer des Lookups ein Culture-Scope gesetzt (Default oder Override).
+/// </summary>
 public sealed class ResourceLocator : IResourceLocator
 {
     private readonly ImmutableArray<IResourceProvider> _providers;
     private readonly ITenantContext _tenantContext;
     private readonly ICultureThreadScopeFactory? _cultureScopeFactory;
 
+    /// <summary>
+    /// Erstellt einen ResourceLocator.
+    /// providers: Reihenfolge definiert die Lookup-Priorität der Provider.
+    /// cultureScopeFactory: optional; eröffnet für Anfragen einen Culture-Scope (mit Override, falls angegeben).
+    /// Verwendet ProgramTenantContext.Instance als Tenant-Quelle (Singleton, nicht via DI).
+    /// </summary>
     public ResourceLocator(
         IEnumerable<IResourceProvider> providers,
-        ITenantContext tenantContext,
         ICultureThreadScopeFactory? cultureScopeFactory = null)
     {
         ArgumentNullException.ThrowIfNull(providers);
-        _providers = providers.ToImmutableArray();
-        _tenantContext = tenantContext ?? throw new ArgumentNullException(nameof(tenantContext));
-        _cultureScopeFactory = cultureScopeFactory; // optional
+        _providers = [..providers];
+        _tenantContext = ProgramTenantContext.Instance; // Singleton verwenden
+        _cultureScopeFactory = cultureScopeFactory; 
     }
 
     // Convenience: Overloads ohne Options delegieren auf die Options-Varianten
@@ -77,15 +88,7 @@ public sealed class ResourceLocator : IResourceLocator
                     switch (lookup.Status)
                     {
                         case ResourceLookupStatus.Found:
-                        case ResourceLookupStatus.NotModified:
-                            // Tenant auffüllen, falls Provider ihn nicht gesetzt hat
-                            return lookup.ResolvedTenant is null
-                                ? ResourceLookupResult.Found(
-                                    lookup.Resource!,
-                                    provider: lookup.Provider,
-                                    t: tenant) 
-                                : lookup;
-
+                        case ResourceLookupStatus.NotModified: return lookup;
                         case ResourceLookupStatus.NotFound:
                         default:
                             // Nächsten Provider / nächsten Tenant versuchen

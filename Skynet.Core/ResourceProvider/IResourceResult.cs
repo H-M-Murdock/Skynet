@@ -16,4 +16,7 @@ public interface IResourceResult : IDisposable, IAsyncDisposable
     long? ContentLength { get; }
     /// <summary>Opaque concurrency/version token (ETag). Changes when the content changes.</summary>
     string? Version { get; }
+
+    /// <summary>Identität des Providers, der dieses Ergebnis geliefert hat (für Logging/Tracing/Cache).</summary>
+    ProviderId? ProviderId { get; }
 }

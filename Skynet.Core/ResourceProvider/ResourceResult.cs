@@ -12,7 +12,8 @@ public sealed class ResourceResult : IResourceResult
         string? contentType = null,
         DateTimeOffset? lastModified = null,
         long? contentLength = null,
-        string? version = null)
+        string? version = null,
+        ProviderId? providerId = null)
     {
         TenantId = tenantId;
         Key = key ?? throw new ArgumentNullException(nameof(key));
@@ -21,6 +22,7 @@ public sealed class ResourceResult : IResourceResult
         LastModified = lastModified;
         ContentLength = contentLength;
         Version = version;
+        ProviderId = providerId;
     }
 
     public TenantId TenantId { get; }
@@ -30,6 +32,7 @@ public sealed class ResourceResult : IResourceResult
     public DateTimeOffset? LastModified { get; }
     public long? ContentLength { get; }
     public string? Version { get; }
+    public ProviderId? ProviderId { get; }
 
     public void Dispose() => Content.Dispose();
     public ValueTask DisposeAsync() => Content.DisposeAsync();
