@@ -18,7 +18,8 @@ public static class BootstrapPipeline
                 new BootstrapClockStep(),
                 new BootstrapConfigStep(),
                 new BootstrapTempStep(appSubfolderName: "Skynet"),
-                new BootstrapVersionStep()
+                new BootstrapVersionStep(),
+                new RegisterSystemTenantResourcesStep()
             });
     }
 }
