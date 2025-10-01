@@ -10,12 +10,12 @@ internal interface ILogWriter
     void Post(string line);
 }
 
-internal sealed class CoreFileLogger : ILogger
+internal sealed class BootstrapFileLogger : ILogger
 {
     private readonly string _category;
     private readonly ILogWriter _writer;
 
-    public CoreFileLogger(string category, ILogWriter writer)
+    public BootstrapFileLogger(string category, ILogWriter writer)
     {
         _category = category;
         _writer = writer;

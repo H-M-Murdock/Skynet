@@ -52,7 +52,7 @@ public sealed class BootstrapLoggingStep : IBootStep, IStepReport
 
         services.AddSingleton(state);
 
-        var opts = new CoreFileLoggerOptions
+        var opts = new BootstrapFileLoggerOptions
         {
             DirectoryPath = _logDir,
             FileNamePrefix = "core",
@@ -67,7 +67,7 @@ public sealed class BootstrapLoggingStep : IBootStep, IStepReport
         services.AddLogging(b =>
         {
             b.ClearProviders();
-            b.AddProvider(new CoreFileLoggerProvider(opts));
+            b.AddProvider(new BootstrapFileLoggerProvider(opts));
         });
 
         return Task.CompletedTask;

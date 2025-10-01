@@ -2,7 +2,7 @@
 
 namespace Skynet.Core.Bootstrap;
 
-public sealed class CoreFileLoggerOptions
+public sealed class BootstrapFileLoggerOptions
 {
     public string DirectoryPath { get; set; } = "./logs";
     public string FileNamePrefix { get; set; } = "app";

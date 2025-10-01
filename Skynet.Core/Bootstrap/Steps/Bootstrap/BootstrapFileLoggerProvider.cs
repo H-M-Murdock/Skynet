@@ -6,17 +6,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Skynet.Core.Bootstrap;
 
-internal sealed class CoreFileLoggerProvider : ILoggerProvider
+internal sealed class BootstrapFileLoggerProvider : ILoggerProvider
 {
     private readonly LogWriter _writer;
     private bool _disposed;
 
-    public CoreFileLoggerProvider(CoreFileLoggerOptions options)
+    public BootstrapFileLoggerProvider(BootstrapFileLoggerOptions options)
     {
         _writer = new LogWriter(options);
     }
 
-    public ILogger CreateLogger(string categoryName) => new CoreFileLogger(categoryName, _writer);
+    public ILogger CreateLogger(string categoryName) => new BootstrapFileLogger(categoryName, _writer);
 
     public void Dispose()
     {
@@ -28,7 +28,7 @@ internal sealed class CoreFileLoggerProvider : ILoggerProvider
 
 internal sealed class LogWriter : ILogWriter, IDisposable
 {
-    private readonly CoreFileLoggerOptions _options;
+    private readonly BootstrapFileLoggerOptions _options;
     private readonly Channel<string> _channel;
     private readonly CancellationTokenSource _cts = new();
     private readonly Task _worker;
@@ -37,7 +37,7 @@ internal sealed class LogWriter : ILogWriter, IDisposable
     private FileStream? _stream;
     private string _currentFilePath = string.Empty;
 
-    public LogWriter(CoreFileLoggerOptions options)
+    public LogWriter(BootstrapFileLoggerOptions options)
     {
         _options = options;
         _channel = Channel.CreateBounded<string>(new BoundedChannelOptions(1024)
