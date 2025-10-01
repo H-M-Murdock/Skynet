@@ -11,13 +11,13 @@ public sealed class FileSystemResourceProvider : IResourceProvider
     private static readonly ProviderId StaticId = new ProviderId(new Guid("F8E2A0C9-4C5B-4B2E-9B2A-9F4B2B5B3E11"));
     public ProviderId Id => StaticId;
 
-    // Am Ende der Kette
-    public int Priority => 90;
+    public int Priority { get; }
 
-    public FileSystemResourceProvider(string root)
+    public FileSystemResourceProvider(string root, int priority)
     {
         ArgumentNullException.ThrowIfNull(root);
         _rootFull = Path.GetFullPath(root);
+        Priority = priority;
     }
 
     public bool CanHandle(ResourceRequest request) => !string.IsNullOrEmpty(request.Key);
@@ -31,7 +31,6 @@ public sealed class FileSystemResourceProvider : IResourceProvider
         string fullPath;
         try
         {
-            // sicheren Pfad innerhalb des Root ermitteln
             fullPath = IoUtilities.BuildSafeFullPath(
                 baseRootFull: _rootFull,
                 tenantIdString: request.TenantId.ToString(),

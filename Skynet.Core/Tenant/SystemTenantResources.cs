@@ -21,9 +21,9 @@ public sealed class SystemTenantResources : ITenantResources
     private readonly string _assetsDir;
     private readonly string _templatesDir;
 
-    public SystemTenantResources(string? bootstrapRoot = "./bootstrap")
+    public SystemTenantResources(string? bootstrapRoot = "./root")
     {
-        _root = Path.Combine(bootstrapRoot ?? "./bootstrap", SystemTenantGuid.ToString());
+        _root = Path.Combine(bootstrapRoot ?? "./root", SystemTenantGuid.ToString());
         _configDir = Path.Combine(_root, "config");
         _certsDir = Path.Combine(_root, "certs");
         _licensesDir = Path.Combine(_root, "licenses");

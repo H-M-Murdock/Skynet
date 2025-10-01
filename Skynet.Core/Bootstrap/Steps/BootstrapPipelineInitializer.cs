@@ -30,7 +30,8 @@ public static class BootstrapPipeline
             new IBootStep[]
             {
                 new RegisterSystemTenantContextStep(),
-                new RegisterLocalAesProtectorStep()
+                new RegisterLocalAesProtectorStep(),
+                new RegisterAllResourceProvidersStep()
             });
     }
 }
