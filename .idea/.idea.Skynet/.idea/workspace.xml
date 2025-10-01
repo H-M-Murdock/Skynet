@@ -8,13 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/JsonConfigFileProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceProvider.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,8 +67,8 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/JsonConfigFileProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ProviderId.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceKind.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
@@ -171,7 +165,7 @@
       <workItem from="1759211487678" duration="57000" />
       <workItem from="1759211594118" duration="12381000" />
       <workItem from="1759224054447" duration="11999000" />
-      <workItem from="1759297664850" duration="15308000" />
+      <workItem from="1759297664850" duration="15991000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -317,7 +311,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759310092722</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Neues Konzeot mit den Providern">
+      <option name="closed" value="true" />
+      <created>1759313428688</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1759313428688</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -345,7 +347,8 @@
     <MESSAGE value="Core Aes Provider" />
     <MESSAGE value="FileSystemResourceProvider und ResourceType enum" />
     <MESSAGE value="Jsonfile Provider - IOUtilities.cs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Jsonfile Provider - IOUtilities.cs" />
+    <MESSAGE value="Neues Konzeot mit den Providern" />
+    <option name="LAST_COMMIT_MESSAGE" value="Neues Konzeot mit den Providern" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

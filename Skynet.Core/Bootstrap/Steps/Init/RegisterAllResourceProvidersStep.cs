@@ -11,9 +11,10 @@ public sealed class RegisterAllResourceProvidersStep : IBootStep, IStepReport
 
     private string _report = string.Empty;
 
+    public RegisterAllResourceProvidersStep() { }
+
     public Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
-        // Standard-Roots und Prioritäten direkt hier definieren
         var liveRoot = "./root";
         var bootstrapRoot = "./bootstrap";
         var tempRoot = Path.Combine(Path.GetTempPath(), "Skynet");
@@ -22,14 +23,22 @@ public sealed class RegisterAllResourceProvidersStep : IBootStep, IStepReport
         var bootstrapPriority = 95;
         var tempPriority = 98;
 
+        // Filesystem-Provider
         services.AddSingleton<IResourceProvider>(new FileSystemResourceProvider(liveRoot, livePriority));
         services.AddSingleton<IResourceProvider>(new FileSystemResourceProvider(bootstrapRoot, bootstrapPriority));
         services.AddSingleton<IResourceProvider>(new FileSystemResourceProvider(tempRoot, tempPriority));
 
+        // Environment-Provider (Prefix konfigurierbar, hier "SKYNET")
+        services.AddSingleton<IResourceProvider>(new EnvironmentResourceProvider(EnvScope.Process, 30, "SKYNET"));
+        services.AddSingleton<IResourceProvider>(new EnvironmentResourceProvider(EnvScope.User,    35, "SKYNET"));
+        services.AddSingleton<IResourceProvider>(new EnvironmentResourceProvider(EnvScope.Machine, 40, "SKYNET"));
+
         _report =
-            $"Providers registered: live='{Path.GetFullPath(liveRoot)}'(prio={livePriority}), " +
-            $"bootstrap='{Path.GetFullPath(bootstrapRoot)}'(prio={bootstrapPriority}), " +
-            $"temp='{Path.GetFullPath(tempRoot)}'(prio={tempPriority})";
+            "Providers registered:" + Environment.NewLine +
+            $"  FS:   live='{Path.GetFullPath(liveRoot)}' (prio={livePriority})" + Environment.NewLine +
+            $"        bootstrap='{Path.GetFullPath(bootstrapRoot)}' (prio={bootstrapPriority})" + Environment.NewLine +
+            $"        temp='{Path.GetFullPath(tempRoot)}' (prio={tempPriority})" + Environment.NewLine +
+            $"  ENV:  process (prio=30), user (prio=35), machine (prio=40)";
 
         return Task.CompletedTask;
     }

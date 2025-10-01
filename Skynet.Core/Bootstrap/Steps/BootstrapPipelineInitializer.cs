@@ -31,7 +31,7 @@ public static class BootstrapPipeline
             {
                 new RegisterSystemTenantContextStep(),
                 new RegisterLocalAesProtectorStep(),
-                new RegisterAllResourceProvidersStep()
+                new RegisterAllResourceProvidersStep(),
             });
     }
 }
