@@ -8,8 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Skynet.Core.Localization;
-using Skynet.Core.Tenant;
+using Localization;
+using Tenant;
 using System.Globalization;
 
 /// <summary>
@@ -26,7 +26,7 @@ public sealed class ResourceLocator : IResourceLocator
 
     /// <summary>
     /// Erstellt einen ResourceLocator.
-    /// providers: Reihenfolge definiert die Lookup-Priorität der Provider.
+    /// Providers: Reihenfolge definiert die Lookup-Priorität der Provider.
     /// tenantContext: optional; wenn nicht angegeben, wird ProgramTenantContext.Instance verwendet (eindeutiger System-Tenant).
     /// cultureScopeFactory: optional; eröffnet für Anfragen einen Culture-Scope (mit Override, falls angegeben).
     /// </summary>
@@ -36,7 +36,7 @@ public sealed class ResourceLocator : IResourceLocator
         ICultureThreadScopeFactory? cultureScopeFactory = null)
     {
         ArgumentNullException.ThrowIfNull(providers);
-        _providers = [..providers];
+        _providers = [..providers.OrderBy(p => p.Priority)];
         _tenantContext = tenantContext ?? ProgramTenantContext.Instance; // System-Singleton als Fallback
         _cultureScopeFactory = cultureScopeFactory; 
     }
@@ -94,16 +94,16 @@ public sealed class ResourceLocator : IResourceLocator
             // Kultur-Scope optional öffnen (Default oder Override)
             if (_cultureScopeFactory is not null)
             {
-                scope = options?.CultureOverride is { } ci
+                scope = options.CultureOverride is { } ci
                     ? _cultureScopeFactory.BeginScope(ci)
                     : _cultureScopeFactory.BeginScope();
             }
 
             string? lastReason = null;
 
-            // Vorfilterung: CanHandle nur einmal gegen den Current-Tenant prüfen
+            // Vorfilterung mit Priority-Order beibehalten
             var currentTenant = _tenantContext.ResolutionChain.FirstOrDefault();
-            var filteredProviders = _providers;
+            ImmutableArray<IResourceProvider> filteredProviders;
             if (currentTenant is { } ct)
             {
                 var probeRequest = request with { TenantId = ct };

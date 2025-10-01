@@ -5,5 +5,5 @@ namespace Skynet.Core.ResourceProvider;
 public sealed record ResourceRequest(
     TenantId TenantId,
     string Key,
-    string? ResourceType = null
+    ResourceKind ResourceType
 );

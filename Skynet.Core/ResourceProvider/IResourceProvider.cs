@@ -4,15 +4,18 @@ namespace Skynet.Core.ResourceProvider;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 /// <summary>
 /// Einzelner Ressourcenlieferant mit klarer Identität.
 /// - Id: stabile technische Kennung (für Logging/Tracing/Diagnostik).
+/// - Priority: Ausführungsreihenfolge im Locator (kleiner = zuerst).
 /// - CanHandle: schneller Vorab-Check, ob der Provider eine Anfrage grundsätzlich bedienen kann.
 /// - TryGetAsync: führt den eigentlichen Lookup aus und liefert ein strukturiertes Ergebnis ohne Exceptions für Nichttreffer.
 /// </summary>
 public interface IResourceProvider
 {
+    /// <summary>Ausführungsreihenfolge im Locator (kleiner = höhere Priorität).</summary>
+    int Priority { get; }
+
     bool CanHandle(ResourceRequest request);
     ProviderId Id { get; }
 

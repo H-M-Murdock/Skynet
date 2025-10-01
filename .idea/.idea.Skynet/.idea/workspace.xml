@@ -8,19 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/InitAesProtector.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterLocalAesProtectorStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/SystemTenantContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/ISecretProtector.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapPipelineInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/CoreFileLogger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLogger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/CoreFileLoggerOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerOptions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/CoreFileLoggerProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Core/RegisterSystemTenantResourcesStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,6 +72,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ProviderId.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" root0="FORCE_HIGHLIGHTING" />
@@ -173,7 +167,7 @@
       <workItem from="1759211487678" duration="57000" />
       <workItem from="1759211594118" duration="12381000" />
       <workItem from="1759224054447" duration="11999000" />
-      <workItem from="1759297664850" duration="4485000" />
+      <workItem from="1759297664850" duration="8866000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -295,7 +289,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759238883385</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Core Aes Provider">
+      <option name="closed" value="true" />
+      <created>1759302585123</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1759302585123</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,7 +322,8 @@
     <MESSAGE value="Merged Logging Step" />
     <MESSAGE value="Template Resources" />
     <MESSAGE value="Workspace changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Workspace changes" />
+    <MESSAGE value="Core Aes Provider" />
+    <option name="LAST_COMMIT_MESSAGE" value="Core Aes Provider" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -98,9 +98,11 @@ public sealed class Bootstrapper
             Log(provider, LogLevel.Information, $"Started  barrier {barrier.GetType().Name} (CurrentLevel={CurrentLevel})");
 
             // Vorherigen Provider entsorgen (saubere Lifetimes), neue ServiceCollection für nächste Barrier
-            lastProvider?.Dispose();
+            if (lastProvider is not null)
+            {
+                await lastProvider.DisposeAsync().ConfigureAwait(false);
+            }
             lastProvider = provider;
-            services = new ServiceCollection();
         }
 
         // Finaler Provider ist der von der letzten Barrier

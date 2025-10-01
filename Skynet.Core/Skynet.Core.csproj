@@ -20,6 +20,7 @@
     <ItemGroup>
       <Folder Include="Bootstrap\Steps\Core\" />
       <Folder Include="Crypto\" />
+      <Folder Include="ResourceProvider\Provider\" />
     </ItemGroup>
 
 </Project>
