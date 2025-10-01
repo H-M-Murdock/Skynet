@@ -1,42 +1,38 @@
-// Skynet.Core/ResourceProvider/FileSystemResourceProvider.cs
-
-using Skynet.Core.Tenant;
+// Skynet.Core/ResourceProvider/JsonConfigFileProvider.cs
 
 namespace Skynet.Core.ResourceProvider;
 
-public sealed class FileSystemResourceProvider : IResourceProvider
+public sealed class JsonConfigFileProvider : IResourceProvider
 {
     private readonly string _rootFull;
 
-    private static readonly ProviderId StaticId = new ProviderId(new Guid("F8E2A0C9-4C5B-4B2E-9B2A-9F4B2B5B3E11"));
+    private static readonly ProviderId StaticId = new(new Guid("7BC5F7C1-2C2C-4A8B-8B1E-7C5C9E6B9F21"));
     public ProviderId Id => StaticId;
+    public int Priority => 49;
 
-    // Am Ende der Kette
-    public int Priority => 90;
-
-    public FileSystemResourceProvider(string root)
+    public JsonConfigFileProvider(string root)
     {
         ArgumentNullException.ThrowIfNull(root);
         _rootFull = Path.GetFullPath(root);
     }
 
-    public bool CanHandle(ResourceRequest request) => !string.IsNullOrEmpty(request.Key);
+    public bool CanHandle(ResourceRequest request)
+        => request.ResourceType == ResourceKind.Config && !string.IsNullOrWhiteSpace(request.Key);
 
     public async ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
         CancellationToken cancellationToken = default)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        if (!CanHandle(request))
+            return ResourceLookupResult.NotFound("Unsupported resource type or empty key.");
 
         string fullPath;
         try
         {
-            // sicheren Pfad innerhalb des Root ermitteln
-            fullPath = IoUtilities.BuildSafeFullPath(
-                baseRootFull: _rootFull,
-                tenantIdString: request.TenantId.ToString(),
-                key: request.Key,
-                subFolder: null);
+            var tenant = request.TenantId.ToString();
+            // {root}/{tenant}/config/{key}.json (Erweiterung optional ergänzen)
+            var key = request.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ? request.Key : request.Key + ".json";
+            fullPath = IoUtilities.BuildSafeFullPath(_rootFull, tenant, key, subFolder: "config");
         }
         catch (Exception ex)
         {
@@ -44,7 +40,7 @@ public sealed class FileSystemResourceProvider : IResourceProvider
         }
 
         if (!File.Exists(fullPath))
-            return ResourceLookupResult.NotFound($"File not found: {fullPath}");
+            return ResourceLookupResult.NotFound($"Config not found: {fullPath}");
 
         try
         {
