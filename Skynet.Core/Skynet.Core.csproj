@@ -21,6 +21,7 @@
       <Folder Include="Bootstrap\Steps\Core\" />
       <Folder Include="Crypto\" />
       <Folder Include="ResourceProvider\Provider\" />
+      <Folder Include="Security\" />
       <Folder Include="Utilities\" />
     </ItemGroup>
 

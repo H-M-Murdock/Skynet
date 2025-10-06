@@ -1,5 +1,5 @@
 using System.Security.Cryptography.X509Certificates;
-using Skynet.Core.License;
+using Skynet.Core.Licensing;
 
 namespace Skynet.Core.Tenant;
 

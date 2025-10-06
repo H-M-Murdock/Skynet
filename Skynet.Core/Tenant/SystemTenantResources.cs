@@ -1,6 +1,6 @@
 // Skynet.Core/Tenant/SystemTenantResources.cs
 using System.Security.Cryptography.X509Certificates;
-using Skynet.Core.License;
+using Skynet.Core.Licensing;
 
 namespace Skynet.Core.Tenant;
 
@@ -40,14 +40,9 @@ public sealed class SystemTenantResources : ITenantResources
     public async Task<string?> SecretAsync(string key, CancellationToken ct = default)
         => await ReadTextIfExistsAsync(Path.Combine(_secretsDir, key + ".json"), ct).ConfigureAwait(false);
 
-    public async Task<LicenseInfo?> LicenseAsync(string key, CancellationToken ct = default)
+    public Task<LicenseInfo?> LicenseAsync(string key, CancellationToken ct = default)
     {
-        var path = Path.Combine(_licensesDir, key + ".lic");
-        var raw = await ReadTextIfExistsAsync(path, ct).ConfigureAwait(false);
-        if (raw is null) return null;
-
-        // Minimal: nur Raw füllen; Parsing/Signaturprüfung kann später ergänzt werden
-        return new LicenseInfo(raw);
+        return Task.FromResult<LicenseInfo?>(null);
     }
 
     public Task<X509Certificate2?> CertificateAsync(string name, CancellationToken ct = default)

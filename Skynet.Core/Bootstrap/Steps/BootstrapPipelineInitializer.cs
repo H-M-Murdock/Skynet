@@ -11,7 +11,7 @@ public static class BootstrapPipeline
         // 1) Bootstrap -> Core: generelle Bootstrap-Dienste + System-Ressourcen registrieren
         yield return new BarrierBootStep(
             RuntimeLevel.Bootstrap,
-            RuntimeLevel.Core,
+            RuntimeLevel.Init,
             new IBootStep[]
             {
                 new BootstrapLoggingStep(bootstrapDirectory: bootstrapDir ?? "./bootstrap/log"),
@@ -23,15 +23,15 @@ public static class BootstrapPipeline
                 new RegisterSystemTenantResourcesStep() // Ressourcen stehen ab Core bereit
             });
 
-        // 2) Core -> Init: System-Tenant-Context registrieren (nutzt bereits Ressourcen)
+        // 2) Init -> Core: System-Tenant-Context registrieren (nutzt bereits Ressourcen)
         yield return new BarrierBootStep(
-            RuntimeLevel.Core,
             RuntimeLevel.Init,
+            RuntimeLevel.Core,
             new IBootStep[]
             {
                 new RegisterSystemTenantContextStep(),
                 new RegisterLocalAesProtectorStep(),
-                new RegisterAllResourceProvidersStep(),
+                new RegisterAllResourceProvidersStep()
             });
     }
 }
