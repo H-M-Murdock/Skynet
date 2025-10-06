@@ -20,6 +20,7 @@
     <ItemGroup>
       <Folder Include="Bootstrap\Steps\Core\" />
       <Folder Include="Crypto\" />
+      <Folder Include="Licensing\Internal\" />
       <Folder Include="ResourceProvider\Provider\" />
       <Folder Include="Security\" />
       <Folder Include="Utilities\" />

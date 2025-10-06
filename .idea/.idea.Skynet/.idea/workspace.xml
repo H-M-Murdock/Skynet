@@ -8,29 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientInitMeta.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/EcdhAlgorithm.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IAead.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientDekManager.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientLicenseInitiator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IEcdhKeyAgreement.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IKeyDerivation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IKeyPairGenerator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseTools.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ISecretStore.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IServerLicenseIssuer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseEnvelope.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ServerInitMeta.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Security/ImpersonationContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/License/LicenseInfo.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +60,8 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISecretStore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IServerLicenseIssuer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/LicenseEnvelope.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/LicenseInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ServerInitMeta.cs" root0="FORCE_HIGHLIGHTING" />
@@ -203,7 +186,7 @@
       <workItem from="1759224054447" duration="11999000" />
       <workItem from="1759297664850" duration="16534000" />
       <workItem from="1759731819227" duration="592000" />
-      <workItem from="1759732506615" duration="11341000" />
+      <workItem from="1759732506615" duration="13575000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -365,7 +348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759314348415</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Lizenz infos">
+      <option name="closed" value="true" />
+      <created>1759745364077</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1759745364077</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,7 +386,8 @@
     <MESSAGE value="Jsonfile Provider - IOUtilities.cs" />
     <MESSAGE value="Neues Konzeot mit den Providern" />
     <MESSAGE value="EnvironmentResourceProvider" />
-    <option name="LAST_COMMIT_MESSAGE" value="EnvironmentResourceProvider" />
+    <MESSAGE value="Lizenz infos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lizenz infos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
