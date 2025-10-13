@@ -55,4 +55,13 @@ public interface IResourceLocator
         ResourceRequest request,
         string? ifMatch = null,
         CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Listet Ressourcenschlüssel. Unterstützt Prefix und Paging.
+    /// Die Implementierung aggregiert/merged über Provider (inkl. Tenant-Chain) entsprechend der Policies.
+    /// </summary>
+    Task<IResourceListResult> ListKeysAsync(
+        ResourceRequest request,
+        CancellationToken cancellationToken = default);
+    
 }

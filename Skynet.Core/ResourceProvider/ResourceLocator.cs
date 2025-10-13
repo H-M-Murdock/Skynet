@@ -19,7 +19,7 @@ using Tenant;
 /// </summary>
 public sealed class ResourceLocator : IResourceLocator
 {
-    private readonly ImmutableArray<IResourceProvider> _readProviders;
+    private readonly ImmutableArray<IResourceReader> _readProviders;
     private readonly ImmutableArray<IResourceWriter> _writeProviders;
     private readonly ITenantContext _tenantContext;
     private readonly ICultureThreadScopeFactory? _cultureScopeFactory;
@@ -32,7 +32,7 @@ public sealed class ResourceLocator : IResourceLocator
     /// cultureScopeFactory: optional; setzt (bei READ) einen Culture-Scope (Default oder Override).
     /// </summary>
     public ResourceLocator(
-        IEnumerable<IResourceProvider> providers,
+        IEnumerable<IResourceReader> providers,
         IEnumerable<IResourceWriter>? writers = null,
         ITenantContext? tenantContext = null,
         ICultureThreadScopeFactory? cultureScopeFactory = null)
@@ -106,7 +106,7 @@ public sealed class ResourceLocator : IResourceLocator
             // Vorfilterung: nur Provider, die (für CurrentTenant) grundsätzlich können
             var currentTenant = _tenantContext.ResolutionChain.FirstOrDefault();
 
-            ImmutableArray<IResourceProvider> filteredProviders = _readProviders;
+            ImmutableArray<IResourceReader> filteredProviders = _readProviders;
             if (currentTenant is { } ct)
             {
                 var probeRequest = request with { TenantId = ct };
@@ -189,4 +189,57 @@ public sealed class ResourceLocator : IResourceLocator
         // Z. B. Writers mit optionalem CanHandle(request) bevorzugen.
         return _writeProviders.FirstOrDefault();
     }
+    
+    
+    public async Task<IResourceListResult> ListKeysAsync(
+        ResourceRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var keys = new HashSet<string>(StringComparer.Ordinal);
+        string? continuationToken = null;
+        ProviderId? lastProviderId = null;
+
+        var currentTenant = _tenantContext.ResolutionChain.FirstOrDefault();
+        ImmutableArray<IResourceReader> filteredProviders = _readProviders;
+        if (currentTenant is { } ct)
+        {
+            var probe = request with { TenantId = ct };
+            filteredProviders = [.._readProviders.Where(p => p.CanHandle(probe))];
+        }
+
+        foreach (var tenant in _tenantContext.ResolutionChain)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var scoped = request with { TenantId = tenant };
+
+            foreach (var provider in filteredProviders)
+            {
+                if (!provider.CanHandle(scoped)) continue;
+
+                var (pageKeys, nextToken) = await provider.ListKeysAsync(
+                        scoped,
+                        continuationToken: continuationToken,
+                        limit: null,
+                        cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
+
+                foreach (var k in pageKeys)
+                    keys.Add(k);
+
+                if (!string.IsNullOrEmpty(nextToken))
+                {
+                    continuationToken = nextToken;
+                    lastProviderId = provider.Id;
+                }
+            }
+        }
+
+        var sorted = keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
+        return new ResourceListResult(request, sorted, continuationToken, lastProviderId);
+    }
+    
+    
+    
 }

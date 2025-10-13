@@ -24,14 +24,14 @@ public sealed class RegisterAllResourceProvidersStep : IBootStep, IStepReport
         var tempPriority = 98;
 
         // Filesystem-Provider
-        services.AddSingleton<IResourceProvider>(new FileSystemResourceProvider(liveRoot, livePriority));
-        services.AddSingleton<IResourceProvider>(new FileSystemResourceProvider(bootstrapRoot, bootstrapPriority));
-        services.AddSingleton<IResourceProvider>(new FileSystemResourceProvider(tempRoot, tempPriority));
+        services.AddSingleton<IResourceReader>(new FileSystemResourceReader(liveRoot, livePriority));
+        services.AddSingleton<IResourceReader>(new FileSystemResourceReader(bootstrapRoot, bootstrapPriority));
+        services.AddSingleton<IResourceReader>(new FileSystemResourceReader(tempRoot, tempPriority));
 
         // Environment-Provider (Prefix konfigurierbar, hier "SKYNET")
-        services.AddSingleton<IResourceProvider>(new EnvironmentResourceProvider(EnvScope.Process, 30, "SKYNET"));
-        services.AddSingleton<IResourceProvider>(new EnvironmentResourceProvider(EnvScope.User,    35, "SKYNET"));
-        services.AddSingleton<IResourceProvider>(new EnvironmentResourceProvider(EnvScope.Machine, 40, "SKYNET"));
+        services.AddSingleton<IResourceReader>(new EnvironmentResourceReader(EnvScope.Process, 30, "SKYNET"));
+        services.AddSingleton<IResourceReader>(new EnvironmentResourceReader(EnvScope.User,    35, "SKYNET"));
+        services.AddSingleton<IResourceReader>(new EnvironmentResourceReader(EnvScope.Machine, 40, "SKYNET"));
 
         _report =
             "Providers registered:" + Environment.NewLine +

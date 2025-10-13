@@ -4,6 +4,7 @@ namespace Skynet.Core.ResourceProvider;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,7 @@ using Skynet.Core.Tenant;
 /// Simple memory-backed provider for tests and bootstrapping.
 /// Stores resources per (TenantId, Key) with metadata and SHA-256 version.
 /// </summary>
-public sealed class MemoryResourceProvider : IResourceProvider
+public sealed class MemoryResourceReader : IResourceReader
 {
     private sealed record Entry(
         byte[] Bytes,
@@ -48,6 +49,41 @@ public sealed class MemoryResourceProvider : IResourceProvider
             providerId: Id); // ProviderId im Result setzen
 
         return ValueTask.FromResult(ResourceLookupResult.Found(rr));
+    }
+
+    /// <summary>
+    /// Listet Keys aus dem In-Memory-Store anhand des Prefixes (request.Key) und TenantId.
+    /// Paging wird über continuationToken (letzter Key der vorherigen Page) und optionales limit unterstützt.
+    /// </summary>
+    public Task<(IReadOnlyList<string> keys, string? nextContinuationToken)> ListKeysAsync(
+        ResourceRequest request,
+        string? continuationToken = null,
+        int? limit = null,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var prefix = request.Key ?? string.Empty;
+
+        // Basismenge: erst filtern, DANN genau einmal sortieren
+        var query = _store.Keys
+            .Where(k => k.TenantId.Equals(request.TenantId) && k.Key.StartsWith(prefix, StringComparison.Ordinal))
+            .Select(k => k.Key)
+            .OrderBy(k => k, StringComparer.Ordinal);
+
+        // Continuation: exklusiv nach dem Token
+        if (!string.IsNullOrEmpty(continuationToken))
+        {
+            query = query.Where(k => string.Compare(k, continuationToken, StringComparison.Ordinal) > 0)
+                .OrderBy(k => k, StringComparer.Ordinal);
+        }
+
+        var take = (limit is > 0) ? limit.Value : int.MaxValue;
+        var page = query.Take(take).ToArray();
+
+        string? nextToken = page.Length == take ? page[^1] : null;
+
+        return Task.FromResult(((IReadOnlyList<string>)page, nextToken));
     }
 
     // --- Convenience writers (for tests/dev/bootstrap) ---
