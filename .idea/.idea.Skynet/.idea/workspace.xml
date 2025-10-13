@@ -8,10 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseVerifier.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseGlossary.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,6 +62,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IServerLicenseIssuer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" root0="FORCE_HIGHLIGHTING" />
@@ -192,7 +191,7 @@
       <workItem from="1759297664850" duration="16534000" />
       <workItem from="1759731819227" duration="592000" />
       <workItem from="1759732506615" duration="14673000" />
-      <workItem from="1760338451114" duration="1054000" />
+      <workItem from="1760338451114" duration="2099000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -370,7 +369,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759747736880</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Introduce license verification and canonicalization interfaces and implementations">
+      <option name="closed" value="true" />
+      <created>1760339527623</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1760339527623</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,7 +409,8 @@
     <MESSAGE value="EnvironmentResourceProvider" />
     <MESSAGE value="Lizenz infos" />
     <MESSAGE value="Add KeyDerivation and AesGcmAead implementations for licensing encryption" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add KeyDerivation and AesGcmAead implementations for licensing encryption" />
+    <MESSAGE value="Introduce license verification and canonicalization interfaces and implementations" />
+    <option name="LAST_COMMIT_MESSAGE" value="Introduce license verification and canonicalization interfaces and implementations" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
