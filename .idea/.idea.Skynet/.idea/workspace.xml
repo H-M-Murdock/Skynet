@@ -8,10 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseVerifier.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,12 +57,16 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IEcdhKeyAgreement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IKeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IKeyPairGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseTools.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseVerifier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISecretStore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IServerLicenseIssuer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/LicenseEnvelope.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/LicenseInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ServerInitMeta.cs" root0="FORCE_HIGHLIGHTING" />
@@ -186,7 +191,8 @@
       <workItem from="1759224054447" duration="11999000" />
       <workItem from="1759297664850" duration="16534000" />
       <workItem from="1759731819227" duration="592000" />
-      <workItem from="1759732506615" duration="13575000" />
+      <workItem from="1759732506615" duration="14673000" />
+      <workItem from="1760338451114" duration="1054000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -356,7 +362,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759745364077</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Add KeyDerivation and AesGcmAead implementations for licensing encryption">
+      <option name="closed" value="true" />
+      <created>1759747736880</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1759747736880</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -387,7 +401,8 @@
     <MESSAGE value="Neues Konzeot mit den Providern" />
     <MESSAGE value="EnvironmentResourceProvider" />
     <MESSAGE value="Lizenz infos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lizenz infos" />
+    <MESSAGE value="Add KeyDerivation and AesGcmAead implementations for licensing encryption" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add KeyDerivation and AesGcmAead implementations for licensing encryption" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
