@@ -4,51 +4,54 @@ namespace Skynet.Core.ResourceProvider;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Localization;
 using Tenant;
-using System.Globalization;
 
 /// <summary>
-/// Orchestriert Ressourcensuchen über eine geordnete Menge von IResourceProvider
-/// und entlang der vom ITenantContext vorgegebenen Tenant-Resolution-Chain.
-/// Bietet TryGetAsync (ohne Exceptions bei Nichttreffer) sowie GetAsync (wirft bei Nichtfund).
-/// Optional wird für die Dauer des Lookups ein Culture-Scope gesetzt (Default oder Override).
+/// Orchestriert Ressourcensuchen (READ) über eine geordnete Menge von IResourceProvider
+/// entlang der vom ITenantContext vorgegebenen Tenant-Resolution-Chain und
+/// optional Ressourcen-Mutationen (WRITE/DELETE) über registrierte IResourceWriter.
 /// </summary>
 public sealed class ResourceLocator : IResourceLocator
 {
-    private readonly ImmutableArray<IResourceProvider> _providers;
+    private readonly ImmutableArray<IResourceProvider> _readProviders;
+    private readonly ImmutableArray<IResourceWriter> _writeProviders;
     private readonly ITenantContext _tenantContext;
     private readonly ICultureThreadScopeFactory? _cultureScopeFactory;
 
     /// <summary>
     /// Erstellt einen ResourceLocator.
-    /// Providers: Reihenfolge definiert die Lookup-Priorität der Provider.
-    /// tenantContext: optional; wenn nicht angegeben, wird ProgramTenantContext.Instance verwendet (eindeutiger System-Tenant).
-    /// cultureScopeFactory: optional; eröffnet für Anfragen einen Culture-Scope (mit Override, falls angegeben).
+    /// providers: Read-Provider; Reihenfolge wird nach Priority sortiert (kleiner = früher).
+    /// writers: Write-Provider; optional. Ebenfalls nach Priority sortiert, sofern sie CanHandle unterstützen.
+    /// tenantContext: optional; wenn null, ProgramTenantContext.Instance als Fallback.
+    /// cultureScopeFactory: optional; setzt (bei READ) einen Culture-Scope (Default oder Override).
     /// </summary>
     public ResourceLocator(
         IEnumerable<IResourceProvider> providers,
+        IEnumerable<IResourceWriter>? writers = null,
         ITenantContext? tenantContext = null,
         ICultureThreadScopeFactory? cultureScopeFactory = null)
     {
         ArgumentNullException.ThrowIfNull(providers);
-        _providers = [..providers.OrderBy(p => p.Priority)];
-        _tenantContext = tenantContext ?? ProgramTenantContext.Instance; // System-Singleton als Fallback
-        _cultureScopeFactory = cultureScopeFactory; 
+        _readProviders = [..providers.OrderBy(p => p.Priority)];
+        _writeProviders = writers is null ? ImmutableArray<IResourceWriter>.Empty : [..writers];
+        _tenantContext = tenantContext ?? ProgramTenantContext.Instance;
+        _cultureScopeFactory = cultureScopeFactory;
     }
 
-    // Convenience: Overloads ohne Options delegieren auf die Options-Varianten
+    // -------------------- READ --------------------
+
     public Task<IResourceResult> GetAsync(ResourceRequest request, CancellationToken cancellationToken = default)
         => GetAsync(request, new ResourceQueryOptions(), cancellationToken);
 
     public Task<ResourceLookupResult> TryGetAsync(ResourceRequest request, CancellationToken cancellationToken = default)
         => TryGetAsync(request, new ResourceQueryOptions(), cancellationToken);
 
-    // Bequemlichkeits-Overload: nur Kultur setzen
     public Task<ResourceLookupResult> TryGetAsync(ResourceRequest request, CultureInfo? culture, CancellationToken cancellationToken = default)
         => TryGetAsync(request, new ResourceQueryOptions(culture), cancellationToken);
 
@@ -63,14 +66,14 @@ public sealed class ResourceLocator : IResourceLocator
         if (res.Status is ResourceLookupStatus.Found or ResourceLookupStatus.NotModified)
             return res.Resource!;
 
-        // Diagnostik aufbauen: TenantChain, Provider-Liste, letzte Reason
+        // Diagnose: TenantChain + Providerliste + Reason
         var chain = string.Join(" -> ", _tenantContext.ResolutionChain.Select(t => t.ToString()));
-        var providerList = _providers.Length == 0 
-            ? "(keine Provider registriert)" 
-            : string.Join(", ", _providers.Select(p => p.Id.ToString()));
-        
-        var reasonPart = string.IsNullOrWhiteSpace(res.Reason) 
-            ? "Kein Provider hat eine Reason gemeldet." 
+        var providerList = _readProviders.Length == 0
+            ? "(keine Provider registriert)"
+            : string.Join(", ", _readProviders.Select(p => p.Id.ToString()));
+
+        var reasonPart = string.IsNullOrWhiteSpace(res.Reason)
+            ? "Kein Provider hat eine Reason gemeldet."
             : $"Letzte Reason: {res.Reason}";
 
         var message = new StringBuilder()
@@ -91,7 +94,6 @@ public sealed class ResourceLocator : IResourceLocator
         IDisposable? scope = null;
         try
         {
-            // Kultur-Scope optional öffnen (Default oder Override)
             if (_cultureScopeFactory is not null)
             {
                 scope = options.CultureOverride is { } ci
@@ -101,13 +103,14 @@ public sealed class ResourceLocator : IResourceLocator
 
             string? lastReason = null;
 
-            // Vorfilterung mit Priority-Order beibehalten
+            // Vorfilterung: nur Provider, die (für CurrentTenant) grundsätzlich können
             var currentTenant = _tenantContext.ResolutionChain.FirstOrDefault();
-            ImmutableArray<IResourceProvider> filteredProviders;
+
+            ImmutableArray<IResourceProvider> filteredProviders = _readProviders;
             if (currentTenant is { } ct)
             {
                 var probeRequest = request with { TenantId = ct };
-                filteredProviders = [.._providers.Where(p => p.CanHandle(probeRequest))];
+                filteredProviders = [.._readProviders.Where(p => p.CanHandle(probeRequest))];
             }
 
             foreach (var tenant in _tenantContext.ResolutionChain)
@@ -128,7 +131,6 @@ public sealed class ResourceLocator : IResourceLocator
                             return lookup;
 
                         case ResourceLookupStatus.NotFound:
-                            // Sammle letzte Reason (überschreibt vorherige)
                             lastReason = lookup.Reason ?? lastReason;
                             break;
 
@@ -138,12 +140,53 @@ public sealed class ResourceLocator : IResourceLocator
                 }
             }
 
-            // TryGetAsync gibt bei NotFound die letzte gesammelte Reason zurück
             return ResourceLookupResult.NotFound(lastReason);
         }
         finally
         {
             scope?.Dispose();
         }
+    }
+
+    // -------------------- WRITE --------------------
+
+    public async Task<IResourceWriteResult> WriteAsync(
+        ResourceRequest request,
+        Stream content,
+        bool createIfMissing = true,
+        string? ifMatch = null,
+        string? contentType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        // Auswahl: erster Writer, der diese Resource (Kind) schreibt.
+        // Optional könnte IResourceWriter CanHandle besitzen; hier einfache Routing-Variante.
+        var writer = SelectWriter(request);
+        if (writer is null)
+            throw new NotSupportedException($"Kein schreibfähiger Provider für ResourceKind '{request.ResourceType}' registriert.");
+
+        return await writer.WriteAsync(request, content, createIfMissing, ifMatch, contentType, cancellationToken)
+                           .ConfigureAwait(false);
+    }
+
+    public async Task<IResourceDeleteResult> DeleteAsync(
+        ResourceRequest request,
+        string? ifMatch = null,
+        CancellationToken cancellationToken = default)
+    {
+        var writer = SelectWriter(request);
+        if (writer is null)
+            throw new NotSupportedException($"Kein schreibfähiger Provider für ResourceKind '{request.ResourceType}' registriert.");
+
+        return await writer.DeleteAsync(request, ifMatch, cancellationToken).ConfigureAwait(false);
+    }
+
+    // Auswahlstrategie für Writer: der erste registrierte Writer (Priority-Ranking kann in Writer selbst abgebildet werden).
+    private IResourceWriter? SelectWriter(ResourceRequest request)
+    {
+        // Falls mehrere Writer mit Priorität, hier nach Policy ordnen/filtern.
+        // Z. B. Writers mit optionalem CanHandle(request) bevorzugen.
+        return _writeProviders.FirstOrDefault();
     }
 }

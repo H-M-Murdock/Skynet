@@ -8,9 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseGlossary.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceDeleteResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriteResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,9 +88,12 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceDeleteResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriteResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" root0="FORCE_HIGHLIGHTING" />
@@ -98,6 +104,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceQueryOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceRequest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceWriterInterface.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Security/ImpersonationContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/AssetData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" root0="FORCE_HIGHLIGHTING" />
@@ -191,7 +198,7 @@
       <workItem from="1759297664850" duration="16534000" />
       <workItem from="1759731819227" duration="592000" />
       <workItem from="1759732506615" duration="14673000" />
-      <workItem from="1760338451114" duration="2099000" />
+      <workItem from="1760338451114" duration="7296000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -377,7 +384,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760339527623</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Add `ClientDekManager` implementation and accompanying license glossary document">
+      <option name="closed" value="true" />
+      <created>1760340580673</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1760340580673</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -410,7 +425,8 @@
     <MESSAGE value="Lizenz infos" />
     <MESSAGE value="Add KeyDerivation and AesGcmAead implementations for licensing encryption" />
     <MESSAGE value="Introduce license verification and canonicalization interfaces and implementations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Introduce license verification and canonicalization interfaces and implementations" />
+    <MESSAGE value="Add `ClientDekManager` implementation and accompanying license glossary document" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `ClientDekManager` implementation and accompanying license glossary document" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
