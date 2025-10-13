@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using Skynet.Core.Crypto;
 
 namespace Skynet.Core.Licensing;
 

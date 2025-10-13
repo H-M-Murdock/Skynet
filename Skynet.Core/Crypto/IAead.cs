@@ -1,4 +1,4 @@
-namespace Skynet.Core.Licensing;
+namespace Skynet.Core.Crypto;
 
 public interface IAead
 {

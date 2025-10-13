@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Skynet.Core.Licensing;
+namespace Skynet.Core.Crypto;
 
 /// <summary>
 /// Produktive AES-GCM-Implementierung (AEAD) mit

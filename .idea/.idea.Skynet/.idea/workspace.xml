@@ -8,16 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceListResult.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceListResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/SignatureAlgorithm.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/EcdhAlgorithm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/EcdhAlgorithm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IAead.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IAead.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IEcdhKeyAgreement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IEcdhKeyAgreement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IKeyDerivation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IKeyDerivation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IKeyPairGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IKeyPairGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/ISignature.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/AesGcmAead.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/KeyDerivation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +208,7 @@
       <workItem from="1759297664850" duration="16534000" />
       <workItem from="1759731819227" duration="592000" />
       <workItem from="1759732506615" duration="14673000" />
-      <workItem from="1760338451114" duration="13403000" />
+      <workItem from="1760338451114" duration="16036000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -407,7 +410,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760345810614</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Introduce key listing capabilities to `IResourceLocator` along with supporting interfaces (`IResourceReader`, `IResourceListResult`) and implementation updates.">
+      <option name="closed" value="true" />
+      <created>1760351949664</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1760351949664</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -417,7 +428,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Add Projekts" />
     <MESSAGE value="feat(resources): implement ResourceLocator with tenant fallback, cancellation, and optional culture scope" />
     <MESSAGE value="refactor(api): replace tuple with ResourceLookupResult (status + payload), return ValueTask to reduce allocations" />
     <MESSAGE value="fix(locator): use Found(...) factory and pass tenant via 't' named argument" />
@@ -442,7 +452,8 @@
     <MESSAGE value="Introduce license verification and canonicalization interfaces and implementations" />
     <MESSAGE value="Add `ClientDekManager` implementation and accompanying license glossary document" />
     <MESSAGE value="Introduce write and delete capabilities in `IResourceLocator` with supporting interfaces (`IResourceWriter`, `IResourceWriteResult`, `IResourceDeleteResult`) for resource mutation operations." />
-    <option name="LAST_COMMIT_MESSAGE" value="Introduce write and delete capabilities in `IResourceLocator` with supporting interfaces (`IResourceWriter`, `IResourceWriteResult`, `IResourceDeleteResult`) for resource mutation operations." />
+    <MESSAGE value="Introduce key listing capabilities to `IResourceLocator` along with supporting interfaces (`IResourceReader`, `IResourceListResult`) and implementation updates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Introduce key listing capabilities to `IResourceLocator` along with supporting interfaces (`IResourceReader`, `IResourceListResult`) and implementation updates." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

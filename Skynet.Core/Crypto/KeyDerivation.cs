@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Skynet.Core.Licensing;
+namespace Skynet.Core.Crypto;
 
 /// <summary>
 /// HKDF-Implementierung nach RFC 5869 mit SHA-256 und SHA-512.

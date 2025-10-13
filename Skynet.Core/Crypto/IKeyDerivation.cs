@@ -1,4 +1,4 @@
-namespace Skynet.Core.Licensing;
+namespace Skynet.Core.Crypto;
 
 /// <summary>
 /// Key-Derivation (HKDF) für symmetrische Schlüsselableitungen.
