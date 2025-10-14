@@ -2,13 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Skynet.Core.Crypto;
 using Skynet.Core.Licensing;
 
-// LicenseRequest CLI – init/i erzeugt Meta-JSON mit:
-// - ClientId: zufällige UUID
-// - DeviceId: SHA-256(OS-Machine-ID) oder Fallback SHA-256(Hostname)
-// Befehle:
-//   init | i [--file client-meta.json]
+// LicenseRequest CLI:
+//   init | i [--file client-meta.json]     → Meta-JSON (ClientId UUID, DeviceId aus OS-ID/Hostname gehasht)
+//   genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub] → ECDH-Keypair (X25519) erzeugen
 //   info
 
 public static class Program
@@ -43,6 +42,11 @@ public static class Program
                     await CmdInitAsync(rest);
                     return 0;
 
+                case "genkey":
+                case "g":
+                    await CmdGenKeyAsync(rest);
+                    return 0;
+
                 default:
                     Console.WriteLine($"Unbekannter Befehl: {cmd}");
                     PrintHelp();
@@ -67,11 +71,13 @@ public static class Program
         Console.WriteLine("  info");
         Console.WriteLine("      Zeigt Tool-/Runtime-Informationen.");
         Console.WriteLine("  init | i [--file client-meta.json]");
-        Console.WriteLine("      Erstellt eine Meta-JSON (ClientInitMeta) mit zufälliger ClientId und DeviceId aus OS-Machine-ID (Fallback: Hostname).");
+        Console.WriteLine("      Erstellt eine Meta-JSON mit zufälliger ClientId und DeviceId (OS-ID/Hostname gehasht).");
+        Console.WriteLine("  genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub]");
+        Console.WriteLine("      Erzeugt ein ECDH-Keypair (X25519) und speichert Base64-Dateien.");
         Console.WriteLine();
         Console.WriteLine("Beispiele:");
         Console.WriteLine("  dotnet run -- init --file client-meta.json");
-        Console.WriteLine("  dotnet run -- i");
+        Console.WriteLine("  dotnet run -- genkey --priv client-ecdh.priv --pub client-ecdh.pub");
         Console.WriteLine("  dotnet run -- info");
     }
 
@@ -90,8 +96,8 @@ public static class Program
         var file = GetArgValue(args, "--file") ?? "client-meta.json";
 
         var clientId = Guid.NewGuid().ToString("D");
-
         var (deviceId, source) = ComputeDeviceId();
+
         var meta = new ClientInitMeta(
             name: "CHANGE-ME",
             description: null,
@@ -112,9 +118,25 @@ public static class Program
         Console.WriteLine("Bitte 'name' anpassen. Optionale Felder nach Bedarf ausfüllen.");
     }
 
-    // Ermittelt DeviceId:
-    // 1) OS-Machine-ID (Windows: MachineGuid, Linux: /etc/machine-id, macOS: IOPlatformUUID) → SHA-256 hex
-    // 2) Fallback: SHA-256(Hostname) hex
+    private static async Task CmdGenKeyAsync(string[] args)
+    {
+        var privPath = GetArgValue(args, "--priv") ?? "client-ecdh.priv";
+        var pubPath = GetArgValue(args, "--pub") ?? "client-ecdh.pub";
+
+        // P-256 Keypair (PKCS#8 + SPKI), Base64 speichern
+        using var ecdh = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
+        var privPkcs8 = ecdh.ExportPkcs8PrivateKey();
+        var pubSpki = ecdh.ExportSubjectPublicKeyInfo();
+
+        await File.WriteAllTextAsync(privPath, Convert.ToBase64String(privPkcs8), Encoding.UTF8);
+        await File.WriteAllTextAsync(pubPath, Convert.ToBase64String(pubSpki), Encoding.UTF8);
+
+        Console.WriteLine("ECDH P-256 Schlüssel erzeugt.");
+        Console.WriteLine($"Private Key (PKCS#8): {privPath}");
+        Console.WriteLine($"Public  Key (SPKI):   {pubPath}");
+    }
+
+    // DeviceId: OS-Machine-ID → SHA-256 hex; Fallback Hostname → SHA-256 hex
     private static (string deviceId, string source) ComputeDeviceId()
     {
         try

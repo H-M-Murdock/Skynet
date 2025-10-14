@@ -17,7 +17,7 @@ public sealed class BootstrapCryptoServicesStep : IBootStep, IStepReport
         services.AddSingleton<IKeyDerivation, KeyDerivation>();
 
         // ECDH (X25519), Key-Paare, Signaturen (ECDSA P-256)
-        services.AddSingleton(new EcdhKeyAgreement(EcdhAlgorithm.X25519));
+        services.AddSingleton(new EcdhKeyAgreement());
         services.AddSingleton(new DefaultKeyPairGenerator());
         services.AddSingleton(new SignatureP256());
 

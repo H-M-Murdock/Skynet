@@ -7,13 +7,11 @@ public sealed class DefaultKeyPairGenerator : IKeyPairGenerator
     public EcdhAlgorithm EcdhAlg { get; }
     public SignatureAlgorithm SignAlg { get; }
 
-    private const int X25519KeySize = 32;
-
     public DefaultKeyPairGenerator(
-        EcdhAlgorithm ecdhAlg = EcdhAlgorithm.X25519,
+        EcdhAlgorithm ecdhAlg = EcdhAlgorithm.P256,
         SignatureAlgorithm signAlg = SignatureAlgorithm.ECDSA_P256)
     {
-        if (ecdhAlg != EcdhAlgorithm.X25519)
+        if (ecdhAlg != EcdhAlgorithm.P256)
             throw new NotSupportedException($"ECDH-Algorithmus {ecdhAlg} wird nicht unterstützt.");
         if (signAlg != SignatureAlgorithm.ECDSA_P256)
             throw new NotSupportedException($"Signatur-Algorithmus {signAlg} wird nicht unterstützt.");
@@ -26,18 +24,26 @@ public sealed class DefaultKeyPairGenerator : IKeyPairGenerator
     {
         EnsureEcdhSupported();
 
-        var sk = RandomNumberGenerator.GetBytes(X25519KeySize);
-        var pk = GetX25519PublicKey(sk);
-        return (sk, pk);
+        using var ecdh = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
+        var priv = ecdh.ExportPkcs8PrivateKey();            // PKCS#8 (DER)
+        var pub = ecdh.ExportSubjectPublicKeyInfo();        // SPKI (DER)
+        return (priv, pub);
     }
 
     public (byte[] PrivateKey, byte[] PublicKey) GenerateEcdhKeyPair(ReadOnlySpan<byte> seed)
     {
         EnsureEcdhSupported();
 
-        var sk = Derive32(seed, "Skynet.Core.Crypto:ECDH:X25519");
-        var pk = GetX25519PublicKey(sk);
-        return (sk, pk);
+        // deterministisch: 32-Byte Secret via HKDF-SHA512 ableiten und als D importieren
+        var d = Derive32(seed, "Skynet.Core.Crypto:ECDH:P256");
+
+        using var ecdh = ECDiffieHellman.Create();
+        var curve = ECCurve.NamedCurves.nistP256;
+        ecdh.ImportParameters(new ECParameters { Curve = curve, D = d });
+
+        var priv = ecdh.ExportPkcs8PrivateKey();
+        var pub = ecdh.ExportSubjectPublicKeyInfo();
+        return (priv, pub);
     }
 
     // ECDSA P-256: Export als PKCS#8 (privat) und SPKI (öffentlich), beides DER-codiert.
@@ -55,41 +61,15 @@ public sealed class DefaultKeyPairGenerator : IKeyPairGenerator
     {
         EnsureSignSupported();
 
-        // deterministisch: 32-Byte Secret via HKDF-SHA512 ableiten und als D importieren
         var sk = Derive32(seed, "Skynet.Core.Crypto:SIGN:ECDSA-P256");
 
         using var ecdsa = ECDsa.Create();
         var curve = ECCurve.NamedCurves.nistP256;
-
-        // D muss 32 Byte sein. Wir verwenden sk direkt; ImportParameters reduziert ggf. intern modulo n.
-        var parameters = new ECParameters { Curve = curve, D = sk };
-        ecdsa.ImportParameters(parameters);
+        ecdsa.ImportParameters(new ECParameters { Curve = curve, D = sk });
 
         var priv = ecdsa.ExportPkcs8PrivateKey();
         var pub = ecdsa.ExportSubjectPublicKeyInfo();
         return (priv, pub);
-    }
-
-    private static byte[] GetX25519PublicKey(ReadOnlySpan<byte> privateKey)
-    {
-        if (privateKey.Length != X25519KeySize)
-            throw new ArgumentException($"X25519 Private Key muss {X25519KeySize} Bytes haben.", nameof(privateKey));
-
-        using var ecdh = ECDiffieHellman.Create();
-        ecdh.GenerateKey(ECCurve.CreateFromFriendlyName("X25519"));
-
-        var parms = new ECParameters
-        {
-            Curve = ECCurve.CreateFromFriendlyName("X25519"),
-            D = privateKey.ToArray()
-        };
-        ecdh.ImportParameters(parms);
-
-        var pub = ecdh.ExportParameters(includePrivateParameters: false).Q.X;
-        if (pub is null || pub.Length != X25519KeySize)
-            throw new ArgumentException("X25519 Public Key konnte nicht erzeugt werden.");
-
-        return pub;
     }
 
     private static byte[] Derive32(ReadOnlySpan<byte> seed, string context)
@@ -104,8 +84,8 @@ public sealed class DefaultKeyPairGenerator : IKeyPairGenerator
 
     private void EnsureEcdhSupported()
     {
-        if (EcdhAlg != EcdhAlgorithm.X25519)
-            throw new NotSupportedException("Nur X25519 wird unterstützt.");
+        if (EcdhAlg != EcdhAlgorithm.P256)
+            throw new NotSupportedException("Nur P-256 wird unterstützt.");
     }
 
     private void EnsureSignSupported()

@@ -2,6 +2,6 @@ namespace Skynet.Core.Crypto;
 
 public enum EcdhAlgorithm
 {
-    X25519 = 0,
-    // P256 = 1, // optional für später
+    // X25519 = 0, // vorerst entfernt
+    P256 = 1
 }
