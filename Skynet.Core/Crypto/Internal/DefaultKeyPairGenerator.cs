@@ -8,8 +8,6 @@ public sealed class DefaultKeyPairGenerator : IKeyPairGenerator
     public SignatureAlgorithm SignAlg { get; }
 
     private const int X25519KeySize = 32;
-    private const int Ed25519SeedSize = 32;
-    private const int Ed25519PublicKeySize = 32;
 
     public DefaultKeyPairGenerator(
         EcdhAlgorithm ecdhAlg = EcdhAlgorithm.X25519,

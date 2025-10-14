@@ -64,10 +64,15 @@ public sealed class BootstrapLoggingStep : IBootStep, IStepReport
         };
         services.AddSingleton(opts);
 
+        // Eine konkrete Provider-Instanz erstellen und im DI registrieren
+        var fileProvider = new BootstrapFileLoggerProvider(opts);
+        services.AddSingleton(fileProvider);
+
+        // Logging auf die registrierte Instanz umstellen
         services.AddLogging(b =>
         {
             b.ClearProviders();
-            b.AddProvider(new BootstrapFileLoggerProvider(opts));
+            b.AddProvider(fileProvider);
         });
 
         return Task.CompletedTask;

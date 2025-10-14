@@ -11,6 +11,7 @@ public sealed class Bootstrapper
 
     private bool _diLoggerReady = false;
     private ILogger? _logger;
+    private bool _switchNoticePrinted = false;
 
     private void Log(IServiceProvider? sp, LogLevel level, string message)
     {
@@ -23,9 +24,19 @@ public sealed class Bootstrapper
                 {
                     _logger = factory.CreateLogger("Bootstrapper");
                     _diLoggerReady = true;
+
+                    if (!_switchNoticePrinted)
+                    {
+                        // Einmalige Hinweis-Ausgabe auf die Konsole beim Wechsel
+                        Console.WriteLine($"[{DateTime.UtcNow:O}] Switching to DI logging …");
+                        _switchNoticePrinted = true;
+                    }
                 }
             }
-            catch { /* stay on console */ }
+            catch
+            {
+                // stay on console
+            }
         }
 
         if (_diLoggerReady && _logger is not null)
@@ -33,7 +44,6 @@ public sealed class Bootstrapper
         else
             Console.WriteLine($"[{DateTime.UtcNow:O}] {message}");
     }
-
     public async Task<IServiceProvider> RunAsync(
         IEnumerable<IBootStep> steps,
         CancellationToken ct = default)

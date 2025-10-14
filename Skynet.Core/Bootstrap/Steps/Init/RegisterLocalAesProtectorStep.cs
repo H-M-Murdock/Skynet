@@ -7,21 +7,24 @@ using Skynet.Core.Crypto;
 namespace Skynet.Core.Bootstrap;
 
 /// <summary>
-/// Registriert einen LocalAesProtector:
+/// Registriert einen SecretProtector:
 /// - Schlüssel aus Config: Crypto:LocalAes:KeyBase64 (Base64 von 16/24/32 Bytes)
 /// - Fallback: stabiler Default-Key im Code (nur für Bootstrap/Core-Fallback!)
 /// </summary>
 public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
 {
-    public RuntimeLevel MinLevel => RuntimeLevel.Bootstrap;
+    public RuntimeLevel MinLevel => RuntimeLevel.Init;
     public RuntimeLevel TargetLevel => RuntimeLevel.Core;
 
     private string _report = string.Empty;
 
     public Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
+        // AesGcmAead bereitstellen, falls nicht schon durch RegisterCryptoCoreServicesStep geschehen
+        services.AddSingleton<IAead, AesGcmAead>();
+
         // Config holen (vom BootstrapConfigStep bereitgestellt)
-        var sp = services.BuildServiceProvider();
+        using var sp = services.BuildServiceProvider();
         var cfg = sp.GetService<IConfiguration>();
 
         byte[] key;
@@ -53,8 +56,14 @@ public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
             (key, source) = GetDefaultKey();
         }
 
-        services.AddSingleton<ISecretProtector>(new InitAesProtector(key));
-        _report = $"local AES protector registered (keySource={source}, keySize={key.Length * 8}bit)";
+        // SecretProtector mit IAead registrieren
+        services.AddSingleton<ISecretProtector>(sp2 =>
+        {
+            var aead = sp2.GetRequiredService<IAead>();
+            return new SecretProtector(aead, key);
+        });
+
+        _report = $"secret protector registered (keySource={source}, keySize={key.Length * 8}bit)";
         return Task.CompletedTask;
     }
 
@@ -62,8 +71,8 @@ public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
 
     private static (byte[] key, string source) GetDefaultKey()
     {
-        // Stabiler Default (nur für Bootstrap/Core-Fallback; später durch Locator/Secrets ersetzen!)
-        // 32 Bytes (AES-256). In echter Produktion rotation & sichere Quelle.
+        // Stabiler Default (nur für Bootstrap/Core-Fallback; später durch sicheren Secret-Provider ersetzen).
+        // 32 Bytes (AES-256).
         var key = new byte[]
         {
             0x5A,0x12,0x7C,0x3F,0x09,0xAB,0xCD,0xEE,

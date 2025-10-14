@@ -10,7 +10,7 @@ namespace Skynet.Core.Bootstrap;
 /// </summary>
 public sealed class RegisterSystemTenantContextStep : IBootStep, IStepReport
 {
-    public RuntimeLevel MinLevel => RuntimeLevel.Bootstrap;
+    public RuntimeLevel MinLevel => RuntimeLevel.Init;
     public RuntimeLevel TargetLevel => RuntimeLevel.Core;
 
     private string _report = string.Empty;

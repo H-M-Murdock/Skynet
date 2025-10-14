@@ -8,7 +8,7 @@ public static class BootstrapPipeline
 {
     public static IEnumerable<IBootStep> CreateInitialPipeline(string? bootstrapDir = null)
     {
-        // 1) Bootstrap -> Core: generelle Bootstrap-Dienste + System-Ressourcen registrieren
+        // 1) Bootstrap -> Init: generelle Bootstrap-Dienste + System-Ressourcen registrieren
         yield return new BarrierBootStep(
             RuntimeLevel.Bootstrap,
             RuntimeLevel.Init,
@@ -20,7 +20,9 @@ public static class BootstrapPipeline
                 new BootstrapConfigStep(),
                 new BootstrapTempStep(appSubfolderName: "Skynet"),
                 new BootstrapVersionStep(),
-                new RegisterSystemTenantResourcesStep() // Ressourcen stehen ab Core bereit
+                new RegisterSystemTenantResourcesStep(), // Ressourcen stehen ab Core bereit
+                new BootstrapCryptoServicesStep()
+                
             });
 
         // 2) Init -> Core: System-Tenant-Context registrieren (nutzt bereits Ressourcen)

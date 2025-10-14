@@ -18,6 +18,8 @@ internal sealed class BootstrapFileLoggerProvider : ILoggerProvider
 
     public ILogger CreateLogger(string categoryName) => new BootstrapFileLogger(categoryName, _writer);
 
+    public void Flush() => _writer.Flush();
+
     public void Dispose()
     {
         if (_disposed) return;
@@ -65,16 +67,55 @@ internal sealed class LogWriter : ILogWriter, IDisposable
         _channel.Writer.TryWrite(line);
     }
 
+    // Neu: expliziter Flush (drain + stream flush)
+    public void Flush()
+    {
+        try
+        {
+            // so viel wie möglich aus dem Channel ziehen und schreiben
+            var sb = new StringBuilder(8 * 1024);
+            while (_channel.Reader.TryRead(out var line))
+            {
+                sb.Append(line);
+                if (sb.Length >= 8 * 1024)
+                {
+                    TryWrite(sb);
+                    sb.Clear();
+                }
+            }
+            if (sb.Length > 0) TryWrite(sb);
+        }
+        catch { /* ignore */ }
+
+        lock (_fileLock)
+        {
+            try { _stream?.Flush(); } catch { /* ignore */ }
+        }
+
+        void TryWrite(StringBuilder s)
+        {
+            try { WriteToFile(s); } catch { /* ignore */ }
+        }
+    }
+
     public void Dispose()
     {
+        // 1) keine neuen Einträge mehr
         _channel.Writer.TryComplete();
-        try { _worker.Wait(TimeSpan.FromSeconds(5)); } catch { /* ignore */ }
 
+        // 2) Worker beenden lassen
+        try { _worker.Wait(TimeSpan.FromSeconds(3)); } catch { /* ignore */ }
+
+        // 3) letzte Reste sicher flushen
+        try { Flush(); } catch { /* ignore */ }
+
+        // 4) Stream schließen
         lock (_fileLock)
         {
             _stream?.Dispose();
             _stream = null;
         }
+
         _cts.Cancel();
         _cts.Dispose();
     }
@@ -85,30 +126,52 @@ internal sealed class LogWriter : ILogWriter, IDisposable
         var flushInterval = _options.FlushInterval;
         var sb = new StringBuilder(16 * 1024);
 
-        while (await _channel.Reader.WaitToReadAsync(token).ConfigureAwait(false))
+        try
         {
-            var nextFlushAt = DateTime.UtcNow + flushInterval;
-
-            while (DateTime.UtcNow < nextFlushAt && _channel.Reader.TryRead(out var line))
+            while (await _channel.Reader.WaitToReadAsync(token).ConfigureAwait(false))
             {
-                sb.Append(line);
+                var nextFlushAt = DateTime.UtcNow + flushInterval;
+
+                while (DateTime.UtcNow < nextFlushAt && _channel.Reader.TryRead(out var line))
+                {
+                    sb.Append(line);
+                }
+
+                if (sb.Length > 0)
+                {
+                    try { WriteToFile(sb); } catch { /* ignore */ }
+                    sb.Clear();
+                }
+
+                await Task.Delay(10, token).ConfigureAwait(false);
+
+                TryRotateIfNeeded();
+                TryCleanupRetention();
             }
+
+            // Channel ist abgeschlossen → Rest entleeren
+            while (_channel.Reader.TryRead(out var line2))
+                sb.Append(line2);
 
             if (sb.Length > 0)
             {
-                try { WriteToFile(sb); }
-                catch
-                {
-                    // ignored
-                }
-
+                try { WriteToFile(sb); } catch { /* ignore */ }
                 sb.Clear();
             }
 
-            await Task.Delay(10, token).ConfigureAwait(false);
-
-            TryRotateIfNeeded();
-            TryCleanupRetention();
+            // finaler Flush
+            lock (_fileLock)
+            {
+                try { _stream?.Flush(); } catch { /* ignore */ }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // shutdown
+        }
+        catch
+        {
+            // ignore
         }
     }
 
@@ -199,9 +262,7 @@ internal sealed class LogWriter : ILogWriter, IDisposable
                         lock (_fileLock)
                         {
                             if (!string.Equals(f, _currentFilePath, StringComparison.OrdinalIgnoreCase))
-                            {
                                 File.Delete(f);
-                            }
                         }
                     }
                 }
