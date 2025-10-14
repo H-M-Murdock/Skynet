@@ -8,19 +8,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/SignatureAlgorithm.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/DefaultKeyPairGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/EcdhKeyAgreement.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/SecretProtector.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/SignatureP256Handler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/EcdhAlgorithm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/EcdhAlgorithm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IAead.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IAead.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IEcdhKeyAgreement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IEcdhKeyAgreement.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IKeyDerivation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IKeyDerivation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IKeyPairGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/IKeyPairGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/ISignature.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/AesGcmAead.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/KeyDerivation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Crypto/AesGcmAead.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/AesGcmAead.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Crypto/EcdhAlgorithm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/EcdhAlgorithm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Crypto/KeyDerivation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/KeyDerivation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Crypto/SignatureAlgorithm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/SignatureAlgorithm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,24 +55,28 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterLocalAesProtectorStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/SystemTenantContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/IAead.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/IEcdhKeyAgreement.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/IKeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/IKeyPairGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/ISecretProtector.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/ISignature.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/Internal/AesGcmAead.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/Internal/DefaultKeyPairGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/Internal/EcdhKeyAgreement.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/Internal/KeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/Internal/SecretProtector.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Crypto/Internal/SignatureP256Handler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ClientInitMeta.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IAead.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IClientDekManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IClientLicenseInitiator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IEcdhKeyAgreement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IKeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IKeyPairGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseTools.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseVerifier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISecretStore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/IServerLicenseIssuer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/ISignature.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/AesGcmAead.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/ClientDekManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/KeyDerivation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/LicenseEnvelope.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/LicenseInfo.cs" root0="FORCE_HIGHLIGHTING" />
@@ -148,24 +149,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.Skynet.Runner.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feat/resource-locator",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ml.llm.LLMTrustedDomainsConfigurableProvider",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.Skynet.Runner.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/resource-locator&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMTrustedDomainsConfigurableProvider&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Skynet.Runner" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -208,7 +209,8 @@
       <workItem from="1759297664850" duration="16534000" />
       <workItem from="1759731819227" duration="592000" />
       <workItem from="1759732506615" duration="14673000" />
-      <workItem from="1760338451114" duration="16036000" />
+      <workItem from="1760338451114" duration="17662000" />
+      <workItem from="1760419511049" duration="5145000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -418,7 +420,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760351949664</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Refactor: Move licensing-related cryptographic components to `Crypto` namespace for improved organization and clarity.">
+      <option name="closed" value="true" />
+      <created>1760354625803</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1760354625803</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -428,7 +438,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="feat(resources): implement ResourceLocator with tenant fallback, cancellation, and optional culture scope" />
     <MESSAGE value="refactor(api): replace tuple with ResourceLookupResult (status + payload), return ValueTask to reduce allocations" />
     <MESSAGE value="fix(locator): use Found(...) factory and pass tenant via 't' named argument" />
     <MESSAGE value="ProviderID inerted" />
@@ -453,7 +462,8 @@
     <MESSAGE value="Add `ClientDekManager` implementation and accompanying license glossary document" />
     <MESSAGE value="Introduce write and delete capabilities in `IResourceLocator` with supporting interfaces (`IResourceWriter`, `IResourceWriteResult`, `IResourceDeleteResult`) for resource mutation operations." />
     <MESSAGE value="Introduce key listing capabilities to `IResourceLocator` along with supporting interfaces (`IResourceReader`, `IResourceListResult`) and implementation updates." />
-    <option name="LAST_COMMIT_MESSAGE" value="Introduce key listing capabilities to `IResourceLocator` along with supporting interfaces (`IResourceReader`, `IResourceListResult`) and implementation updates." />
+    <MESSAGE value="Refactor: Move licensing-related cryptographic components to `Crypto` namespace for improved organization and clarity." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor: Move licensing-related cryptographic components to `Crypto` namespace for improved organization and clarity." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
