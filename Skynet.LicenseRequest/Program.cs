@@ -2,12 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Skynet.Core.Crypto;
 using Skynet.Core.Licensing;
 
 // LicenseRequest CLI:
-//   init | i [--file client-meta.json]     → Meta-JSON (ClientId UUID, DeviceId aus OS-ID/Hostname gehasht)
-//   genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub] → ECDH-Keypair (X25519) erzeugen
+//   init | i [--file client-meta.json]                         → Meta (ClientId UUID, DeviceId aus OS-ID/Hostname gehasht)
+//   genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub] → ECDH P-256 Keypair (PKCS#8/SPKI, Base64)
+//   request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json]
 //   info
 
 public static class Program
@@ -47,6 +47,11 @@ public static class Program
                     await CmdGenKeyAsync(rest);
                     return 0;
 
+                case "request":
+                case "r":
+                    await CmdRequestAsync(rest);
+                    return 0;
+
                 default:
                     Console.WriteLine($"Unbekannter Befehl: {cmd}");
                     PrintHelp();
@@ -73,11 +78,14 @@ public static class Program
         Console.WriteLine("  init | i [--file client-meta.json]");
         Console.WriteLine("      Erstellt eine Meta-JSON mit zufälliger ClientId und DeviceId (OS-ID/Hostname gehasht).");
         Console.WriteLine("  genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub]");
-        Console.WriteLine("      Erzeugt ein ECDH-Keypair (X25519) und speichert Base64-Dateien.");
+        Console.WriteLine("      Erzeugt ein ECDH-Keypair (P-256) und speichert Base64-Dateien (PKCS#8/SPKI).");
+        Console.WriteLine("  request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json]");
+        Console.WriteLine("      Erstellt die Request-Datei (ClientLicenseRequest) für den Server.");
         Console.WriteLine();
         Console.WriteLine("Beispiele:");
         Console.WriteLine("  dotnet run -- init --file client-meta.json");
         Console.WriteLine("  dotnet run -- genkey --priv client-ecdh.priv --pub client-ecdh.pub");
+        Console.WriteLine("  dotnet run -- request --meta client-meta.json --pub client-ecdh.pub --out license-request.json");
         Console.WriteLine("  dotnet run -- info");
     }
 
@@ -123,7 +131,6 @@ public static class Program
         var privPath = GetArgValue(args, "--priv") ?? "client-ecdh.priv";
         var pubPath = GetArgValue(args, "--pub") ?? "client-ecdh.pub";
 
-        // P-256 Keypair (PKCS#8 + SPKI), Base64 speichern
         using var ecdh = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
         var privPkcs8 = ecdh.ExportPkcs8PrivateKey();
         var pubSpki = ecdh.ExportSubjectPublicKeyInfo();
@@ -136,6 +143,42 @@ public static class Program
         Console.WriteLine($"Public  Key (SPKI):   {pubPath}");
     }
 
+    private static async Task CmdRequestAsync(string[] args)
+    {
+        var metaPath = GetArgValue(args, "--meta") ?? "client-meta.json";
+        var pubPath = GetArgValue(args, "--pub") ?? "client-ecdh.pub";
+        var outPath = GetArgValue(args, "--out") ?? "license-request.json";
+
+        if (!File.Exists(metaPath)) throw new FileNotFoundException("Meta-Datei nicht gefunden.", metaPath);
+        if (!File.Exists(pubPath)) throw new FileNotFoundException("Public-Key-Datei nicht gefunden.", pubPath);
+
+        // Meta laden
+        var metaJson = await File.ReadAllTextAsync(metaPath, Encoding.UTF8);
+        var meta = JsonSerializer.Deserialize<ClientInitMeta>(metaJson, JsonOpts)
+                   ?? throw new InvalidOperationException("Meta-Datei ist leer/ungültig.");
+        if (string.IsNullOrWhiteSpace(meta.Name) || meta.Name == "CHANGE-ME")
+            throw new ArgumentException("Meta.Name ist leer/ungültig. Bitte client-meta.json bearbeiten.");
+
+        // Public Key (SPKI, Base64) laden – unverändert als Base64 weiterreichen
+        var pubB64 = (await File.ReadAllTextAsync(pubPath, Encoding.UTF8)).Trim();
+        _ = Convert.FromBase64String(pubB64); // Validierung
+
+        var nonceClientB64 = Convert.ToBase64String(RandomNumberGenerator.GetBytes(12));
+
+        var dto = new ClientLicenseRequest(
+            ClientPubEcdhSpkiBase64: pubB64,
+            NonceClientBase64: nonceClientB64,
+            Meta: meta,
+            Kem: "ECDH-P256",
+            Kdf: "HKDF-SHA256",
+            Aead: "AES-256-GCM"
+        );
+
+        var json = JsonSerializer.Serialize(dto, JsonOpts);
+        await File.WriteAllTextAsync(outPath, json, Encoding.UTF8);
+        Console.WriteLine($"Request-Datei geschrieben: {outPath}");
+    }
+
     // DeviceId: OS-Machine-ID → SHA-256 hex; Fallback Hostname → SHA-256 hex
     private static (string deviceId, string source) ComputeDeviceId()
     {
@@ -145,10 +188,7 @@ public static class Program
             if (!string.IsNullOrEmpty(osId))
                 return (Sha256Hex(osId), "OS-Machine-ID");
         }
-        catch
-        {
-            // still fallback
-        }
+        catch { /* fallback */ }
 
         var host = Environment.MachineName ?? "unknown-host";
         return (Sha256Hex(host), "Hostname");
@@ -165,22 +205,16 @@ public static class Program
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // Windows: HKLM\SOFTWARE\Microsoft\Cryptography\MachineGuid
-            // .NET: Registry nur über Microsoft.Win32 verfügbar (Windows-only).
             try
             {
                 using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography");
                 return key?.GetValue("MachineGuid") as string;
             }
-            catch
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            // Linux: /etc/machine-id
             try
             {
                 const string path = "/etc/machine-id";
@@ -190,18 +224,13 @@ public static class Program
                     return string.IsNullOrWhiteSpace(s) ? null : s;
                 }
             }
-            catch
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            // macOS: IOPlatformUUID via ioreg (einfacher Ansatz ohne zusätzliche Libs)
             try
             {
-                // ioreg -rd1 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $4}'
                 var psi = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = "/usr/sbin/ioreg",
@@ -222,10 +251,7 @@ public static class Program
                         return output.Substring(idx, end - idx);
                 }
             }
-            catch
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
         return null;
