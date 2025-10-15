@@ -42,12 +42,11 @@ public sealed record LicenseEnvelope
         ServerPubEcdh = serverPubEcdh ?? throw new ArgumentNullException(nameof(serverPubEcdh));
         NonceClient = nonceClient ?? throw new ArgumentNullException(nameof(nonceClient));
         NonceServer = nonceServer ?? throw new ArgumentNullException(nameof(nonceServer));
-        Signature = signature ?? throw new ArgumentNullException(nameof(signature));
+        Signature = signature ?? []; // Signatur kann beim Aufbau zunächst leer sein
 
         if (ServerPubEcdh.Length == 0) throw new ArgumentException("ServerPubEcdh must not be empty.", nameof(serverPubEcdh));
         if (NonceClient.Length == 0) throw new ArgumentException("NonceClient must not be empty.", nameof(nonceClient));
         if (NonceServer.Length == 0) throw new ArgumentException("NonceServer must not be empty.", nameof(nonceServer));
-        if (Signature.Length == 0) throw new ArgumentException("Signature must not be empty.", nameof(signature));
         if (expiresUtc <= issuedAtUtc) throw new ArgumentException("ExpiresUtc must be after IssuedAtUtc.", nameof(expiresUtc));
         if (notBeforeUtc is { } nbf && nbf > expiresUtc) throw new ArgumentException("NotBeforeUtc must be <= ExpiresUtc.", nameof(notBeforeUtc));
 

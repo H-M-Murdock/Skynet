@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Skynet.Core.Licensing;
+using Skynet.Core.Tenant;
 
 // LicenseRequest CLI:
 //   init | i [--file client-meta.json]
@@ -67,6 +68,11 @@ public static class Program
                 case "r":
                     await CmdRequestAsync(rest);
                     return 0;
+                
+                case "verify":
+                case "v":
+                    await CmdVerifyAsync(rest);
+                    return 0;
 
                 default:
                     Console.WriteLine($"Unbekannter Befehl: {cmd}");
@@ -97,6 +103,8 @@ public static class Program
         Console.WriteLine("      Erzeugt ein ECDH-Keypair (P-256) und speichert Base64-Dateien (PKCS#8/SPKI).");
         Console.WriteLine("  request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json] (-p1..-p9) [--ver 1.0.0]");
         Console.WriteLine("      Erstellt die Request-Datei (ClientLicenseRequest) für den Server.");
+        Console.WriteLine("  verify | v --license license-envelope.json --verify-key server-sign.pub");
+        Console.WriteLine("      Prüft die Lizenz-Signatur und das Zeitfenster.");
         Console.WriteLine();
         Console.WriteLine("Produkte (Schalter → AppId GUID):");
         foreach (var p in ProductCatalog)
@@ -363,6 +371,91 @@ public static class Program
         }
 
         return (true, "");
+    }
+    
+    private static async Task CmdVerifyAsync(string[] args)
+    {
+        var licPath = GetArgValue(args, "--license") ?? throw new ArgumentException("--license fehlt.");
+        var verifyKeyPath = GetArgValue(args, "--verify-key") ?? throw new ArgumentException("--verify-key fehlt (Server PublicKey SPKI Base64).");
+
+        if (!File.Exists(licPath)) throw new FileNotFoundException("Lizenzdatei nicht gefunden.", licPath);
+        if (!File.Exists(verifyKeyPath)) throw new FileNotFoundException("Verify-Key-Datei nicht gefunden.", verifyKeyPath);
+
+        // Lizenz laden (JSON wie von LicenseGrant erzeugt)
+        var licJson = await File.ReadAllTextAsync(licPath, Encoding.UTF8);
+        using var doc = JsonDocument.Parse(licJson);
+        var root = doc.RootElement;
+
+        byte[] FromB64(string name)
+        {
+            var s = root.GetProperty(name).GetString() ?? throw new ArgumentException($"{name} fehlt/leer.");
+            return Convert.FromBase64String(s);
+        }
+
+        var tenantIdStr = root.GetProperty("tenantId").GetString() ?? throw new ArgumentException("tenantId fehlt.");
+        var serverPubEcdh = FromB64("serverPubEcdh");
+        var nonceClient = FromB64("nonceClient");
+        var nonceServer = FromB64("nonceServer");
+        var signature = FromB64("signature");
+        var signKeyId = root.TryGetProperty("signKeyId", out var kidEl) ? kidEl.GetString() : null;
+
+        var issuedAtUtc = DateTimeOffset.Parse(root.GetProperty("issuedAtUtc").GetString()!, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        var expiresUtc = DateTimeOffset.Parse(root.GetProperty("expiresUtc").GetString()!, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        DateTimeOffset? notBeforeUtc = null;
+        if (root.TryGetProperty("notBeforeUtc", out var nbfEl) && nbfEl.ValueKind == JsonValueKind.String)
+            notBeforeUtc = DateTimeOffset.Parse(nbfEl.GetString()!, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+
+        // Enum-Felder tolerant setzen (entsprechend unserer Tool-Defaults)
+        var kemAlg = Skynet.Core.Licensing.KemAlgorithm.X25519; // aktuell Platzhalter im Enum
+        var kdfAlg = Skynet.Core.Licensing.KdfAlgorithm.HkdfSha256;
+        var aeadAlg = Skynet.Core.Licensing.AeadAlgorithm.Aes256Gcm;
+
+        var envelope = new LicenseEnvelope(
+            tenantId: new TenantId(Guid.Parse(tenantIdStr)),
+            serverPubEcdh: serverPubEcdh,
+            nonceClient: nonceClient,
+            nonceServer: nonceServer,
+            featureFlags: null,
+            issuedAtUtc: issuedAtUtc,
+            notBeforeUtc: notBeforeUtc,
+            expiresUtc: expiresUtc,
+            kemAlg: kemAlg,
+            kdfAlg: kdfAlg,
+            aeadAlg: aeadAlg,
+            signKeyId: signKeyId,
+            signature: signature
+        );
+
+        // LicenseVerifier verwenden (allgemeingültig)
+        var verifyKeyB64 = (await File.ReadAllTextAsync(verifyKeyPath, Encoding.UTF8)).Trim();
+        var verifyKey = Convert.FromBase64String(verifyKeyB64);
+
+        var signatureImpl = new Skynet.Core.Crypto.SignatureP256();
+        var clock = new Skynet.Core.Time.SystemClock(); // Annahme: SystemClock existiert im Projekt
+        var canonicalizer = new JsonLicenseCanonicalizer();
+        var verifier = new LicenseVerifier(signatureImpl, verifyKey, clock, canonicalizer);
+
+        try
+        {
+            var info = await verifier.VerifyAsync(envelope, defaultClaims: null, requireValidSignature: true);
+            Console.WriteLine("Verification: OK");
+            Console.WriteLine($"Tenant:   {info.TenantId}");
+            Console.WriteLine($"Issued:   {info.IssuedAtUtc:O}");
+            Console.WriteLine($"Expires:  {info.ExpiresUtc:O}");
+            Console.WriteLine($"SignKeyId:{info.SignKeyId ?? "-"}");
+            Console.WriteLine($"ValidNow: {info.IsValid(clock, requireSignature: true)}");
+            Environment.ExitCode = 0;
+        }
+        catch (CryptographicException ex)
+        {
+            Console.WriteLine($"Verification: FAILED - {ex.Message}");
+            Environment.ExitCode = 3;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Verification: ERROR - {ex.Message}");
+            Environment.ExitCode = 4;
+        }
     }
     
 }
