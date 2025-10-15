@@ -8,8 +8,8 @@ public sealed class FileSystemResourceReader : IResourceReader
 {
     private readonly string _rootFull;
 
-    private static readonly ProviderId StaticId = new ProviderId(new Guid("F8E2A0C9-4C5B-4B2E-9B2A-9F4B2B5B3E11"));
-    public ProviderId Id => StaticId;
+    private readonly ProviderId _providerId;
+    public ProviderId Id => _providerId;
 
     public int Priority { get; }
 
@@ -18,6 +18,9 @@ public sealed class FileSystemResourceReader : IResourceReader
         ArgumentNullException.ThrowIfNull(root);
         _rootFull = Path.GetFullPath(root);
         Priority = priority;
+
+        // deterministische ID pro Root (muss mit Writer übereinstimmen)
+        _providerId = new ProviderId(DeterministicGuidFromString(_rootFull));
     }
 
     public bool CanHandle(ResourceRequest request) => !string.IsNullOrEmpty(request.Key);
@@ -144,5 +147,15 @@ public sealed class FileSystemResourceReader : IResourceReader
             ? full[root.Length..]
             : Path.GetFileName(full);
         return rel.Replace('\\', '/');
+    }
+
+    private static Guid DeterministicGuidFromString(string input)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(input.ToUpperInvariant());
+        var hash = sha.ComputeHash(bytes);
+        Span<byte> guidBytes = stackalloc byte[16];
+        hash.AsSpan(0, 16).CopyTo(guidBytes);
+        return new Guid(guidBytes);
     }
 }
