@@ -5,10 +5,12 @@ using System.Text.Json;
 using Skynet.Core.Licensing;
 
 // LicenseRequest CLI:
-//   init | i [--file client-meta.json]                         → Meta (ClientId UUID, DeviceId aus OS-ID/Hostname gehasht)
-//   genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub] → ECDH P-256 Keypair (PKCS#8/SPKI, Base64)
-//   request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json]
+//   init | i [--file client-meta.json]
+//   genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub]
+//   request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json] (-p1..-p9) [--ver 1.0.0]
 //   info
+
+namespace Skynet.LicenseRequest;
 
 public static class Program
 {
@@ -17,6 +19,20 @@ public static class Program
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true
     };
+
+    // Feste Produkt-GUIDs (DummyApp01..DummyApp09)
+    private static readonly (string Switch, string Name, string Guid)[] ProductCatalog =
+    [
+        ("-p1", "DummyApp01", "8a9b7b9f-9f3b-4e9b-9d9f-1c2a3b4c5d6e"),
+        ("-p2", "DummyApp02", "d1f2e3c4-b5a6-4789-9abc-def012345678"),
+        ("-p3", "DummyApp03", "3f1e2d4c-5b6a-4789-8abc-01def2345678"),
+        ("-p4", "DummyApp04", "a2b3c4d5-e6f7-4a89-9b0c-1234567890ab"),
+        ("-p5", "DummyApp05", "0c1b2a3d-4e5f-4678-9abc-d0123456789f"),
+        ("-p6", "DummyApp06", "9e8d7c6b-5a4f-4e3d-8c2b-1a0f9e8d7c6b"),
+        ("-p7", "DummyApp07", "f0e1d2c3-b4a5-4c6d-8e9f-0123456789ab"),
+        ("-p8", "DummyApp08", "12ab34cd-56ef-4789-9a0b-cdef01234567"),
+        ("-p9", "DummyApp09", "98ba76dc-54fe-4321-9abc-def001234567"),
+    ];
 
     public static async Task<int> Main(string[] args)
     {
@@ -79,13 +95,17 @@ public static class Program
         Console.WriteLine("      Erstellt eine Meta-JSON mit zufälliger ClientId und DeviceId (OS-ID/Hostname gehasht).");
         Console.WriteLine("  genkey | g [--priv client-ecdh.priv] [--pub client-ecdh.pub]");
         Console.WriteLine("      Erzeugt ein ECDH-Keypair (P-256) und speichert Base64-Dateien (PKCS#8/SPKI).");
-        Console.WriteLine("  request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json]");
+        Console.WriteLine("  request | r [--meta client-meta.json] [--pub client-ecdh.pub] [--out license-request.json] (-p1..-p9) [--ver 1.0.0]");
         Console.WriteLine("      Erstellt die Request-Datei (ClientLicenseRequest) für den Server.");
+        Console.WriteLine();
+        Console.WriteLine("Produkte (Schalter → AppId GUID):");
+        foreach (var p in ProductCatalog)
+            Console.WriteLine($"  {p.Switch.PadRight(4)} {p.Name.PadRight(14)} {p.Guid}");
         Console.WriteLine();
         Console.WriteLine("Beispiele:");
         Console.WriteLine("  dotnet run -- init --file client-meta.json");
         Console.WriteLine("  dotnet run -- genkey --priv client-ecdh.priv --pub client-ecdh.pub");
-        Console.WriteLine("  dotnet run -- request --meta client-meta.json --pub client-ecdh.pub --out license-request.json");
+        Console.WriteLine("  dotnet run -- request --meta client-meta.json --pub client-ecdh.pub --out license-request.json -p1 --ver 1.0.0");
         Console.WriteLine("  dotnet run -- info");
     }
 
@@ -148,20 +168,23 @@ public static class Program
         var metaPath = GetArgValue(args, "--meta") ?? "client-meta.json";
         var pubPath = GetArgValue(args, "--pub") ?? "client-ecdh.pub";
         var outPath = GetArgValue(args, "--out") ?? "license-request.json";
+        var version = GetArgValue(args, "--ver") ?? GetAssemblyVersion();
 
         if (!File.Exists(metaPath)) throw new FileNotFoundException("Meta-Datei nicht gefunden.", metaPath);
         if (!File.Exists(pubPath)) throw new FileNotFoundException("Public-Key-Datei nicht gefunden.", pubPath);
 
-        // Meta laden
+        var (appIdGuid, appName, switchUsed) = ResolveProduct(args);
+        if (appIdGuid is null)
+            throw new ArgumentException("Bitte Produkt angeben (-p1..-p9). Siehe Hilfe.");
+
         var metaJson = await File.ReadAllTextAsync(metaPath, Encoding.UTF8);
         var meta = JsonSerializer.Deserialize<ClientInitMeta>(metaJson, JsonOpts)
                    ?? throw new InvalidOperationException("Meta-Datei ist leer/ungültig.");
-        if (string.IsNullOrWhiteSpace(meta.Name) || meta.Name == "CHANGE-ME")
-            throw new ArgumentException("Meta.Name ist leer/ungültig. Bitte client-meta.json bearbeiten.");
+        var (ok, metaError) = ValidateMeta(meta);
+        if (!ok) throw new ArgumentException($"Meta ungültig: {metaError}");
 
-        // Public Key (SPKI, Base64) laden – unverändert als Base64 weiterreichen
         var pubB64 = (await File.ReadAllTextAsync(pubPath, Encoding.UTF8)).Trim();
-        _ = Convert.FromBase64String(pubB64); // Validierung
+        _ = Convert.FromBase64String(pubB64);
 
         var nonceClientB64 = Convert.ToBase64String(RandomNumberGenerator.GetBytes(12));
 
@@ -171,12 +194,25 @@ public static class Program
             Meta: meta,
             Kem: "ECDH-P256",
             Kdf: "HKDF-SHA256",
-            Aead: "AES-256-GCM"
+            Aead: "AES-256-GCM",
+            AppId: appIdGuid,
+            Version: version
         );
 
         var json = JsonSerializer.Serialize(dto, JsonOpts);
         await File.WriteAllTextAsync(outPath, json, Encoding.UTF8);
         Console.WriteLine($"Request-Datei geschrieben: {outPath}");
+        Console.WriteLine($"Produkt: {appName} ({switchUsed}), AppId={appIdGuid}, Version={version}");
+    }
+
+    private static (string? appIdGuid, string appName, string switchUsed) ResolveProduct(string[] args)
+    {
+        foreach (var p in ProductCatalog)
+        {
+            if (args.Any(a => string.Equals(a, p.Switch, StringComparison.OrdinalIgnoreCase)))
+                return (p.Guid, p.Name, p.Switch);
+        }
+        return (null, "<unbekannt>", "<none>");
     }
 
     // DeviceId: OS-Machine-ID → SHA-256 hex; Fallback Hostname → SHA-256 hex
@@ -266,4 +302,67 @@ public static class Program
         }
         return null;
     }
+
+    private static string GetAssemblyVersion()
+    {
+        var asm = typeof(Program).Assembly.GetName().Version;
+        return asm is null ? "1.0.0" : $"{asm.Major}.{asm.Minor}.{asm.Build}";
+    }
+    
+    // Rudimentäre Metadaten-Prüfung gegen offensichtliche Probleme:
+    // - Trimmen und Längenbegrenzung (max 256 pro Feld, Tags-Werte 256, Keys 64)
+    // - Verbot einfacher HTML-Tags/Script-Fragmente
+    // - Verbot gängiger SQL-Injection-Payload-Fragmente
+    // - Keine überlangen Whitespaces-Sequenzen (>3) – wird als Fehler gewertet
+    private static (bool Ok, string Error) ValidateMeta(ClientInitMeta meta)
+    {
+        (bool Ok, string Err) Fail(string e) => (false, e);
+
+        (bool Ok, string Err) CheckString(string? s, string field, int maxLen = 256)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return (true, "");
+            var trimmed = s.Trim();
+            if (trimmed.Length == 0) return Fail($"{field}: nur Leerzeichen.");
+            if (trimmed.Length > maxLen) return Fail($"{field}: zu lang (>{maxLen}).");
+            if (trimmed.Contains("    ") || trimmed.Contains("\t\t\t")) return Fail($"{field}: enthält ungewöhnlich viele Whitespaces.");
+
+            var lower = trimmed.ToLowerInvariant();
+            string[] badHtml = { "<script", "</script", "<iframe", "</iframe", "<img", "<a ", "<div", "</div", "<style", "</style" };
+            if (badHtml.Any(b => lower.Contains(b))) return Fail($"{field}: enthält HTML/Script-Tags.");
+
+            string[] badSql = { " or ", " and ", " union ", " select ", " insert ", " update ", " delete ", " drop ", " --", ";--", "' or '1'='1", "\" or \"1\"=\"1" };
+            if (badSql.Any(b => lower.Contains(b))) return Fail($"{field}: enthält mögliche SQL-Injection-Fragmente.");
+
+            string[] badTokens = { "<?", "?>", "<!", "</", "-->", "<%", "%>", "${", "{{", "}}" };
+            if (badTokens.Any(t => trimmed.Contains(t, StringComparison.Ordinal))) return Fail($"{field}: enthält verbotene Markup/Template-Tokens.");
+
+            return (true, "");
+        }
+
+        if (string.IsNullOrWhiteSpace(meta.Name) || meta.Name.Trim().Length == 0) return Fail("name: Pflichtfeld fehlt/leer.");
+        var res = CheckString(meta.Name, "name", 128); if (!res.Ok) return res;
+
+        res = CheckString(meta.Description, "description"); if (!res.Ok) return res;
+        res = CheckString(meta.Address, "address"); if (!res.Ok) return res;
+        res = CheckString(meta.ContactName, "contactName", 128); if (!res.Ok) return res;
+        res = CheckString(meta.ContactEmail, "contactEmail", 128); if (!res.Ok) return res;
+        res = CheckString(meta.ContactPhone, "contactPhone", 64); if (!res.Ok) return res;
+        res = CheckString(meta.ClientId, "clientId", 128); if (!res.Ok) return res;
+        res = CheckString(meta.DeviceId, "deviceId", 128); if (!res.Ok) return res;
+
+        if (meta.Tags is not null)
+        {
+            if (meta.Tags.Count > 64) return Fail("tags: zu viele Einträge (>64).");
+            foreach (var kv in meta.Tags)
+            {
+                var key = kv.Key?.Trim();
+                var val = kv.Value?.Trim();
+                if (string.IsNullOrWhiteSpace(key) || key!.Length > 64) return Fail("tags: ungültiger Key (leer/zu lang).");
+                res = CheckString(val, $"tags[{key}]", 256); if (!res.Ok) return res;
+            }
+        }
+
+        return (true, "");
+    }
+    
 }

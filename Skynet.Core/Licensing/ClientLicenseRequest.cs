@@ -6,5 +6,7 @@ public sealed record ClientLicenseRequest(
     ClientInitMeta Meta,
     string Kem,   // "ECDH-P256"
     string Kdf,   // "HKDF-SHA256"
-    string Aead   // "AES-256-GCM"
+    string Aead,  // "AES-256-GCM"
+    string AppId, // z. B. "skynet.tools.licenserequest"
+    string Version // z. B. "1.0.0"
 );

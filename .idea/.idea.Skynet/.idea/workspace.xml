@@ -9,8 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientLicenseRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientLicenseRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientLicenseRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +47,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1ff12748f9cf237ee59518603564fda4aeff2655358e148a39e284766c2b2/ILoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/eacce541aea4343da72fa852aadb945151e86e945e6ae0b260527f81a84e2e/ILoggerFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapCryptoServicesStep.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/Licensing/ClientLicenseRequest.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -69,6 +69,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.LicenseRequest/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -111,7 +112,7 @@
   <component name="RunManager">
     <configuration name="Skynet.LicenseRequest" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseRequest/bin/Debug/net9.0/Skynet.LicenseRequest.exe" />
-      <option name="PROGRAM_PARAMETERS" value="r" />
+      <option name="PROGRAM_PARAMETERS" value="r -p1" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Skynet.LicenseRequest/bin/Debug/net9.0" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -142,6 +143,8 @@
       <updated>1756720198204</updated>
       <workItem from="1756720199993" duration="5954000" />
       <workItem from="1756726244591" duration="3041000" />
+      <workItem from="1760510765740" duration="3770000" />
+      <workItem from="1760515750077" duration="3191000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -175,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760447039242</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256.">
+      <option name="closed" value="true" />
+      <created>1760447833301</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1760447833301</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,7 +200,8 @@
     <MESSAGE value="Update IntelliJ IDEA project workspace settings and metadata files for Skynet development configuration." />
     <MESSAGE value="Add `Skynet.LicenseRequest` project for client metadata generation and runtime information CLI tool." />
     <MESSAGE value="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements." />
+    <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
