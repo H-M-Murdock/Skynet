@@ -1,0 +1,22 @@
+Konfiguration (logische Ebene, tenant-aware, culture-frei)
+└─ IConfigProvider
+   ├─ T? Get<T>(string key, ITenantContext tenantContext)
+   ├─ string? Get(string key, ITenantContext tenantContext)
+   ├─ bool TryGet<T>(string key, ITenantContext tenantContext, out T? value)
+   ├─ IChangeToken Watch(string key, ITenantContext tenantContext)
+   └─ Task<IReadOnlyList<string>> ListKeysAsync(string prefix, ITenantContext tenantContext, ...)
+
+.NET Configuration Integration (Adapter/Source)
+├─ TenantConfigurationSource : IConfigurationSource
+│  ├─ IResourceLocator Locator
+│  └─ ITenantContextAccessor TenantAccessor
+└─ TenantConfigurationProvider : IConfigurationProvider
+   ├─ Dictionary<string,string> Cache
+   ├─ TryGet / GetChildKeys / Set / Load / GetReloadToken
+   └─ Build/Reload via Locator + TenantAccessor (ResolutionChain, Provider-Priorität)
+
+Beziehungen
+- ResourceLocator nutzt:
+  - IResourceReader[n] (Priority-geordnet) für Reads/Listings
+  - IResourceWriter[n] für Writes/Deletes
+  - ITenantContext (ResolutionChain) für Fallbacks

@@ -10,10 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceWriter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/NewFile1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +52,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1ff12748f9cf237ee59518603564fda4aeff2655358e148a39e284766c2b2/ILoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/eacce541aea4343da72fa852aadb945151e86e945e6ae0b260527f81a84e2e/ILoggerFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -65,7 +69,10 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceWriter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
@@ -225,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760519412178</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers.">
+      <option name="closed" value="true" />
+      <created>1760525146443</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1760525146443</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,7 +256,8 @@
     <MESSAGE value="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements." />
     <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
     <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
+    <MESSAGE value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

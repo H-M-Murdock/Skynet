@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <Folder Include="Bootstrap\Steps\Core\" />
+      <Folder Include="Configuration\" />
       <Folder Include="Licensing\Internal\" />
       <Folder Include="ResourceProvider\Provider\" />
       <Folder Include="Security\" />

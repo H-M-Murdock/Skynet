@@ -18,6 +18,14 @@ public sealed class RegisterSystemTenantContextStep : IBootStep, IStepReport
     public Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
         services.AddSingleton<ITenantContext, SystemTenantContext>();
+        services.AddSingleton<ITenantContextAccessor, TenantContextAccessor>();
+        services.AddSingleton(sp =>
+        {
+            // Initialen Current auf den SystemTenant setzen
+            var accessor = (TenantContextAccessor)sp.GetRequiredService<ITenantContextAccessor>();
+            accessor.Current = sp.GetRequiredService<ITenantContext>();
+            return accessor;
+        });
         _report = $"system tenant context registered: {SystemTenantContext.SystemGuid}";
         return Task.CompletedTask;
     }
