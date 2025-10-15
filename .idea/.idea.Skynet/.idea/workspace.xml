@@ -10,13 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/NewFile1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materuializer" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760525146443</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management.">
+      <option name="closed" value="true" />
+      <created>1760526692510</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1760526692510</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,7 +260,8 @@
     <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
     <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
     <MESSAGE value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
+    <MESSAGE value="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

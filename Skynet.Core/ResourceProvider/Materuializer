@@ -1,0 +1,129 @@
+Typed Resources (tenant-aware, format-agnostisch)
+└─ IResourceMaterializer
+   ├─ Task<bool> TryGetAsync<T>(string logicalKey, out T? value, CancellationToken ct = default)
+   ├─ Task<bool> TryGetAsync<T>(ITenantContext tenant, string logicalKey, out T? value, CancellationToken ct = default)
+   ├─ Task<T?>   GetAsync<T>(string logicalKey, CancellationToken ct = default)
+   ├─ Task       WriteAsync<T>(string logicalKey, T value, string? ifMatch = null, CancellationToken ct = default)
+   └─ Task       DeleteAsync(string logicalKey, string? ifMatch = null, CancellationToken ct = default)
+
+Implementierung
+└─ DefaultResourceMaterializer : IResourceMaterializer
+   ├─ depends -> ITenantContextAccessor (Current, BeginScope)
+   ├─ depends -> IResourceTypeResolver (logicalKey -> ResourceKind)
+   ├─ depends -> IResourceLocator (TryGet/Write/Delete)
+   ├─ depends -> IEnumerable<IResourceDeserializer> (Registry)
+   ├─ depends -> IEnumerable<IResourceConverter>   (Registry)
+   └─ depends -> IEnumerable<IResourceSerializer>  (Registry)
+
+Typing / Routing
+└─ IResourceTypeResolver
+   ├─ (ResourceKind Kind) Resolve(string logicalKey)
+   └─ optional: (string PhysicalKey, string? DefaultContentType) ResolveWriteTarget(string logicalKey, Type targetType)
+
+Parsing / Conversion / Serialization
+├─ IResourceDeserializer (non-generic)
+│  ├─ bool CanHandle(Type targetType, string? contentType, string logicalKey)
+│  └─ object? Deserialize(Type targetType, ResourceEnvelope envelope)
+├─ IResourceConverter
+│  ├─ bool CanConvert(Type sourceType, Type targetType, string logicalKey)
+│  └─ object? Convert(object sourceModel, Type targetType)
+└─ IResourceSerializer (non-generic)
+   ├─ bool CanHandle(Type sourceType, string logicalKey, out string contentType)
+   └─ Task SerializeAsync(object value, Stream destination, string contentType, CancellationToken ct)
+
+Envelope (Parser/Serializer-Input)
+└─ ResourceEnvelope
+   ├─ string LogicalKey
+   ├─ string? ContentType
+   ├─ Stream Content
+   ├─ ITenantContext Tenant
+   ├─ ProviderId? ProviderId
+   └─ string? Version
+
+Resource-Orchestrierung
+└─ IResourceLocator
+   ├─ Task<IResourceResult> GetAsync(ResourceRequest, ...)
+   ├─ Task<ResourceLookupResult> TryGetAsync(ResourceRequest, ...)
+   ├─ Task<IResourceWriteResult> WriteAsync(ResourceRequest, Stream, createIfMissing, ifMatch, contentType, ...)
+   ├─ Task<IResourceDeleteResult> DeleteAsync(ResourceRequest, ifMatch, ...)
+   └─ Task<IResourceListResult>  ListKeysAsync(ResourceRequest, ...)
+
+Physische Provider
+├─ IResourceReader
+│  ├─ int Priority
+│  ├─ ProviderId Id
+│  ├─ bool CanHandle(ResourceRequest)
+│  ├─ ValueTask<ResourceLookupResult> TryGetAsync(...)
+│  └─ Task<(IReadOnlyList<string> keys, string? nextToken)> ListKeysAsync(...)
+└─ IResourceWriter
+   ├─ Task<IResourceWriteResult>  WriteAsync(ResourceRequest, Stream, ...)
+   └─ Task<IResourceDeleteResult> DeleteAsync(ResourceRequest, ...)
+
+Beispiele (Reader/Writer)
+├─ FileSystemResourceReader / FileSystemResourceWriter (deterministische ProviderId pro Root, Priority)
+└─ EnvironmentResourceReader (read-only)
+
+Tenant-Kontext
+├─ ITenantContext (CurrentTenantId, ResolutionChain, DefaultCulture, ...)
+└─ ITenantContextAccessor
+   ├─ ITenantContext? Current
+   └─ IDisposable BeginScope(ITenantContext context)
+
+Datenfluss (READ)
+Consumer
+ └─ IResourceMaterializer.TryGet<T>("__CFG__LISTENER")
+    ├─ tenant := ITenantContextAccessor.Current
+    ├─ kind := IResourceTypeResolver.Resolve(logicalKey)
+    ├─ for tenant in ResolutionChain:
+    │    └─ IResourceLocator.TryGet(ResourceRequest(tenant, logicalKey, kind))
+    │         ├─ Reader in Priority-Reihenfolge
+    │         └─ IResourceResult { Content(Stream), ContentType, Version, ProviderId }
+    ├─ Envelope := ResourceEnvelope(logicalKey, ContentType, Stream, tenant, ...)
+    ├─ Deserializer match (T + ContentType) → T
+    └─ wenn kein direkter Deserializer:
+         ├─ Deserializer → Intermediär (z. B. IJsonEntity/IXmlEntity/IBinaryBlob)
+         └─ IResourceConverter (Intermediär -> T)
+
+Datenfluss (WRITE)
+Consumer
+ └─ IResourceMaterializer.Write<T>("__CFG__LISTENER", value, ifMatch?)
+    ├─ tenant := ITenantContextAccessor.Current
+    ├─ kind := IResourceTypeResolver.Resolve(logicalKey)
+    ├─ Serializer match (typeof(T)) → contentType + Stream
+    └─ IResourceLocator.WriteAsync(ResourceRequest(tenant, logicalKey, kind), stream, contentType, ifMatch)
+
+Key-Strategie
+- logicalKey ohne Tenant-Präfix (Tenant implizit via Accessor)
+- Beispiele:
+  - "__CERT__MY"                  → ResourceKind.Certificate → ICertificateEntity / Write<Icert>
+  - "__CFG__WEB__LISTENER"        → ResourceKind.Config      → ITcpParameters | IJsonEntity
+  - "__ASSET__LOGO"               → ResourceKind.Asset       → IBinaryBlob/IImageEntity
+
+Fehlerpfade
+- kein Reader-Treffer in Chain → TryGet<T> = false | Get<T> wirft
+- kein Deserializer/Converter → TryGet<T> = false | Get<T> wirft (inkl. ContentType/ProviderId/Version-Hinweis)
+
+
+Prioritäten sind auch hier sinnvoll. Empfehlenswert:
+IResourceDeserializerPriority
+int Priority { get; } (kleiner = zuerst)
+Registry der Deserializer nach Priority sortieren.
+IResourceConverterPriority
+int Priority { get; }
+Erlaubt mehrere Konvertierungswege; der “beste” wird zuerst versucht.
+IResourceSerializerPriority
+int Priority { get; }
+Auswahlstrategie im Materializer:
+Deserializer: erster, der (T, ContentType, Key) kann, gemäß Priority.
+Fallback: Intermediär-Deserializer nach Priority, dann Converter-Kette nach Priority.
+Serializer: erster, der typeof(T) kann; falls keiner: Converter T→Intermediär (nach Priority), dann Serializer.
+Warum:
+Bevorzugung performanter/präziser Parser.
+Gezieltes Override in Projekten (eigener Parser mit höherer Priorität).
+Deterministische Ergebnisse bei Mehrfach-Unterstützung.
+
+Reihenfolge per Priority sortiert (kleiner zuerst). Der Materializer geht die Liste durch:
+Deserializer: erster, der CanHandle(...) true liefert, wird genutzt; sonst nächster.
+Falls keiner direkt für T passt: Intermediär-Deserializer in Priority-Reihenfolge, dann Converter-Kette (ebenfalls nach Priority) bis ein Pfad funktioniert.
+Serializer beim Schreiben analog: erster passender, sonst via Converter zu einem unterstützten Intermediär, dann entsprechender Serializer.
+Wenn alle Kandidaten scheitern: TryGet→ false; Get → Exception.
