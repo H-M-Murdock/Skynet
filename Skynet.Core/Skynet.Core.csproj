@@ -21,6 +21,9 @@
       <Folder Include="Bootstrap\Steps\Core\" />
       <Folder Include="Configuration\" />
       <Folder Include="Licensing\Internal\" />
+      <Folder Include="ResourceProvider\Materializer\Converter\" />
+      <Folder Include="ResourceProvider\Materializer\Deserializer\" />
+      <Folder Include="ResourceProvider\Materializer\Serializer\" />
       <Folder Include="ResourceProvider\Provider\" />
       <Folder Include="Security\" />
       <Folder Include="Utilities\" />

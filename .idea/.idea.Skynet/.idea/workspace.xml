@@ -10,8 +10,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materuializer" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/BinaryToStringConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/ICsvToDomainConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IIniToDomainConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IJsonToDomainConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToBinaryConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToCsvConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToIniConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToJsonConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToXmlConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/XmlToDomainConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/ICsvResourceDeserializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IIniResourceDeserializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IJsonResourceDeserializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IStringResourceDeserializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IXmlResourceDeserializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceConverter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceDeserializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceSerializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/ResourceEnvelope.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IBinaryResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/ICsvResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IInMemoryBinaryResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IJsonResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IRawResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IStringResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IXmlResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IniResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/ICsvResourceSerializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IIniResourceSerializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IJsonResourceSerializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IStringResourceSerializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IXmlResourceSerializer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +97,37 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/BinaryToStringConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/ICsvToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IIniToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IJsonToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToBinaryConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToCsvConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToIniConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToJsonConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToXmlConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/XmlToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/ICsvResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IIniResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IJsonResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IStringResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IXmlResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IBinaryResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/ICsvResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IInMemoryBinaryResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IJsonResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IRawResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IStringResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IXmlResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IniResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/ICsvResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IIniResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IJsonResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IStringResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IXmlResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceWriter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
@@ -84,6 +147,9 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -95,25 +161,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.Skynet.LicenseGrant.executor": "Run",
-    ".NET Project.Skynet.LicenseRequest.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "XThreadsFramesViewSplitterKey": "0.49963424",
-    "git-widget-placeholder": "feat/bootstrap",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.Skynet.LicenseGrant.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.Skynet.LicenseRequest.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.49963424&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/bootstrap&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
@@ -178,6 +244,7 @@
       <workItem from="1760510765740" duration="3770000" />
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
+      <workItem from="1760596106841" duration="11458000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -243,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760526692510</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings.">
+      <option name="closed" value="true" />
+      <created>1760528825499</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1760528825499</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,7 +336,8 @@
     <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
     <MESSAGE value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
     <MESSAGE value="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management." />
+    <MESSAGE value="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
