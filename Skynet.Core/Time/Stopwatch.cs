@@ -16,12 +16,27 @@ namespace Skynet.Core.Time
 
         public TimeSpan Elapsed(long startTimestamp, long endTimestamp)
         {
-            var deltaTicks = endTimestamp - startTimestamp;
-            // Umrechnung in TimeSpan-Ticks (long) mit saturierender Klammerung
-            var timespanTicks = (long)(deltaTicks * TicksPerStopwatchTick);
-            return new TimeSpan(timespanTicks);
+            var deltaTicksStopwatch = endTimestamp - startTimestamp;
+
+            // double-Multiplikation, danach clampen in den Bereich von long-Min/Max und TimeSpan.Min/Max
+            double ticksDouble = deltaTicksStopwatch * TicksPerStopwatchTick;
+
+            // Clamp in long-Bereich, damit der ctor von TimeSpan sicher ist
+            if (ticksDouble > long.MaxValue) ticksDouble = long.MaxValue;
+            if (ticksDouble < long.MinValue) ticksDouble = long.MinValue;
+
+            var timeSpanTicks = (long)ticksDouble;
+
+            // Zusätzlich gegen TimeSpan-Grenzen clampen (obwohl ctor mit long schon prüft)
+            if (timeSpanTicks > TimeSpan.MaxValue.Ticks) timeSpanTicks = TimeSpan.MaxValue.Ticks;
+            if (timeSpanTicks < TimeSpan.MinValue.Ticks) timeSpanTicks = TimeSpan.MinValue.Ticks;
+
+            return new TimeSpan(timeSpanTicks);
         }
 
+        /// <summary>
+        /// Bequeme Variante: verstrichene Zeit seit startTimestamp bis jetzt.
+        /// </summary>
         public TimeSpan ElapsedSince(long startTimestamp)
             => Elapsed(startTimestamp, GetTimestamp());
     }
