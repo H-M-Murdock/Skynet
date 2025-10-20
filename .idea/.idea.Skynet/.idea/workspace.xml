@@ -10,33 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationChangeNotifier.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/IStopwatch.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/Stopwatch.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerOptions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterLocalAesProtectorStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterLocalAesProtectorStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/SecretProtector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Crypto/Internal/SecretProtector.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientDekManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientDekManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseTools.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseTools.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseGlossary.md" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseGlossary.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/IEnricher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IEnricher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/ILogSink.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogSink.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceWriter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceWriter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceKind.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceKind.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ProgramTenantContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ProgramTenantContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/InvariantCultureFixture.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationStoreTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,7 +264,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760955728191</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces.">
+      <option name="closed" value="true" />
+      <created>1760960032310</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1760960032310</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,7 +289,8 @@
     <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
     <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
     <MESSAGE value="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings." />
+    <MESSAGE value="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
