@@ -22,4 +22,8 @@
       <ProjectReference Include="..\Skynet.Core\Skynet.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Time\" />
+    </ItemGroup>
+
 </Project>
