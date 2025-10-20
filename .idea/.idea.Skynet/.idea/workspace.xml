@@ -10,13 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/InvariantCultureFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationStoreTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Time/ClockImplementationsTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Time/StopwatchTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +25,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feat/i18n" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,8 +83,8 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IMonotonicClock.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/MonotonicClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IStopwatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/Stopwatch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nEntryId.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nTemplate.cs" root0="FORCE_HIGHLIGHTING" />
@@ -104,13 +100,8 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/TemplateSetValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/DiRegistrationTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/InvariantCultureFixture.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationStoreTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/LocalizationTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockImplementationsTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/StopwatchTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -133,7 +124,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "XThreadsFramesViewSplitterKey": "0.49963424",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feat/time",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -272,7 +263,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760960032310</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy.">
+      <option name="closed" value="true" />
+      <created>1760960558443</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1760960558443</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -290,7 +289,8 @@
     <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
     <MESSAGE value="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings." />
     <MESSAGE value="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces." />
+    <MESSAGE value="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

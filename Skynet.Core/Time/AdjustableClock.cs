@@ -3,7 +3,8 @@
 namespace Skynet.Core.Time
 {
     /// <summary>
-    /// Manually advanceable, thread-safe clock for integration tests.
+    /// Manuell voranschreitbare, thread-sichere Uhr für Integrations-/Akzeptanztests.
+    /// Achtung: Nicht in Produktion verwenden.
     /// </summary>
     public sealed class AdjustableClock : IClock
     {
@@ -18,8 +19,15 @@ namespace Skynet.Core.Time
             _ticksUtc = utc.Ticks;
         }
 
+        /// <summary>
+        /// Aktuelle UTC-Zeit des verstellbaren Clocks. Thread-sicher via Interlocked.Read.
+        /// </summary>
         public DateTime UtcNow => new DateTime(Interlocked.Read(ref _ticksUtc), DateTimeKind.Utc);
 
+        /// <summary>
+        /// Stellt die Uhr um delta vor (kann negativ sein, um zurückzustellen).
+        /// Thread-sicher via Interlocked.Add.
+        /// </summary>
         public void Advance(TimeSpan delta) => Interlocked.Add(ref _ticksUtc, delta.Ticks);
     }
 }

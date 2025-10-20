@@ -3,7 +3,7 @@
 namespace Skynet.Core.Time
 {
     /// <summary>
-    /// Fixed time for deterministic tests.
+    /// Fixierte Zeitquelle für deterministische Tests.
     /// </summary>
     public sealed class FrozenClock : IClock
     {
@@ -16,6 +16,9 @@ namespace Skynet.Core.Time
                 : DateTime.SpecifyKind(utcNow, DateTimeKind.Utc);
         }
 
+        /// <summary>
+        /// Gibt stets die beim Erzeugen gesetzte UTC-Zeit zurück.
+        /// </summary>
         public DateTime UtcNow => _utc;
     }
 }
