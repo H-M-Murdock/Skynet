@@ -10,9 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Time/ClockImplementationsTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Time/StopwatchTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatch.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatchFactory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchLoggingTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,10 +81,13 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/Time/AdjustableClock.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IStopwatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatchFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/Stopwatch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nEntryId.cs" root0="FORCE_HIGHLIGHTING" />
@@ -100,7 +104,11 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/TemplateSetValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockImplementationsTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockRegistrationTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchLoggingTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/StopwatchEdgeCaseTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/StopwatchTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -271,7 +279,31 @@
       <option name="project" value="LOCAL" />
       <updated>1760960558443</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="test(time): Basis-Tests für IClock und IStopwatch hinzufügen">
+      <option name="closed" value="true" />
+      <created>1760960890121</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1760960890121</updated>
+    </task>
+    <task id="LOCAL-00011" summary="test(time): DI-Registrierung für IClock (System/Frozen/Adjustable) testen; docs: Kommentare präzisiert">
+      <option name="closed" value="true" />
+      <created>1760961089882</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1760961089882</updated>
+    </task>
+    <task id="LOCAL-00012" summary="feat(time): Stopwatch robuster gegen Overflow clamping; test(time): Edge-Case-Tests für IStopwatch hinzugefügt">
+      <option name="closed" value="true" />
+      <created>1760961187431</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1760961187431</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -290,7 +322,10 @@
     <MESSAGE value="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings." />
     <MESSAGE value="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces." />
     <MESSAGE value="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy." />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy." />
+    <MESSAGE value="test(time): Basis-Tests für IClock und IStopwatch hinzufügen" />
+    <MESSAGE value="test(time): DI-Registrierung für IClock (System/Frozen/Adjustable) testen; docs: Kommentare präzisiert" />
+    <MESSAGE value="feat(time): Stopwatch robuster gegen Overflow clamping; test(time): Edge-Case-Tests für IStopwatch hinzugefügt" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(time): Stopwatch robuster gegen Overflow clamping; test(time): Edge-Case-Tests für IStopwatch hinzugefügt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
