@@ -1,3 +1,4 @@
+/*
 // Skynet.Core.Configuration/IConfigProvider.cs
 using Microsoft.Extensions.Primitives;
 using Skynet.Core.Tenant;
@@ -20,3 +21,4 @@ public interface IConfigProvider
     // Keys auflisten (optional)
     Task<IReadOnlyList<string>> ListKeysAsync(string prefix, ITenantContext tenantContext, CancellationToken ct = default);
 }
+*/

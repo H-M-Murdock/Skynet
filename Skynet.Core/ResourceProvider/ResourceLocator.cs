@@ -169,7 +169,7 @@ public sealed class ResourceLocator : IResourceLocator
         return await writer.WriteAsync(request, content, createIfMissing, ifMatch, contentType, cancellationToken)
                            .ConfigureAwait(false);
     }
-
+    
     public async Task<IResourceDeleteResult> DeleteAsync(
         ResourceRequest request,
         string? ifMatch = null,
@@ -182,12 +182,33 @@ public sealed class ResourceLocator : IResourceLocator
         return await writer.DeleteAsync(request, ifMatch, cancellationToken).ConfigureAwait(false);
     }
 
-    // Auswahlstrategie für Writer: der erste registrierte Writer (Priority-Ranking kann in Writer selbst abgebildet werden).
+    // Auswahlstrategie für Writer: nach Fähigkeiten/Policy und Priorität.
     private IResourceWriter? SelectWriter(ResourceRequest request)
     {
-        // Falls mehrere Writer mit Priorität, hier nach Policy ordnen/filtern.
-        // Z. B. Writers mit optionalem CanHandle(request) bevorzugen.
-        return _writeProviders.FirstOrDefault();
+        // 1) Writer mit IResourceWriteCapabilities filtern, die CanHandle(request) true liefern.
+        var withCaps = _writeProviders
+            .Select(w => (writer: w, caps: w as IResourceWriteCapabilities))
+            .Where(x => x.caps?.CanHandle(request) != false) // true oder null (kein Interface) zulassen
+            .ToArray();
+
+        if (withCaps.Length == 0)
+            return null;
+
+        // 2) Wenn mehrere Kandidaten: nach Priority (falls vorhanden) sortieren, sonst Reihenfolge beibehalten.
+        var ordered = withCaps
+            .OrderBy(x => x.caps?.Priority ?? int.MaxValue)
+            .Select(x => x.writer)
+            .ToArray();
+
+        // 3) Policy-Beispiel: Secrets niemals an FileSystemWriter routen (sofern ein anderer Writer existiert).
+        if (request.ResourceType == ResourceKind.Secret && ordered.Count() > 1)
+        {
+            var preferred = ordered.FirstOrDefault(w => w is not FileSystemResourceWriter);
+            if (preferred is not null) return preferred;
+        }
+
+        // 4) Default: erster geeigneter Writer.
+        return ordered.FirstOrDefault();
     }
     
     

@@ -4,6 +4,25 @@ Dieses Dokument erklärt verwendete Abkürzungen, Begriffe und Abläufe. Es dien
 
 ---
 
+## AAD/HKDF – Projektweite Konventionen (verbindlich)
+
+- HKDF-Info
+  - Format: UTF-8 "tenant/{TenantId}/license-v1"
+  - Zweck: Bindet den abgeleiteten Sitzungsschlüssel K an Tenant und Version der Lizenz-Policy.
+- HKDF-Salt
+  - Format: NonceClient || NonceServer (Konkatenation in genau dieser Reihenfolge)
+  - Zweck: Entkoppelt Schlüsselableitungen bei neuen Handshakes; erhöht Unvorhersagbarkeit.
+- AEAD-AAD
+  - Format: UTF-8 "tenant/{TenantId};purpose={Purpose};v=1"
+  - Zweck: Bindet Ciphertexte (z. B. DEK-Wrap, Secrets-at-rest) an Tenant und fachlichen Zweck.
+  - Beispiele:
+    - "tenant/85b28ec9-34db-414b-9e29-2c4ae17a6923;purpose=license;v=1"
+    - "tenant/{id};purpose=secret.profile;v=1"
+
+Diese Konstanten sind auf Client und Server identisch zu verwenden. Abweichungen führen zu Verifikationsfehlern.
+
+---
+
 ## Abkürzungen und Begriffe
 
 - AES (Advanced Encryption Standard)

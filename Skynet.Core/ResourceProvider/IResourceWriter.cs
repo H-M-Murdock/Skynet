@@ -36,3 +36,21 @@ public interface IResourceWriter
         CancellationToken cancellationToken = default);
 }
 
+/// <summary>
+/// Optionale Fähigkeitenbeschreibung für Writer zur konsistenten Auswahl.
+/// Implementierungen können signalisieren, welche Requests sie schreiben können.
+/// </summary>
+public interface IResourceWriteCapabilities
+{
+    /// <summary>
+    /// Schneller Check, ob dieser Writer den Request grundsätzlich bedienen kann
+    /// (z. B. abhängig von ResourceKind, Key-Prefix, Policies).
+    /// </summary>
+    bool CanHandle(ResourceRequest request);
+
+    /// <summary>
+    /// Optional: Priorität für Schreibauswahl (kleiner = bevorzugt).
+    /// </summary>
+    int Priority => 1000;
+}
+

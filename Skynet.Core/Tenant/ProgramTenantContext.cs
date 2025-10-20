@@ -24,17 +24,8 @@ public sealed class ProgramTenantContext : ITenantContext
     /// </summary>
     public static ProgramTenantContext Instance { get; } = new ProgramTenantContext();
 
-    /// <summary>
-    /// Privater parameterloser Konstruktor, der alle Properties mit sinnvollen Standardwerten belegt.
-    /// </summary>
     private ProgramTenantContext()
     {
-        // Sinnvolle Defaults:
-        // - Aktueller Tenant: "program" (oder eine feste GUID, falls TenantId das unterstützt)
-        // - DefaultCulture: "en-US"
-        // - Name/Description: sprechende Defaults
-        // - ParentTenantId: none
-        // - ResolutionChain: [CurrentTenantId]
         CurrentTenantId = new TenantId(new Guid("85B28EC9-34DB-414B-9E29-2C4AE17A6923"));
         DefaultCulture = new CultureInfo("de-DE");
         Name = "System";
@@ -45,5 +36,4 @@ public sealed class ProgramTenantContext : ITenantContext
         chain.Add(CurrentTenantId);
         ResolutionChain = chain.ToImmutable();
     }
-
 }

@@ -42,7 +42,7 @@ internal sealed class LogWriter : ILogWriter, IDisposable
     public LogWriter(BootstrapFileLoggerOptions options)
     {
         _options = options;
-        _channel = Channel.CreateBounded<string>(new BoundedChannelOptions(1024)
+        _channel = Channel.CreateBounded<string>(new BoundedChannelOptions(2048)
         {
             SingleReader = true,
             SingleWriter = false,
@@ -67,12 +67,11 @@ internal sealed class LogWriter : ILogWriter, IDisposable
         _channel.Writer.TryWrite(line);
     }
 
-    // Neu: expliziter Flush (drain + stream flush)
+    // Expliziter Flush (drain + stream flush)
     public void Flush()
     {
         try
         {
-            // so viel wie möglich aus dem Channel ziehen und schreiben
             var sb = new StringBuilder(8 * 1024);
             while (_channel.Reader.TryRead(out var line))
             {
@@ -100,16 +99,12 @@ internal sealed class LogWriter : ILogWriter, IDisposable
 
     public void Dispose()
     {
-        // 1) keine neuen Einträge mehr
         _channel.Writer.TryComplete();
 
-        // 2) Worker beenden lassen
         try { _worker.Wait(TimeSpan.FromSeconds(3)); } catch { /* ignore */ }
 
-        // 3) letzte Reste sicher flushen
         try { Flush(); } catch { /* ignore */ }
 
-        // 4) Stream schließen
         lock (_fileLock)
         {
             _stream?.Dispose();
@@ -128,19 +123,24 @@ internal sealed class LogWriter : ILogWriter, IDisposable
 
         try
         {
+            var nextFlushAt = DateTime.UtcNow + flushInterval;
+
             while (await _channel.Reader.WaitToReadAsync(token).ConfigureAwait(false))
             {
-                var nextFlushAt = DateTime.UtcNow + flushInterval;
-
-                while (DateTime.UtcNow < nextFlushAt && _channel.Reader.TryRead(out var line))
+                while (_channel.Reader.TryRead(out var line))
                 {
                     sb.Append(line);
+                    if (sb.Length >= 64 * 1024)
+                    {
+                        TryWriteBuffered(sb);
+                    }
                 }
 
-                if (sb.Length > 0)
+                // Zeitgesteuerter Flush
+                if (DateTime.UtcNow >= nextFlushAt && sb.Length > 0)
                 {
-                    try { WriteToFile(sb); } catch { /* ignore */ }
-                    sb.Clear();
+                    TryWriteBuffered(sb);
+                    nextFlushAt = DateTime.UtcNow + flushInterval;
                 }
 
                 await Task.Delay(10, token).ConfigureAwait(false);
@@ -149,15 +149,12 @@ internal sealed class LogWriter : ILogWriter, IDisposable
                 TryCleanupRetention();
             }
 
-            // Channel ist abgeschlossen → Rest entleeren
+            // Channel abgeschlossen -> Rest entleeren
             while (_channel.Reader.TryRead(out var line2))
                 sb.Append(line2);
 
             if (sb.Length > 0)
-            {
-                try { WriteToFile(sb); } catch { /* ignore */ }
-                sb.Clear();
-            }
+                TryWriteBuffered(sb);
 
             // finaler Flush
             lock (_fileLock)
@@ -172,6 +169,16 @@ internal sealed class LogWriter : ILogWriter, IDisposable
         catch
         {
             // ignore
+        }
+
+        void TryWriteBuffered(StringBuilder buffer)
+        {
+            try
+            {
+                WriteToFile(buffer);
+                buffer.Clear();
+            }
+            catch { /* ignore */ }
         }
     }
 
@@ -188,7 +195,12 @@ internal sealed class LogWriter : ILogWriter, IDisposable
             }
 
             _stream.Write(bytes, 0, bytes.Length);
-            _stream.Flush();
+
+            // Nur schreiben, Flush erfolgt zeitgesteuert / explizit / Dispose
+            if (_options.UseWriteThrough)
+            {
+                try { _stream.Flush(); } catch { /* ignore */ }
+            }
         }
     }
 
@@ -197,13 +209,18 @@ internal sealed class LogWriter : ILogWriter, IDisposable
         var baseName = $"{_options.FileNamePrefix}-{DateTime.UtcNow:yyyyMMdd}.log";
         _currentFilePath = Path.Combine(_options.DirectoryPath, baseName);
 
+        // Ohne WriteThrough, OS-Buffer nutzen; Flush zeitgesteuert
+        var fileOptions = FileOptions.Asynchronous;
+        if (_options.UseWriteThrough)
+            fileOptions |= FileOptions.WriteThrough;
+
         _stream = new FileStream(
             _currentFilePath,
             FileMode.Append,
             FileAccess.Write,
             FileShare.Read,
-            bufferSize: 64 * 1024,
-            FileOptions.Asynchronous | FileOptions.WriteThrough);
+            bufferSize: 128 * 1024,
+            fileOptions);
     }
 
     private void TryRotateIfNeeded()
@@ -214,7 +231,7 @@ internal sealed class LogWriter : ILogWriter, IDisposable
             lock (_fileLock)
             {
                 if (string.IsNullOrEmpty(_currentFilePath) || _stream == null) return;
-                _stream.Flush();
+                try { _stream.Flush(); } catch { /* ignore */ }
                 fi = new FileInfo(_currentFilePath);
             }
 

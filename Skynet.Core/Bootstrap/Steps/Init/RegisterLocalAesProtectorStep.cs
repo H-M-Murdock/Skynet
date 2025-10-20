@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Skynet.Core.Crypto;
 
 namespace Skynet.Core.Bootstrap;
@@ -10,6 +11,9 @@ namespace Skynet.Core.Bootstrap;
 /// Registriert einen SecretProtector:
 /// - Schlüssel aus Config: Crypto:LocalAes:KeyBase64 (Base64 von 16/24/32 Bytes)
 /// - Fallback: stabiler Default-Key im Code (nur für Bootstrap/Core-Fallback!)
+/// Policy:
+/// - In Produktionsumgebungen ist der Default-Key NICHT erlaubt (Abbruch mit klarer Fehlermeldung).
+/// - Produktionsflag wird über ENV "ASPNETCORE_ENVIRONMENT=Production" oder Config-Schlüssel "Environment:Name=Production" erkannt.
 /// </summary>
 public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
 {
@@ -26,6 +30,13 @@ public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
         // Config holen (vom BootstrapConfigStep bereitgestellt)
         using var sp = services.BuildServiceProvider();
         var cfg = sp.GetService<IConfiguration>();
+        var logger = sp.GetService<ILogger<RegisterLocalAesProtectorStep>>();
+
+        // Environment-Name bestimmen (Defaults: Development)
+        var env = cfg?["Environment:Name"]
+                  ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                  ?? "Development";
+        var isProduction = string.Equals(env, "Production", StringComparison.OrdinalIgnoreCase);
 
         byte[] key;
         string source;
@@ -43,17 +54,34 @@ public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
                 }
                 else
                 {
-                    (key, source) = GetDefaultKey();
+                    throw new InvalidOperationException("Crypto:LocalAes:KeyBase64 must decode to 16/24/32 bytes.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                (key, source) = GetDefaultKey();
+                throw new InvalidOperationException("Invalid Base64 in Crypto:LocalAes:KeyBase64.", ex);
             }
         }
         else
         {
+            // Kein Key konfiguriert → Default nur außerhalb Produktion zulassen
             (key, source) = GetDefaultKey();
+
+            if (isProduction)
+            {
+                // Harte Policy: in Produktion abbrechen
+                var msg =
+                    "No Crypto:LocalAes:KeyBase64 configured while running in Production. " +
+                    "Using the built-in default key is forbidden for security reasons. " +
+                    "Please configure a 16/24/32-byte key (Base64) at 'Crypto:LocalAes:KeyBase64'.";
+                logger?.LogCritical("{Message}", msg);
+                throw new InvalidOperationException(msg);
+            }
+
+            // In Nicht-Prod: warnen
+            logger?.LogWarning(
+                "Using built-in DEFAULT AES key for SecretProtector in environment '{Env}'. Configure 'Crypto:LocalAes:KeyBase64' ASAP.",
+                env);
         }
 
         // SecretProtector mit IAead registrieren
@@ -63,7 +91,7 @@ public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
             return new SecretProtector(aead, key);
         });
 
-        _report = $"secret protector registered (keySource={source}, keySize={key.Length * 8}bit)";
+        _report = $"secret protector registered (keySource={source}, keySize={key.Length * 8}bit, env={env})";
         return Task.CompletedTask;
     }
 
@@ -71,7 +99,7 @@ public sealed class RegisterLocalAesProtectorStep : IBootStep, IStepReport
 
     private static (byte[] key, string source) GetDefaultKey()
     {
-        // Stabiler Default (nur für Bootstrap/Core-Fallback; später durch sicheren Secret-Provider ersetzen).
+        // Stabiler Default (nur für Bootstrap/Core-Fallback in Nicht-Prod).
         // 32 Bytes (AES-256).
         var key = new byte[]
         {

@@ -7,6 +7,7 @@ public interface IClientDekManager
 
     // Verpacken/Entpacken des DEK via KEK
     // AAD/Context bindet den DEK an Tenant/Key-Name usw. (Empfehlung: TenantId/Policy-Hash)
+    // Projektweite Konvention: AAD = UTF8("tenant/{TenantId};purpose=license;v=1")
     byte[] WrapDek(byte[] kek, byte[] dek, byte[]? aad = null);
     byte[] UnwrapDek(byte[] kek, byte[] dekEnc, byte[]? aad = null);
 

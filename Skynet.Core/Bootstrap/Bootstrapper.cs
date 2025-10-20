@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace Skynet.Core.Bootstrap;
 
@@ -27,8 +28,12 @@ public sealed class Bootstrapper
 
                     if (!_switchNoticePrinted)
                     {
-                        // Einmalige Hinweis-Ausgabe auf die Konsole beim Wechsel
-                        Console.WriteLine($"[{DateTime.UtcNow:O}] Switching to DI logging …");
+                        // Umschalt-Hinweis nur in Development/Non-Prod
+                        var env = ResolveEnvironment(sp);
+                        if (!string.Equals(env, "Production", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Console.WriteLine($"[{DateTime.UtcNow:O}] Switching to DI logging … (env={env})");
+                        }
                         _switchNoticePrinted = true;
                     }
                 }
@@ -44,6 +49,23 @@ public sealed class Bootstrapper
         else
             Console.WriteLine($"[{DateTime.UtcNow:O}] {message}");
     }
+
+    private static string ResolveEnvironment(IServiceProvider sp)
+    {
+        try
+        {
+            var cfg = sp.GetService<IConfiguration>();
+            var env = cfg?["Environment:Name"]
+                      ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                      ?? "Development";
+            return env;
+        }
+        catch
+        {
+            return "Development";
+        }
+    }
+
     public async Task<IServiceProvider> RunAsync(
         IEnumerable<IBootStep> steps,
         CancellationToken ct = default)
@@ -63,7 +85,6 @@ public sealed class Bootstrapper
 
         var ordered = barriers.OrderBy(b => b.TargetLevel).ToList();
 
-        // Eine ServiceCollection pro Barrier-Phase, nach jeder Barrier bauen wir einen Provider
         ServiceProvider? lastProvider = null;
         var services = new ServiceCollection();
 
@@ -81,7 +102,6 @@ public sealed class Bootstrapper
 
             Log(lastProvider, LogLevel.Information, $"Starting barrier {barrier.GetType().Name} ({CurrentLevel} -> {barrier.TargetLevel})");
 
-            // Teil-Schritte ausführen (registrieren in 'services')
             var innerSteps = barrier.GetInnerSteps();
             foreach (var step in innerSteps)
             {
@@ -89,7 +109,6 @@ public sealed class Bootstrapper
                 Log(lastProvider, LogLevel.Information, $" Starting step {step.GetType().Name}");
                 await step.ExecuteAsync(services, ct).ConfigureAwait(false);
 
-                // Optionaler Report
                 if (step is IStepReport reporter)
                 {
                     var report = reporter.GetReport();
@@ -100,14 +119,11 @@ public sealed class Bootstrapper
                 Log(lastProvider, LogLevel.Information, $" Started  step {step.GetType().Name}");
             }
 
-            // Provider für diese Barrier bauen
             var provider = services.BuildServiceProvider(validateScopes: true);
 
-            // Level erhöhen und ab jetzt DI-Logger nutzen (Umschaltung erfolgt in Log(...) automatisch)
             CurrentLevel = barrier.TargetLevel;
             Log(provider, LogLevel.Information, $"Started  barrier {barrier.GetType().Name} (CurrentLevel={CurrentLevel})");
 
-            // Vorherigen Provider entsorgen (saubere Lifetimes), neue ServiceCollection für nächste Barrier
             if (lastProvider is not null)
             {
                 await lastProvider.DisposeAsync().ConfigureAwait(false);
@@ -115,7 +131,6 @@ public sealed class Bootstrapper
             lastProvider = provider;
         }
 
-        // Finaler Provider ist der von der letzten Barrier
         var finalProvider = lastProvider ?? new ServiceCollection().BuildServiceProvider(validateScopes: true);
         Log(finalProvider, LogLevel.Information, $"Bootstrap finished. CurrentLevel={CurrentLevel}");
 

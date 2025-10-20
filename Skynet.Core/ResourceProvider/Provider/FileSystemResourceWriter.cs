@@ -4,7 +4,7 @@ using Skynet.Core.Tenant;
 
 namespace Skynet.Core.ResourceProvider;
 
-public sealed class FileSystemResourceWriter : IResourceWriter
+public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCapabilities
 {
     private readonly string _rootFull;
     private readonly ProviderId _providerId;
@@ -22,6 +22,15 @@ public sealed class FileSystemResourceWriter : IResourceWriter
         _providerId = new ProviderId(DeterministicGuidFromString(_rootFull));
     }
 
+    // Policy: FS-Writer akzeptiert standardmäßig keine Secrets (um Klartext-Files in Prod zu vermeiden).
+    // Config/Template/Asset/License/File sind erlaubt.
+    public bool CanHandle(ResourceRequest request)
+        => request.ResourceType is ResourceKind.Config
+                                or ResourceKind.Template
+                                or ResourceKind.Asset
+                                or ResourceKind.License
+                                or ResourceKind.File;
+
     public async Task<IResourceWriteResult> WriteAsync(
         ResourceRequest request,
         Stream content,
@@ -31,6 +40,9 @@ public sealed class FileSystemResourceWriter : IResourceWriter
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+
+        if (!CanHandle(request))
+            throw new NotSupportedException($"FileSystemResourceWriter: ResourceKind '{request.ResourceType}' is not allowed by policy.");
 
         if (string.IsNullOrWhiteSpace(request.Key))
             throw new ArgumentException("Key must be specified for file system writes.", nameof(request));
@@ -78,6 +90,9 @@ public sealed class FileSystemResourceWriter : IResourceWriter
 
         var (etag, fi) = await ComputeFileMetaAsync(fullPath, cancellationToken).ConfigureAwait(false);
 
+        // ContentType-Defaulting gemäß ResourceKind-Policy
+        var resolvedContentType = contentType ?? ResolveDefaultContentType(request.ResourceType, fullPath);
+
         return new FsResourceWriteResult(
             tenantId: request.TenantId,
             key: request.Key!,
@@ -85,7 +100,7 @@ public sealed class FileSystemResourceWriter : IResourceWriter
             lastModified: new DateTimeOffset(fi.LastWriteTimeUtc, TimeSpan.Zero),
             contentLength: fi.Length,
             providerId: _providerId,
-            contentType: contentType ?? IoUtilities.GuessContentType(fullPath));
+            contentType: resolvedContentType);
     }
 
     public async Task<IResourceDeleteResult> DeleteAsync(
@@ -94,6 +109,9 @@ public sealed class FileSystemResourceWriter : IResourceWriter
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+
+        if (!CanHandle(request))
+            throw new NotSupportedException($"FileSystemResourceWriter: ResourceKind '{request.ResourceType}' is not allowed by policy.");
 
         if (string.IsNullOrWhiteSpace(request.Key))
             throw new ArgumentException("Key must be specified for file system deletes.", nameof(request));
@@ -138,6 +156,22 @@ public sealed class FileSystemResourceWriter : IResourceWriter
             deleted: true,
             previousVersion: prevEtag,
             providerId: _providerId);
+    }
+
+    private static string ResolveDefaultContentType(ResourceKind kind, string path)
+    {
+        // Heuristik gemäß dokumentierter Policy
+        return kind switch
+        {
+            ResourceKind.Config   => "application/json",
+            ResourceKind.Template => "text/plain; charset=utf-8",
+            ResourceKind.Secret   => "application/octet-stream",
+            ResourceKind.License  => "application/json",
+            ResourceKind.Asset    => IoUtilities.GuessContentType(path) ?? "application/octet-stream",
+            ResourceKind.Certificate => IoUtilities.GuessContentType(path) ?? "application/octet-stream",
+            ResourceKind.File     => IoUtilities.GuessContentType(path) ?? "application/octet-stream",
+            _ => "application/octet-stream"
+        };
     }
 
     private static async Task<(string etag, FileInfo fi)> ComputeFileMetaAsync(string fullPath, CancellationToken ct)

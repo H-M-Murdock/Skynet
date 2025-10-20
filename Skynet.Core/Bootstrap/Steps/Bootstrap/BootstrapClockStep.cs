@@ -20,6 +20,7 @@ public sealed class BootstrapClockStep : IBootStep, IStepReport
         _observedToday = DateOnly.FromDateTime(_observedUtc);
 
         services.AddSingleton<IClock, SystemClock>();
+        services.AddSingleton<IStopwatch, Stopwatch>();
         return Task.CompletedTask;
     }
 

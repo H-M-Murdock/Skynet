@@ -12,6 +12,8 @@ public interface ILicenseTools
     Task<LicenseEnvelope> ServerIssueAsync(byte[] clientPubEcdh, ClientInitMeta clientMeta, ServerInitMeta serverMeta, CancellationToken ct = default);
 
     // 3) Client finalisiert: K ableiten, DEK generieren, DEKenc bauen, Lizenz speichern
+    // HKDF-Info = UTF8($"tenant/{tenantId}/license-v1"), HKDF-Salt = NonceClient||NonceServer
+    // AAD (DEK-Wrap) = UTF8($"tenant/{tenantId};purpose=license;v=1")
     Task<LicenseEnvelope> ClientFinalizeAsync(
         LicenseEnvelope serverEnvelope,
         byte[] clientPrivEcdh,
