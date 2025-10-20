@@ -10,30 +10,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/EventFrameworkInterfaces.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LoggingClientAndRoutingOptions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LoggingInfrastructureInterfaces.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/FileRotationPolicy.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IBackpressurePolicy.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IEnricher.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IEventChannel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IEventListener.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IEventTransport.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IEventTransportFactory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogEventEncoder.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogHealthMonitor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogRouter.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogSink.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogTextFormatter.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILoggingClient.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IRedactionPolicy.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/LogEventInterface.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientBackpressurePolicy.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/PathTemplateRenderer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/I18nEntryId.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/I18nKey.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/I18nTemplate.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/IExceptionLocalizer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ILocalizationContextAccessor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ILocalizationService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ILogEventLocalizer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ITemplateRenderer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ITemplateRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ITemplateValidator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ITenantScopeFormatter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ITranslationExchangeService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ImportOptions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/ImportReport.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/LocalizedException.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/TemplateLookupResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/TemplateLookupService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/TemplateSetValidationResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/TemplateValidationResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/TranslationExchangeFormat.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/i18n.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/LogEventInterface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogEvent.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,25 +84,23 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/FileRotationPolicy.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventListener.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogEventEncoder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogHealthMonitor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogRouter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogSink.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogTextFormatter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LogEventInterface.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/PathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nEntryId.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nTemplate.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ILocalizationContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ILocalizationService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ILogEventLocalizer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITenantScopeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ImportReport.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/LocalizedException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/TemplateLookupService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/TemplateSetValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureScopeDiTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -135,7 +132,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "XThreadsFramesViewSplitterKey": "0.49963424",
-    "git-widget-placeholder": "feat/logging",
+    "git-widget-placeholder": "feat/i18n",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
