@@ -304,4 +304,67 @@ public class IoUtilitiesTests
         Assert.StartsWith(rootWithSep, full, StringComparison.OrdinalIgnoreCase);
         Assert.Contains(Path.Combine("tenant1"), full, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public async Task WriteAtomicAsync_CreatesFileAndReturnsEtag()
+    {
+        var tenant = "t1";
+        var key = "folder/new.txt";
+        var bytes = Encoding.UTF8.GetBytes("hello write");
+
+        var (fullPath, etag, fi) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, bytes);
+
+        Assert.True(File.Exists(fullPath));
+        Assert.Equal(fullPath, fi.FullName);
+        var expectedHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(bytes));
+        Assert.Equal(expectedHash, etag);
+
+        var read = await File.ReadAllTextAsync(fullPath, Encoding.UTF8);
+        Assert.Equal("hello write", read);
+    }
+
+    [Fact]
+    public async Task WriteAtomicAsync_OverwritesAtomically_UpdatesEtag()
+    {
+        var tenant = "t1";
+        var key = "folder/replace.txt";
+
+        var v1 = Encoding.UTF8.GetBytes("v1");
+        var (p1, e1, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v1);
+        Assert.True(File.Exists(p1));
+
+        var v2 = Encoding.UTF8.GetBytes("v2 - updated");
+        var (p2, e2, fi2) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v2);
+
+        Assert.Equal(p1, p2);
+        Assert.NotEqual(e1, e2);
+        var expectedHash2 = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(v2));
+        Assert.Equal(expectedHash2, e2);
+        Assert.True(fi2.Exists);
+        var content = await File.ReadAllTextAsync(p2, Encoding.UTF8);
+        Assert.Equal("v2 - updated", content);
+    }
+
+    [Fact]
+    public async Task WriteAtomicAsync_WithSubFolder_WritesUnderSubFolder()
+    {
+        var (fullPath, _, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, "tenantX", "a/b.txt", Encoding.UTF8.GetBytes("x"), "static");
+        Assert.EndsWith(Path.Combine("tenantX", "static", "a", "b.txt"), fullPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData(null, "t", "k")]
+    [InlineData("", "t", "k")]
+    [InlineData(" ", "t", "k")]
+    [InlineData("root", null, "k")]
+    [InlineData("root", "", "k")]
+    [InlineData("root", " ", "k")]
+    [InlineData("root", "t", null)]
+    [InlineData("root", "t", "")]
+    [InlineData("root", "t", " ")]
+    public async Task WriteAtomicAsync_NullOrWhitespace_Throws(string? baseRoot, string? tenant, string? key)
+    {
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await IoUtilities.WriteAtomicAsync(baseRoot!, tenant!, key!, new byte[] { 1, 2 }));
+    }
 }

@@ -10,7 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -198,7 +197,7 @@
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
-      <workItem from="1761031026654" duration="524000" />
+      <workItem from="1761031026654" duration="879000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -384,7 +383,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761031276992</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="fix(io): subFolder – führende/trailing/doppelte Separatoren explizit verbieten">
+      <option name="closed" value="true" />
+      <created>1761031695472</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1761031695472</updated>
+    </task>
+    <task id="LOCAL-00025" summary="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)">
+      <option name="closed" value="true" />
+      <created>1761031808866</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1761031808866</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -417,7 +432,9 @@
     <MESSAGE value="test(io): BuildSafeFullPath wirft ArgumentNullException bei Null/Whitespace-Parametern" />
     <MESSAGE value="test(io): BuildSafeFullPath verhindert Pfad-Escape (.., absolute Segmente)" />
     <MESSAGE value="feat(io): strikte subFolder-Validierung (Zeichen + Segmente wie bei key)" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(io): strikte subFolder-Validierung (Zeichen + Segmente wie bei key)" />
+    <MESSAGE value="fix(io): subFolder – führende/trailing/doppelte Separatoren explizit verbieten" />
+    <MESSAGE value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
