@@ -129,4 +129,15 @@ public class IoUtilitiesTests
         var actual = IoUtilities.GuessContentType(file);
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public async Task OpenReadWithHashAsync_NonExistingFile_ThrowsFileNotFound()
+    {
+        var fakePath = Path.Combine(_tempRoot, "t1", "missing", "nope.txt");
+        var ex = await Assert.ThrowsAsync<FileNotFoundException>(async () =>
+        {
+            await IoUtilities.OpenReadWithHashAsync(fakePath);
+        });
+        Assert.Equal(fakePath, ex.FileName);
+    }
 }
