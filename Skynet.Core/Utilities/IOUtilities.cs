@@ -320,4 +320,68 @@ public static class IoUtilities
             return true;
         }, ct).ConfigureAwait(false);
     }
+
+    /// <summary>
+    /// Prüft sicher, ob ein Verzeichnis existiert (unter baseRoot/tenantId/[subFolder]/key).
+    /// key repräsentiert hier einen Ordnerpfad (Segmente).
+    /// </summary>
+    public static bool DirectoryExistsSafe(
+        string baseRootFull,
+        string tenantIdString,
+        string key,
+        string? subFolder = null)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+        var full = BuildSafeFullPath(baseRootFull, tenantIdString, key, subFolder);
+        try
+        {
+            return Directory.Exists(full);
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Löscht ein Verzeichnis rekursiv unter baseRoot/tenantId/[subFolder]/key, falls vorhanden.
+    /// Gibt true zurück, wenn gelöscht wurde; false, wenn es nicht existierte.
+    /// </summary>
+    public static async Task<bool> DirectoryDeleteSafeAsync(
+        string baseRootFull,
+        string tenantIdString,
+        string key,
+        string? subFolder = null,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+        ct.ThrowIfCancellationRequested();
+
+        var full = BuildSafeFullPath(baseRootFull, tenantIdString, key, subFolder);
+
+        return await Task.Run(() =>
+        {
+            if (!Directory.Exists(full))
+                return false;
+
+            // Versuche, ReadOnly-Attribute in der Tiefe zu entfernen, um Delete nicht zu blockieren.
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(full, "*", SearchOption.AllDirectories))
+                {
+                    try { File.SetAttributes(file, FileAttributes.Normal); } catch { /* ignore */ }
+                }
+            }
+            catch { /* ignore */ }
+
+            Directory.Delete(full, recursive: true);
+            return true;
+        }, ct).ConfigureAwait(false);
+    }
 }

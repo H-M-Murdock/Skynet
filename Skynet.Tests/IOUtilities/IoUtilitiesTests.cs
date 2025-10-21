@@ -649,4 +649,123 @@ public class IoUtilitiesTests
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await IoUtilities.DeleteSafeAsync(_tempRoot, "tenant1", "a/b.txt", subFolder));
     }
+    
+     [Fact]
+    public void DirectoryExistsSafe_ReturnsFalse_WhenMissing()
+    {
+        var exists = IoUtilities.DirectoryExistsSafe(_tempRoot, "tenant1", "folders/none", subFolder: "static");
+        Assert.False(exists);
+    }
+
+    [Fact]
+    public void DirectoryExistsSafe_ReturnsTrue_WhenCreated()
+    {
+        var path = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "folders/sub", "static");
+        Directory.CreateDirectory(path);
+        Assert.True(Directory.Exists(path));
+
+        var exists = IoUtilities.DirectoryExistsSafe(_tempRoot, "tenant1", "folders/sub", "static");
+        Assert.True(exists);
+    }
+
+    [Theory]
+    [InlineData(null, "t", "k", "baseRootFull")]
+    [InlineData("", "t", "k", "baseRootFull")]
+    [InlineData(" ", "t", "k", "baseRootFull")]
+    [InlineData("root", null, "k", "tenantIdString")]
+    [InlineData("root", "", "k", "tenantIdString")]
+    [InlineData("root", " ", "k", "tenantIdString")]
+    [InlineData("root", "t", null, "key")]
+    [InlineData("root", "t", " ", "key")]
+    public void DirectoryExistsSafe_NullOrWhitespace_Throws(string? baseRoot, string? tenant, string? key, string expectedParam)
+    {
+        var ex = Assert.Throws<ArgumentNullException>(() =>
+            IoUtilities.DirectoryExistsSafe(baseRoot!, tenant!, key!));
+        Assert.Equal(expectedParam, ex.ParamName);
+    }
+
+    [Theory]
+    [InlineData("../evil")]
+    [InlineData("a//b")]
+    [InlineData("/abs")]
+    public void DirectoryExistsSafe_InvalidKey_Throws(string key)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.DirectoryExistsSafe(_tempRoot, "tenant1", key));
+    }
+
+    [Theory]
+    [InlineData("..")]
+    [InlineData("/static")]
+    [InlineData("static//images")]
+    public void DirectoryExistsSafe_InvalidSubFolder_Throws(string subFolder)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.DirectoryExistsSafe(_tempRoot, "tenant1", "a/b", subFolder));
+    }
+
+    [Fact]
+    public async Task DirectoryDeleteSafeAsync_Deletes_WhenExists()
+    {
+        var path = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "to/delete/dir", "static");
+        Directory.CreateDirectory(path);
+        File.WriteAllText(Path.Combine(path, "file.txt"), "x");
+
+        var deleted = await IoUtilities.DirectoryDeleteSafeAsync(_tempRoot, "tenant1", "to/delete/dir", "static");
+        Assert.True(deleted);
+        Assert.False(Directory.Exists(path));
+    }
+
+    [Fact]
+    public async Task DirectoryDeleteSafeAsync_ReturnsFalse_WhenMissing()
+    {
+        var deleted = await IoUtilities.DirectoryDeleteSafeAsync(_tempRoot, "tenant1", "not/exist", "static");
+        Assert.False(deleted);
+    }
+
+    [Fact]
+    public async Task DirectoryDeleteSafeAsync_RespectsCancellation()
+    {
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await IoUtilities.DirectoryDeleteSafeAsync(_tempRoot, "tenant1", "a/b", ct: cts.Token));
+    }
+
+    [Theory]
+    [InlineData(null, "t", "k", "baseRootFull")]
+    [InlineData("", "t", "k", "baseRootFull")]
+    [InlineData(" ", "t", "k", "baseRootFull")]
+    [InlineData("root", null, "k", "tenantIdString")]
+    [InlineData("root", "", "k", "tenantIdString")]
+    [InlineData("root", " ", "k", "tenantIdString")]
+    [InlineData("root", "t", null, "key")]
+    [InlineData("root", "t", " ", "key")]
+    public async Task DirectoryDeleteSafeAsync_NullOrWhitespace_Throws(string? baseRoot, string? tenant, string? key, string expectedParam)
+    {
+        var ex = await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await IoUtilities.DirectoryDeleteSafeAsync(baseRoot!, tenant!, key!));
+        Assert.Equal(expectedParam, ex.ParamName);
+    }
+
+    [Theory]
+    [InlineData("../evil")]
+    [InlineData("a//b")]
+    [InlineData("/abs")]
+    public async Task DirectoryDeleteSafeAsync_InvalidKey_Throws(string key)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.DirectoryDeleteSafeAsync(_tempRoot, "tenant1", key));
+    }
+
+    [Theory]
+    [InlineData("..")]
+    [InlineData("/static")]
+    [InlineData("static//images")]
+    public async Task DirectoryDeleteSafeAsync_InvalidSubFolder_Throws(string subFolder)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.DirectoryDeleteSafeAsync(_tempRoot, "tenant1", "a/b", subFolder));
+    }
+    
 }
