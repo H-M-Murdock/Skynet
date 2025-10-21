@@ -10,11 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherAdditionalTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/RedactionOptions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/RedactionPolicy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/RedactionPolicyTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultLogEventEnricher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/IRedactionPolicy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IRedactionPolicy.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +81,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/RedactionPolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/PathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
@@ -111,6 +112,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherAdditionalTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/RedactionPolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleBackpressurePolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -516,7 +518,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761038096640</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Logging: Refactor DefaultEnricher to support mutable/immutable events, update tests accordingly">
+      <option name="closed" value="true" />
+      <created>1761039461798</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1761039461798</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -526,7 +536,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="feat(time): ScopedStopwatchFactory in BootstrapClockStep via DI registriert" />
     <MESSAGE value="test(time): Parallelitäts-Test für AdjustableClock; Fehlerrobustheit von ScopedStopwatchFactory; DI-Integrationstest für BootstrapClockStep&#10;&#10;(RED)" />
     <MESSAGE value="ix(time): ScopedStopwatchFactory – LogAsync strikt asynchron und mit internem Exception-Schutz (Dispose wirft nicht)" />
     <MESSAGE value="test(io): korrigiere xUnit Assert-Parameterreihenfolge (StartsWith/EndsWith)" />
@@ -551,7 +560,8 @@
     <MESSAGE value="Logging: Extend ILogEvent for .NET interop (LogLevel, EventId, Exception, Activity IDs, category, KV properties)" />
     <MESSAGE value="Logging: Simplify ILogEvent for .NET interop" />
     <MESSAGE value="Logging: Refactor ScopedStopwatchFactory and ILogEvent; add DefaultEnricher with unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging: Refactor ScopedStopwatchFactory and ILogEvent; add DefaultEnricher with unit tests" />
+    <MESSAGE value="Logging: Refactor DefaultEnricher to support mutable/immutable events, update tests accordingly" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging: Refactor DefaultEnricher to support mutable/immutable events, update tests accordingly" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
