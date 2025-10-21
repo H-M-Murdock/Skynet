@@ -131,6 +131,25 @@ public class IoUtilitiesTests
     }
 
     [Fact]
+    public async Task OpenReadWithHashAsync_HonorsCancellationToken()
+    {
+        var path = Path.Combine(_tempRoot, "t1", "big.bin");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        // Datei mit etwas Größe erzeugen
+        var data = new byte[2 * 1024 * 1024];
+        new Random(42).NextBytes(data);
+        await File.WriteAllBytesAsync(path, data);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel(); // sofortiger Abbruch
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+        {
+            await IoUtilities.OpenReadWithHashAsync(path, cts.Token);
+        });
+    }
+
+    [Fact]
     public async Task OpenReadWithHashAsync_NonExistingFile_ThrowsFileNotFound()
     {
         var fakePath = Path.Combine(_tempRoot, "t1", "missing", "nope.txt");
