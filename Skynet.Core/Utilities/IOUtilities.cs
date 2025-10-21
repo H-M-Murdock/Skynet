@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace Skynet.Core;
 
+/// <summary>
+/// IO-Hilfsfunktionen für sichere Pfadbildung und effizientes Datei-Lesen.
+/// </summary>
 public static class IoUtilities
 {
     // A–Z a–z 0–9 _ - . /  (Slash für Segmente, Backslashes werden vorher normalisiert)
@@ -12,10 +15,21 @@ public static class IoUtilities
     private static readonly Regex Allowed = new(@"^[A-Za-z0-9_\-./]+$", RegexOptions.Compiled);
 
     /// <summary>
-    /// Normalisiert den key (Backslash->Slash), prüft Zeichen/Segmente und
-    /// liefert den sicheren FullPath innerhalb von baseRoot[/subFolder]/tenantId[/segments].
-    /// Wirft InvalidOperationException bei Verletzungen (Aufrufer wandelt ggf. in NotFound-Reason).
+    /// Baut einen sicheren absoluten Pfad unterhalb eines Basisverzeichnisses auf.
+    /// Regeln:
+    /// - key: Backslashes werden zu Slashes normalisiert; nur A–Z a–z 0–9 _ - . / erlaubt.
+    /// - key-Segmente dürfen weder "." noch ".." enthalten.
+    /// - subFolder (optional): wird analog zum key validiert (Zeichen + Segmente).
+    /// - Der resultierende Pfad muss innerhalb von <paramref name="baseRootFull"/> liegen.
+    /// Ausnahmen:
+    /// - ArgumentNullException: falls baseRootFull/tenantIdString/key leer oder null sind.
+    /// - InvalidOperationException: bei ungültigen Zeichen/Segmenten oder Root-Escape.
     /// </summary>
+    /// <param name="baseRootFull">Absoluter Basis-Pfad (wird normalisiert, Trailing-Separator erzwungen).</param>
+    /// <param name="tenantIdString">Tenant-Identifikator (als Ordnername verwendet).</param>
+    /// <param name="key">Ressourcenschlüssel (z. B. "folder/sub/file.json").</param>
+    /// <param name="subFolder">Optionaler Unterordner (z. B. "static" oder "v1/assets").</param>
+    /// <returns>Vollqualifizierter, sicherer Pfad innerhalb des Basisverzeichnisses.</returns>
     public static string BuildSafeFullPath(
         string baseRootFull,
         string tenantIdString,
@@ -26,8 +40,8 @@ public static class IoUtilities
         if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
+        // Key validieren
         var normKey = key.Replace('\\', '/');
-
         if (!Allowed.IsMatch(normKey))
             throw new InvalidOperationException("Invalid characters in key.");
 
@@ -35,23 +49,30 @@ public static class IoUtilities
         if (segments.Length == 0 || segments.Any(s => s is "." or ".."))
             throw new InvalidOperationException("Invalid path segments.");
 
-        // Optionalen subFolder separat strikt validieren (analog zum key)
+        // subFolder strikt validieren (analog zum key)
         if (!string.IsNullOrWhiteSpace(subFolder))
         {
             var sub = subFolder.Replace('\\', '/');
             if (!Allowed.IsMatch(sub))
                 throw new InvalidOperationException("Invalid characters in subFolder.");
 
+            // Explizit: kein führender oder abschließender Separator erlaubt
+            if (sub.StartsWith("/", StringComparison.Ordinal) || sub.EndsWith("/", StringComparison.Ordinal))
+                throw new InvalidOperationException("Invalid subFolder segments.");
+
+            // Doppel-Slash in der Mitte erkennen (würde sonst durch RemoveEmptyEntries verschwinden)
+            if (sub.Contains("//", StringComparison.Ordinal))
+                throw new InvalidOperationException("Invalid subFolder segments.");
+
             var subSegs = sub.Split('/', StringSplitOptions.RemoveEmptyEntries);
             if (subSegs.Length == 0 || subSegs.Any(s => s is "." or ".."))
                 throw new InvalidOperationException("Invalid subFolder segments.");
-
-            // Absolute subFolder (beginnend mit /) vermeiden: führende / würde leeres Segment erzeugen und oben bereits fehlschlagen.
         }
 
         // Root mit garantiertem Trailing-Separator
         var rootNorm = EnsureTrailingSeparator(Path.GetFullPath(baseRootFull));
 
+        // Pfad zusammenbauen
         var parts = new List<string> { rootNorm, tenantIdString };
         if (!string.IsNullOrWhiteSpace(subFolder)) parts.Add(subFolder);
         parts.AddRange(segments);
@@ -59,7 +80,7 @@ public static class IoUtilities
         var combined = Path.Combine(parts.ToArray());
         var full = Path.GetFullPath(combined);
 
-        // Security: erzwingen, dass full im baseRootFull liegt (mit Trailing-Separator-Vergleich)
+        // Security: erzwingen, dass full im baseRootFull liegt
         if (!IsUnderRoot(full, rootNorm))
             throw new InvalidOperationException("Path escapes root.");
 
@@ -67,9 +88,16 @@ public static class IoUtilities
     }
 
     /// <summary>
-    /// Öffnet eine Datei ReadOnly/ShareRead und berechnet im separaten Handle SHA-256 als Hex-ETag.
-    /// Gibt (stream, etag, fileInfo) zurück. Aufrufer ist für Dispose(stream) verantwortlich.
+    /// Öffnet eine Datei nur-lesend (ShareRead) und liefert:
+    /// - einen asynchronen Lese-Stream,
+    /// - einen SHA-256-Hash als hexadezimales ETag,
+    /// - die zugehörige FileInfo.
+    /// Der Hash wird über ein separates Handle berechnet, bevor der Stream zurückgegeben wird.
     /// </summary>
+    /// <param name="fullPath">Vollqualifizierter Pfad zu einer existierenden Datei.</param>
+    /// <param name="ct">Abbruch-Token.</param>
+    /// <exception cref="FileNotFoundException">Wenn die Datei nicht existiert.</exception>
+    /// <exception cref="OperationCanceledException">Wenn der Aufruf abgebrochen wurde.</exception>
     public static async Task<(FileStream stream, string etag, FileInfo fileInfo)> OpenReadWithHashAsync(
         string fullPath,
         CancellationToken ct = default)
@@ -81,6 +109,7 @@ public static class IoUtilities
 
         var fi = new FileInfo(fullPath);
 
+        // Hash berechnen (separates Handle, um den Rückgabe-Stream nicht zu beeinflussen)
         string etag;
         using (var sha = SHA256.Create())
         using (var fsHash = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024, FileOptions.SequentialScan))
@@ -89,12 +118,21 @@ public static class IoUtilities
             etag = Convert.ToHexString(hash);
         }
 
-        var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024, FileOptions.SequentialScan | FileOptions.Asynchronous);
+        // Streaming-Handle (asynchron, SequentialScan-Hint)
+        var stream = new FileStream(
+            fullPath,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            64 * 1024,
+            FileOptions.SequentialScan | FileOptions.Asynchronous);
+
         return (stream, etag, fi);
     }
 
     /// <summary>
-    /// Simple ContentType-Heuristik per Endung (optional). Kann später durch Resolver ersetzt werden.
+    /// Sehr einfache Content-Type-Heuristik anhand der Dateiendung.
+    /// Gibt null zurück, wenn unbekannt.
     /// </summary>
     public static string? GuessContentType(string path)
     {
@@ -127,13 +165,14 @@ public static class IoUtilities
         };
     }
 
+    // Prüft, ob fullPath unterhalb von rootWithSep liegt (rootWithSep: normalisiert + Trailing-Separator).
     private static bool IsUnderRoot(string fullPath, string rootWithSep)
     {
         var full = Path.GetFullPath(fullPath);
-        // rootWithSep ist bereits normalisiert und hat einen abschließenden Separator
         return full.StartsWith(rootWithSep, StringComparison.OrdinalIgnoreCase);
     }
 
+    // Stellt sicher, dass ein abschließender DirectorySeparator vorhanden ist.
     private static string EnsureTrailingSeparator(string rootFull)
     {
         if (string.IsNullOrEmpty(rootFull)) return rootFull;

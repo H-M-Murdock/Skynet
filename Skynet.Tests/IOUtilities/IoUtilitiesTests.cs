@@ -222,4 +222,29 @@ public class IoUtilitiesTests
             IoUtilities.BuildSafeFullPath(baseRoot!, tenant!, key!));
         Assert.Equal(expectedParam, ex.ParamName);
     }
+    
+    [Theory]
+    [InlineData("/static")]          // führender Slash -> absolutes Segment simuliert
+    [InlineData("static/")]          // trailing Slash -> leeres Segment
+    [InlineData("static//images")]   // leeres Segment in der Mitte
+    [InlineData(@"\static")]         // führender Backslash -> nach Normalisierung "/static"
+    [InlineData(@"static\")]         // trailing Backslash -> nach Normalisierung "static/"
+    [InlineData(@"static\\images")]  // doppelter Backslash -> leeres Segment
+    public void BuildSafeFullPath_SubFolder_EmptyOrAbsoluteSegments_Throws(string subFolder)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "a/b.txt", subFolder));
+    }
+
+    [Theory]
+    [InlineData("StaTic")]           // Groß/Kleinschreibung ok
+    [InlineData("v1/assets")]        // mehrere gültige Segmente
+    [InlineData("A_-9.x")]           // Punkt und Minus/Underscore erlaubt
+    public void BuildSafeFullPath_SubFolder_ValidVariants_Pass(string subFolder)
+    {
+        var full = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "a/b.txt", subFolder);
+        var rootWithSep = Path.GetFullPath(_tempRoot) + Path.DirectorySeparatorChar;
+        Assert.StartsWith(rootWithSep, full, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(Path.Combine("tenant1"), full, StringComparison.OrdinalIgnoreCase);
+    }
 }
