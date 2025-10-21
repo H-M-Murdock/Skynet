@@ -408,4 +408,31 @@ public class IoUtilitiesTests
         var expectedEtag = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(content)));
         Assert.Contains(results.Select(r => r.etag), e => string.Equals(e, expectedEtag, StringComparison.Ordinal));
     }
+
+    [Theory]
+    [InlineData("../evil.txt")]
+    [InlineData("a/../../b.txt")]
+    [InlineData("a//b.txt")]
+    [InlineData("/abs.txt")]
+    [InlineData(" withspace.txt")]
+    [InlineData("a?b.txt")]
+    public async Task WriteAtomicAsync_InvalidKey_Throws(string key)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.WriteAtomicAsync(_tempRoot, "tenant1", key, Encoding.UTF8.GetBytes("x")));
+    }
+
+    [Theory]
+    [InlineData("..")]
+    [InlineData("./")]
+    [InlineData("/static")]
+    [InlineData("static/")]
+    [InlineData("sta tic")]
+    [InlineData("sta/../tic")]
+    [InlineData("static//images")]
+    public async Task WriteAtomicAsync_InvalidSubFolder_Throws(string subFolder)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.WriteAtomicAsync(_tempRoot, "tenant1", "a/b.txt", Encoding.UTF8.GetBytes("x"), subFolder));
+    }
 }
