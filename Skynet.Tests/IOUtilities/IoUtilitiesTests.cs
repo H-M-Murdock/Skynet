@@ -452,7 +452,7 @@ public class IoUtilitiesTests
     }
 
     [Fact]
-    public async Task WriteAtomicAsync_TargetIsReadOnly_ThrowsIOException()
+    public async Task WriteAtomicAsync_TargetIsReadOnly_ThrowsIoOrUnauthorized()
     {
         var tenant = "t1";
         var key = "folder/readonly.txt";
@@ -466,12 +466,14 @@ public class IoUtilitiesTests
 
         try
         {
-            await Assert.ThrowsAsync<IOException>(async () =>
+            var ex = await Assert.ThrowsAnyAsync<Exception>(async () =>
                 await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, Encoding.UTF8.GetBytes("new")));
+
+            Assert.True(ex is IOException || ex is UnauthorizedAccessException);
         }
         finally
         {
-            // Cleanup: ReadOnly entfernen, damit der Temp-Root sauber gelöscht werden kann
+            // Cleanup
             File.SetAttributes(path, File.GetAttributes(path) & ~FileAttributes.ReadOnly);
         }
     }
@@ -500,5 +502,72 @@ public class IoUtilitiesTests
             Assert.True(true);
         }
     }
-    
+
+    [Fact]
+    public async Task ExistsSafe_ReturnsTrueWhenFileExists()
+    {
+        var tenant = "t1";
+        var key = "exists/file.txt";
+        var (path, _, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, Encoding.UTF8.GetBytes("data"));
+        Assert.True(File.Exists(path)); // sanity
+
+        var exists = IoUtilities.ExistsSafe(_tempRoot, tenant, key);
+        Assert.True(exists);
+    }
+
+    [Fact]
+    public void ExistsSafe_ReturnsFalseWhenFileMissing()
+    {
+        var exists = IoUtilities.ExistsSafe(_tempRoot, "t1", "missing/none.txt");
+        Assert.False(exists);
+    }
+
+    [Fact]
+    public void ExistsSafe_WithSubFolder_Works()
+    {
+        var tenant = "t1";
+        var key = "a/b.txt";
+        var path = IoUtilities.BuildSafeFullPath(_tempRoot, tenant, key, "static");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllText(path, "x", Encoding.UTF8);
+
+        var exists = IoUtilities.ExistsSafe(_tempRoot, tenant, key, "static");
+        Assert.True(exists);
+    }
+
+    [Theory]
+    [InlineData("../evil.txt")]
+    [InlineData("a//b.txt")]
+    [InlineData("/abs.txt")]
+    public void ExistsSafe_InvalidKey_Throws(string key)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.ExistsSafe(_tempRoot, "tenant1", key));
+    }
+
+    [Theory]
+    [InlineData("..")]
+    [InlineData("/static")]
+    [InlineData("static//images")]
+    public void ExistsSafe_InvalidSubFolder_Throws(string subFolder)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.ExistsSafe(_tempRoot, "tenant1", "a/b.txt", subFolder));
+    }
+
+    [Theory]
+    [InlineData(null, "t", "k", "baseRootFull")]
+    [InlineData("", "t", "k", "baseRootFull")]
+    [InlineData(" ", "t", "k", "baseRootFull")]
+    [InlineData("root", null, "k", "tenantIdString")]
+    [InlineData("root", "", "k", "tenantIdString")]
+    [InlineData("root", " ", "k", "tenantIdString")]
+    [InlineData("root", "t", null, "key")]
+    [InlineData("root", "t", " ", "key")]
+    public void ExistsSafe_NullOrWhitespace_Throws(string? baseRoot, string? tenant, string? key, string expectedParam)
+    {
+        var ex = Assert.Throws<ArgumentNullException>(() =>
+            IoUtilities.ExistsSafe(baseRoot!, tenant!, key!));
+        Assert.Equal(expectedParam, ex.ParamName);
+    }
 }

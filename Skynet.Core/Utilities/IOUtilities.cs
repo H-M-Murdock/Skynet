@@ -257,4 +257,30 @@ public static class IoUtilities
         if (rootFull.EndsWith(sep) || rootFull.EndsWith(alt)) return rootFull;
         return rootFull + sep;
     }
+
+    /// <summary>
+    /// Prüft sicher (ohne Exceptions bei Nichtvorhandensein), ob die Datei existiert.
+    /// Validiert Eingaben über BuildSafeFullPath; gibt true zurück, wenn die Zieldatei existiert.
+    /// </summary>
+    public static bool ExistsSafe(
+        string baseRootFull,
+        string tenantIdString,
+        string key,
+        string? subFolder = null)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+        var full = BuildSafeFullPath(baseRootFull, tenantIdString, key, subFolder);
+        try
+        {
+            return File.Exists(full);
+        }
+        catch
+        {
+            // Unerwartete IO-Probleme nicht verschlucken; Exists soll nur bei "nicht vorhanden" false liefern.
+            throw;
+        }
+    }
 }
