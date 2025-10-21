@@ -63,6 +63,31 @@ public class IoUtilitiesTests
             IoUtilities.BuildSafeFullPath(_tempRoot, tenant, key));
     }
 
+    [Theory]
+    [InlineData("a/../b.txt")]      // relativ, enthält .. nach Normalisierung
+    [InlineData(@".\..\b.txt")]     // wird zu ../b.txt
+    [InlineData(@"a\..\..\b.txt")]  // wird zu a/../../b.txt
+    public void BuildSafeFullPath_PathTraversal_Throws(string key)
+    {
+        var baseRoot = _tempRoot;
+        var tenant = "tenant";
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(baseRoot, tenant, key));
+    }
+
+    [Fact]
+    public void BuildSafeFullPath_AbsoluteKeyRejected()
+    {
+        var baseRoot = _tempRoot;
+        var tenant = "tenant";
+
+        var absolute = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "other", "abs.txt"));
+        var key = absolute.Replace('\\', '/'); // simuliert absoluten Key (unerlaubt)
+
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(baseRoot, tenant, key));
+    }
+
     [Fact]
     public async Task OpenReadWithHashAsync_ReturnsStreamAndSha256Hex()
     {
