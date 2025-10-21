@@ -159,4 +159,21 @@ public class IoUtilitiesTests
         });
         Assert.Equal(fakePath, ex.FileName);
     }
+
+    [Theory]
+    [InlineData(null, "tenant", "a/b.txt", "baseRootFull")]
+    [InlineData("", "tenant", "a/b.txt", "baseRootFull")]
+    [InlineData(" ", "tenant", "a/b.txt", "baseRootFull")]
+    [InlineData("C:\\tmp", null, "a/b.txt", "tenantIdString")]
+    [InlineData("C:\\tmp", "", "a/b.txt", "tenantIdString")]
+    [InlineData("C:\\tmp", " ", "a/b.txt", "tenantIdString")]
+    [InlineData("C:\\tmp", "tenant", null, "key")]
+    [InlineData("C:\\tmp", "tenant", "", "key")]
+    [InlineData("C:\\tmp", "tenant", " ", "key")]
+    public void BuildSafeFullPath_NullOrWhitespace_Throws(string? baseRoot, string? tenant, string? key, string expectedParam)
+    {
+        var ex = Assert.Throws<ArgumentNullException>(() =>
+            IoUtilities.BuildSafeFullPath(baseRoot!, tenant!, key!));
+        Assert.Equal(expectedParam, ex.ParamName);
+    }
 }
