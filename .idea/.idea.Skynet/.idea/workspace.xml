@@ -10,7 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -198,7 +197,7 @@
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
-      <workItem from="1761031026654" duration="1232000" />
+      <workItem from="1761031026654" duration="1599000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -416,7 +415,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761032028957</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="fix(io): WriteAtomicAsync – Race bei parallelem Move beheben, immer Replace nutzen (Zielstub)">
+      <option name="closed" value="true" />
+      <created>1761032295068</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1761032295068</updated>
+    </task>
+    <task id="LOCAL-00029" summary="test(io): WriteAtomicAsync – ungültiger key/subFolder führen zu InvalidOperationException">
+      <option name="closed" value="true" />
+      <created>1761032366857</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1761032366857</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -426,8 +441,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Add `Skynet.LicenseRequest` project for client metadata generation and runtime information CLI tool." />
-    <MESSAGE value="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements." />
     <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
     <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
     <MESSAGE value="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings." />
@@ -451,7 +464,9 @@
     <MESSAGE value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
     <MESSAGE value="test(io): Sonderfälle für key/subFolder („.“, „..“, nur Separator) und Very-long-Path-Tests" />
     <MESSAGE value="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)" />
-    <option name="LAST_COMMIT_MESSAGE" value="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)" />
+    <MESSAGE value="fix(io): WriteAtomicAsync – Race bei parallelem Move beheben, immer Replace nutzen (Zielstub)" />
+    <MESSAGE value="test(io): WriteAtomicAsync – ungültiger key/subFolder führen zu InvalidOperationException" />
+    <option name="LAST_COMMIT_MESSAGE" value="test(io): WriteAtomicAsync – ungültiger key/subFolder führen zu InvalidOperationException" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

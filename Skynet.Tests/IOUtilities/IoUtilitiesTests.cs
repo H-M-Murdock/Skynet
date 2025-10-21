@@ -435,4 +435,70 @@ public class IoUtilitiesTests
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await IoUtilities.WriteAtomicAsync(_tempRoot, "tenant1", "a/b.txt", Encoding.UTF8.GetBytes("x"), subFolder));
     }
+    
+     [Fact]
+    public async Task WriteAtomicAsync_EmptyContent_CreatesZeroLengthWithKnownEtag()
+    {
+        var tenant = "t1";
+        var key = "folder/empty.txt";
+        var empty = Array.Empty<byte>();
+
+        var (fullPath, etag, fi) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, empty);
+
+        Assert.True(File.Exists(fullPath));
+        Assert.Equal(0, fi.Length);
+        // SHA-256 von leerem Inhalt
+        Assert.Equal("E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855", etag);
+    }
+
+    [Fact]
+    public async Task WriteAtomicAsync_TargetIsReadOnly_ThrowsIOException()
+    {
+        var tenant = "t1";
+        var key = "folder/readonly.txt";
+        var path = IoUtilities.BuildSafeFullPath(_tempRoot, tenant, key);
+
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        await File.WriteAllTextAsync(path, "seed", Encoding.UTF8);
+
+        var attrs = File.GetAttributes(path);
+        File.SetAttributes(path, attrs | FileAttributes.ReadOnly);
+
+        try
+        {
+            await Assert.ThrowsAsync<IOException>(async () =>
+                await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, Encoding.UTF8.GetBytes("new")));
+        }
+        finally
+        {
+            // Cleanup: ReadOnly entfernen, damit der Temp-Root sauber gelöscht werden kann
+            File.SetAttributes(path, File.GetAttributes(path) & ~FileAttributes.ReadOnly);
+        }
+    }
+
+    [Fact]
+    public async Task WriteAtomicAsync_VeryLongPath_StaysUnderRootOrThrows()
+    {
+        var tenant = "tenant1";
+        var seg = new string('x', 150);
+        var key = $"{seg}/{seg}/{seg}.txt";
+
+        try
+        {
+            var (fullPath, _, fi) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, Encoding.UTF8.GetBytes("data"));
+            var rootWithSep = Path.GetFullPath(_tempRoot) + Path.DirectorySeparatorChar;
+            Assert.StartsWith(rootWithSep, fullPath, StringComparison.OrdinalIgnoreCase);
+            Assert.True(fi.Exists);
+        }
+        catch (PathTooLongException)
+        {
+            // Plattformabhängig akzeptabel; Test lässt beide Ergebnisse zu.
+            Assert.True(true);
+        }
+        catch (IOException ex) when (ex.Message.Contains("too long", StringComparison.OrdinalIgnoreCase))
+        {
+            Assert.True(true);
+        }
+    }
+    
 }
