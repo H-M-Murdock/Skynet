@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="IOUtilities\" />
       <Folder Include="Time\" />
     </ItemGroup>
 

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Skynet.Core;
 
-internal static class IoUtilities
+public static class IoUtilities
 {
     // A–Z a–z 0–9 _ - . /  (Slash für Segmente, Backslashes werden vorher normalisiert)
     // Keine Leerzeichen: bewusst strikt für serverseitige Ressourcenkeys.

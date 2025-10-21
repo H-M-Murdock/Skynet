@@ -10,9 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/ScopedStopwatchFactoryLazy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +49,6 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1ff12748f9cf237ee59518603564fda4aeff2655358e148a39e284766c2b2/ILoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/eacce541aea4343da72fa852aadb945151e86e945e6ae0b260527f81a84e2e/ILoggerFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/ScopedStopwatchFactoryLazy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -85,8 +85,6 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IStopwatch.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatch.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatchFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/Stopwatch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nEntryId.cs" root0="FORCE_HIGHLIGHTING" />
@@ -103,15 +101,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/TemplateSetValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/AdjustableClockConcurrencyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/BootstrapClockStepDiTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockRegistrationTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchFactoryErrorTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchLoggingTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ScopedStopwatchTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/StopwatchEdgeCaseTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/StopwatchTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -125,25 +115,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.Skynet.LicenseGrant.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.Skynet.LicenseRequest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.49963424&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/time&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.Skynet.LicenseGrant.executor": "Run",
+    ".NET Project.Skynet.LicenseRequest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "XThreadsFramesViewSplitterKey": "0.49963424",
+    "git-widget-placeholder": "feat/ioutilities",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
