@@ -10,12 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSinkOptions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Utilities/BufferedFileAppender.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkIntegrationTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SingleSinkRouter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,10 +81,12 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MemoryLogSink.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/RedactionPolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleLineLogTextFormatter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SingleSinkRouter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" root0="FORCE_HIGHLIGHTING" />
@@ -120,11 +118,13 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherAdditionalTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkIntegrationTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/PathTemplateRendererTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/RedactionPolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleBackpressurePolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterMoreTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SizeLimiterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -586,7 +586,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761041456218</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Logging: Add FileLogSink with support for file-based streaming, rotation, and retention policies, including integration tests">
+      <option name="closed" value="true" />
+      <created>1761043930576</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1761043930576</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests">
+      <option name="closed" value="true" />
+      <created>1761044158477</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1761044158477</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -596,8 +612,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): BuildSafeFullPath wirft ArgumentNullException bei Null/Whitespace-Parametern" />
-    <MESSAGE value="test(io): BuildSafeFullPath verhindert Pfad-Escape (.., absolute Segmente)" />
     <MESSAGE value="feat(io): strikte subFolder-Validierung (Zeichen + Segmente wie bei key)" />
     <MESSAGE value="fix(io): subFolder – führende/trailing/doppelte Separatoren explizit verbieten" />
     <MESSAGE value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
@@ -621,7 +635,9 @@
     <MESSAGE value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
     <MESSAGE value="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter" />
     <MESSAGE value="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests" />
+    <MESSAGE value="Logging: Add FileLogSink with support for file-based streaming, rotation, and retention policies, including integration tests" />
+    <MESSAGE value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
