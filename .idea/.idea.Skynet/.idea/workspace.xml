@@ -10,12 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/NdjsonLogEventEncoder.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTemplateResolutionTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkConcurrencyTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderMoreTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventListenerTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,6 +83,8 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MemoryLogSink.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" root0="FORCE_HIGHLIGHTING" />
@@ -128,6 +127,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkIntegrationTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventListenerTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkConcurrencyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderMoreTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -238,14 +238,6 @@
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
       <workItem from="1761031026654" duration="3052000" />
-    </task>
-    <task id="LOCAL-00001" summary="Add Projekts">
-      <option name="closed" value="true" />
-      <created>1756720677127</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1756720677127</updated>
     </task>
     <task id="LOCAL-00002" summary="Update IntelliJ IDEA project workspace settings and metadata files for Skynet development configuration.">
       <option name="closed" value="true" />
@@ -631,7 +623,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761045593380</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests">
+      <option name="closed" value="true" />
+      <created>1761046635502</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1761046635502</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -641,7 +641,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
     <MESSAGE value="test(io): Sonderfälle für key/subFolder („.“, „..“, nur Separator) und Very-long-Path-Tests" />
     <MESSAGE value="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)" />
     <MESSAGE value="fix(io): WriteAtomicAsync – Race bei parallelem Move beheben, immer Replace nutzen (Zielstub)" />
@@ -666,7 +665,8 @@
     <MESSAGE value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
     <MESSAGE value="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests" />
     <MESSAGE value="Logging: Add DayRotationPolicy with daily rotation logic, integration with FileLogSink, and unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add DayRotationPolicy with daily rotation logic, integration with FileLogSink, and unit tests" />
+    <MESSAGE value="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
