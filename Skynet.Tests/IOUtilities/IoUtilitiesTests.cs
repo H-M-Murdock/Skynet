@@ -768,4 +768,130 @@ public class IoUtilitiesTests
             await IoUtilities.DirectoryDeleteSafeAsync(_tempRoot, "tenant1", "a/b", subFolder));
     }
     
+    [Fact]
+    public async Task CopySafeAsync_CopiesFile_AndReturnsDestInfo()
+    {
+        var tenant = "t1";
+        var srcKey = "copy/src.txt";
+        var dstKey = "copy/dst.txt";
+
+        var (_, srcEtag, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, Encoding.UTF8.GetBytes("copy-data"));
+
+        var (dstPath, dstInfo) = await IoUtilities.CopySafeAsync(_tempRoot, tenant, srcKey, dstKey);
+
+        Assert.True(File.Exists(dstPath));
+        Assert.Equal(dstPath, dstInfo.FullName);
+        var (_, checkEtag, _) = await IoUtilities.OpenReadWithHashAsync(dstPath);
+        Assert.Equal(srcEtag, checkEtag);
+    }
+
+    [Fact]
+    public async Task CopySafeAsync_WithSubFolder_Works()
+    {
+        var tenant = "t1";
+        var srcKey = "copy/sf/src.txt";
+        var dstKey = "copy/sf/dst.txt";
+
+        await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, Encoding.UTF8.GetBytes("x"), subFolder: "static");
+        var (dstPath, _) = await IoUtilities.CopySafeAsync(_tempRoot, tenant, srcKey, dstKey, subFolder: "static");
+
+        Assert.EndsWith(Path.Combine(tenant, "static", "copy", "sf", "dst.txt"), dstPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task CopySafeAsync_MissingSource_ThrowsFileNotFound()
+    {
+        await Assert.ThrowsAsync<FileNotFoundException>(async () =>
+            await IoUtilities.CopySafeAsync(_tempRoot, "t1", "nope/src.txt", "copy/dst.txt"));
+    }
+
+    [Fact]
+    public async Task CopySafeAsync_RespectsCancellation()
+    {
+        var tenant = "t1";
+        var srcKey = "copy/cancel/src.bin";
+        var dstKey = "copy/cancel/dst.bin";
+        await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, new byte[1024 * 1024]);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await IoUtilities.CopySafeAsync(_tempRoot, tenant, srcKey, dstKey, ct: cts.Token));
+    }
+
+    [Fact]
+    public async Task MoveSafeAsync_MovesFile_AndRemovesSource()
+    {
+        var tenant = "t1";
+        var srcKey = "move/src.txt";
+        var dstKey = "move/dst.txt";
+
+        var (srcPath, srcEtag, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, Encoding.UTF8.GetBytes("move-data"));
+        Assert.True(File.Exists(srcPath));
+
+        var (dstPath, dstInfo) = await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey);
+
+        Assert.False(File.Exists(srcPath));
+        Assert.True(File.Exists(dstPath));
+        var (_, checkEtag, _) = await IoUtilities.OpenReadWithHashAsync(dstPath);
+        Assert.Equal(srcEtag, checkEtag);
+        Assert.Equal(dstPath, dstInfo.FullName);
+    }
+
+    [Fact]
+    public async Task MoveSafeAsync_WithSubFolder_Works()
+    {
+        var tenant = "t1";
+        var srcKey = "move/sf/src.txt";
+        var dstKey = "move/sf/dst.txt";
+        var (srcPath, _, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, Encoding.UTF8.GetBytes("y"), subFolder: "static");
+        Assert.True(File.Exists(srcPath));
+
+        var (dstPath, _) = await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey, subFolder: "static");
+
+        Assert.False(File.Exists(srcPath));
+        Assert.EndsWith(Path.Combine(tenant, "static", "move", "sf", "dst.txt"), dstPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task MoveSafeAsync_MissingSource_ReturnsFalse()
+    {
+        var moved = await IoUtilities.MoveSafeAsync(_tempRoot, "t1", "move/nope.txt", "move/dst.txt");
+        Assert.False(moved.moved);
+    }
+
+    [Fact]
+    public async Task MoveSafeAsync_RespectsCancellation()
+    {
+        var tenant = "t1";
+        var srcKey = "move/cancel/src.bin";
+        var dstKey = "move/cancel/dst.bin";
+        await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, new byte[256 * 1024]);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey, ct: cts.Token));
+    }
+
+    [Theory]
+    [InlineData("../evil.txt")]
+    [InlineData("/abs.txt")]
+    [InlineData("a//b.txt")]
+    public async Task CopySafeAsync_InvalidKey_Throws(string badKey)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.CopySafeAsync(_tempRoot, "tenant1", badKey, "dst.txt"));
+    }
+
+    [Theory]
+    [InlineData("../evil.txt")]
+    [InlineData("/abs.txt")]
+    [InlineData("a//b.txt")]
+    public async Task MoveSafeAsync_InvalidKey_Throws(string badKey)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.MoveSafeAsync(_tempRoot, "tenant1", badKey, "dst.txt"));
+    }
+    
 }

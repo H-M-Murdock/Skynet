@@ -384,4 +384,98 @@ public static class IoUtilities
             return true;
         }, ct).ConfigureAwait(false);
     }
+    
+    
+    /// <summary>
+    /// Kopiert eine Datei sicher innerhalb baseRoot/tenant/[subFolder] von srcKey nach dstKey.
+    /// Validiert beide Pfade mit BuildSafeFullPath. Wirft FileNotFoundException, wenn Quelle fehlt.
+    /// </summary>
+    public static async Task<(string destFullPath, FileInfo destInfo)> CopySafeAsync(
+        string baseRootFull,
+        string tenantIdString,
+        string srcKey,
+        string dstKey,
+        string? subFolder = null,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(srcKey)) throw new ArgumentNullException(nameof(srcKey));
+        if (string.IsNullOrWhiteSpace(dstKey)) throw new ArgumentNullException(nameof(dstKey));
+
+        ct.ThrowIfCancellationRequested();
+
+        var srcFull = BuildSafeFullPath(baseRootFull, tenantIdString, srcKey, subFolder);
+        var dstFull = BuildSafeFullPath(baseRootFull, tenantIdString, dstKey, subFolder);
+
+        if (!File.Exists(srcFull))
+            throw new FileNotFoundException("Source file not found.", srcFull);
+
+        Directory.CreateDirectory(Path.GetDirectoryName(dstFull)!);
+
+        // Async-kompatibles Copy (synchroner Copy-Aufruf in Task)
+        await Task.Run(() =>
+        {
+            File.Copy(srcFull, dstFull, overwrite: true);
+        }, ct).ConfigureAwait(false);
+
+        return (dstFull, new FileInfo(dstFull));
+    }
+
+    /// <summary>
+    /// Verschiebt eine Datei sicher innerhalb baseRoot/tenant/[subFolder] von srcKey nach dstKey.
+    /// Gibt (moved: false) zurück, wenn Quelle fehlt. Ansonsten führt atomaren Replace-ähnlichen Move aus.
+    /// </summary>
+    public static async Task<(bool moved, string destFullPath, FileInfo destInfo)> MoveSafeAsync(
+        string baseRootFull,
+        string tenantIdString,
+        string srcKey,
+        string dstKey,
+        string? subFolder = null,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(srcKey)) throw new ArgumentNullException(nameof(srcKey));
+        if (string.IsNullOrWhiteSpace(dstKey)) throw new ArgumentNullException(nameof(dstKey));
+
+        ct.ThrowIfCancellationRequested();
+
+        var srcFull = BuildSafeFullPath(baseRootFull, tenantIdString, srcKey, subFolder);
+        var dstFull = BuildSafeFullPath(baseRootFull, tenantIdString, dstKey, subFolder);
+
+        if (!File.Exists(srcFull))
+            return (false, dstFull, new FileInfo(dstFull));
+
+        Directory.CreateDirectory(Path.GetDirectoryName(dstFull)!);
+
+        await Task.Run(() =>
+        {
+            // Versuche atomaren Move (Replace-Pattern): erst Zielstub, dann Replace
+            if (!File.Exists(dstFull))
+            {
+                try
+                {
+                    using var _ = new FileStream(dstFull, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+                }
+                catch { /* ignore */ }
+            }
+
+            // Kopiere Inhalt nach Temp und ersetze Ziel; lösche Quelle
+            var temp = Path.Combine(Path.GetDirectoryName(dstFull)!, $".tmp_mv_{Guid.NewGuid():N}.tmp");
+            try
+            {
+                File.Copy(srcFull, temp, overwrite: true);
+                File.Replace(temp, dstFull, destinationBackupFileName: null, ignoreMetadataErrors: true);
+                File.Delete(srcFull);
+            }
+            finally
+            {
+                try { if (File.Exists(temp)) File.Delete(temp); } catch { /* ignore */ }
+            }
+        }, ct).ConfigureAwait(false);
+
+        return (true, dstFull, new FileInfo(dstFull));
+    }
+    
 }
