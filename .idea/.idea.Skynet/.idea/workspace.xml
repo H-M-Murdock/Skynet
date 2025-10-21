@@ -10,6 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Utilities/IOUtilities.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -197,7 +198,7 @@
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
-      <workItem from="1761031026654" duration="879000" />
+      <workItem from="1761031026654" duration="1232000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -399,7 +400,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761031808866</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="test(io): Sonderfälle für key/subFolder („.“, „..“, nur Separator) und Very-long-Path-Tests">
+      <option name="closed" value="true" />
+      <created>1761031917219</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1761031917219</updated>
+    </task>
+    <task id="LOCAL-00027" summary="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)">
+      <option name="closed" value="true" />
+      <created>1761032028957</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1761032028957</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,8 +426,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Add Projekts" />
-    <MESSAGE value="Update IntelliJ IDEA project workspace settings and metadata files for Skynet development configuration." />
     <MESSAGE value="Add `Skynet.LicenseRequest` project for client metadata generation and runtime information CLI tool." />
     <MESSAGE value="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements." />
     <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
@@ -434,7 +449,9 @@
     <MESSAGE value="feat(io): strikte subFolder-Validierung (Zeichen + Segmente wie bei key)" />
     <MESSAGE value="fix(io): subFolder – führende/trailing/doppelte Separatoren explizit verbieten" />
     <MESSAGE value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
+    <MESSAGE value="test(io): Sonderfälle für key/subFolder („.“, „..“, nur Separator) und Very-long-Path-Tests" />
+    <MESSAGE value="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)" />
+    <option name="LAST_COMMIT_MESSAGE" value="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -367,4 +367,45 @@ public class IoUtilitiesTests
         await Assert.ThrowsAsync<ArgumentNullException>(async () =>
             await IoUtilities.WriteAtomicAsync(baseRoot!, tenant!, key!, new byte[] { 1, 2 }));
     }
+
+    [Fact]
+    public async Task WriteAtomicAsync_HonorsCancellationToken()
+    {
+        var tenant = "t1";
+        var key = "folder/cancel.txt";
+        var data = new byte[512 * 1024];
+        new Random(7).NextBytes(data);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel(); // sofort abbrechen
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, data, ct: cts.Token));
+    }
+
+    [Fact]
+    public async Task WriteAtomicAsync_ParallelWrites_ResultIsConsistent()
+    {
+        var tenant = "t1";
+        var key = "folder/parallel.txt";
+
+        var v1 = Encoding.UTF8.GetBytes("first");
+        var v2 = Encoding.UTF8.GetBytes("second");
+
+        // Zwei konkurrierende Writes
+        var t1 = IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v1);
+        var t2 = IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v2);
+
+        var results = await Task.WhenAll(t1, t2);
+
+        // Datei existiert und enthält entweder first oder second, aber konsistent
+        var path = results[0].fullPath;
+        Assert.True(File.Exists(path));
+        var content = await File.ReadAllTextAsync(path, Encoding.UTF8);
+        Assert.True(content is "first" or "second");
+
+        // ETag entspricht dem tatsächlichen Inhalt
+        var expectedEtag = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(content)));
+        Assert.Contains(results.Select(r => r.etag), e => string.Equals(e, expectedEtag, StringComparison.Ordinal));
+    }
 }

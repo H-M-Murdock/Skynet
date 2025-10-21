@@ -93,6 +93,77 @@ public static class IoUtilities
     }
 
     /// <summary>
+    /// Schreibt Bytes atomar an die durch baseRoot/tenantId/key[+subFolder] bestimmte Datei.
+    /// Ablauf:
+    /// - Validiert Eingaben, ermittelt sicheren Zielpfad via BuildSafeFullPath.
+    /// - Stellt sicher, dass das Zielverzeichnis existiert.
+    /// - Schreibt erst in eine temporäre Datei im Zielverzeichnis.
+    /// - Berechnet SHA-256 (Hex) über die geschriebenen Bytes.
+    /// - Ersetzt die Zieldatei atomar durch die temporäre (Move/Replace).
+    /// Rückgabe: (fullPath, etag, fileInfo).
+    /// </summary>
+    /// <exception cref="ArgumentNullException">Wenn baseRoot/tenantId/key oder content ungültig sind.</exception>
+    /// <exception cref="OperationCanceledException">Bei Abbruch.</exception>
+    public static async Task<(string fullPath, string etag, FileInfo fileInfo)> WriteAtomicAsync(
+        string baseRootFull,
+        string tenantIdString,
+        string key,
+        byte[] content,
+        string? subFolder = null,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+        if (content is null) throw new ArgumentNullException(nameof(content));
+
+        ct.ThrowIfCancellationRequested();
+
+        var targetPath = BuildSafeFullPath(baseRootFull, tenantIdString, key, subFolder);
+        var dir = Path.GetDirectoryName(targetPath) ?? throw new InvalidOperationException("Invalid target directory.");
+
+        Directory.CreateDirectory(dir);
+
+        // Temporäre Datei im Zielverzeichnis
+        var tempName = Path.Combine(dir, $".tmp_{Guid.NewGuid():N}.tmp");
+
+        try
+        {
+            // Inhalt schreiben
+            await File.WriteAllBytesAsync(tempName, content, ct).ConfigureAwait(false);
+
+            // Hash berechnen (über content; identisch zu Dateiinhalt)
+            var hash = SHA256.HashData(content);
+            var etag = Convert.ToHexString(hash);
+
+            // Zielstub sicherstellen, damit Replace immer möglich ist
+            if (!File.Exists(targetPath))
+            {
+                try
+                {
+                    using var _ = new FileStream(targetPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+                    // keine Inhalte schreiben; nur Datei anlegen falls fehlend
+                }
+                catch
+                {
+                    // Falls ein anderer Thread sie gerade erzeugt hat, ignorieren
+                }
+            }
+
+            // Atomar ersetzen (ohne Backup). Bei parallelen Writes gewinnt der zuletzt durchgelaufene.
+            File.Replace(tempName, targetPath, destinationBackupFileName: null, ignoreMetadataErrors: true);
+
+            var fi = new FileInfo(targetPath);
+            return (targetPath, etag, fi);
+        }
+        catch
+        {
+            try { if (File.Exists(tempName)) File.Delete(tempName); } catch { /* ignore */ }
+            throw;
+        }
+    }
+
+    /// <summary>
     /// Öffnet eine Datei nur-lesend (ShareRead) und liefert:
     /// - einen asynchronen Lese-Stream,
     /// - einen SHA-256-Hash als hexadezimales ETag,
