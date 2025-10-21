@@ -45,6 +45,11 @@ public static class IoUtilities
         if (!Allowed.IsMatch(normKey))
             throw new InvalidOperationException("Invalid characters in key.");
 
+        // Explizit: kein führender/abschließender oder doppelter Separator im key
+        if (normKey.StartsWith("/", StringComparison.Ordinal) || normKey.EndsWith("/", StringComparison.Ordinal) ||
+            normKey.Contains("//", StringComparison.Ordinal))
+            throw new InvalidOperationException("Invalid path segments.");
+
         var segments = normKey.Split('/', StringSplitOptions.RemoveEmptyEntries);
         if (segments.Length == 0 || segments.Any(s => s is "." or ".."))
             throw new InvalidOperationException("Invalid path segments.");

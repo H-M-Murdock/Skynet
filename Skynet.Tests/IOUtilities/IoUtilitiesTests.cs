@@ -237,12 +237,25 @@ public class IoUtilitiesTests
     }
 
     [Theory]
-    [InlineData("StaTic")]           // Groß/Kleinschreibung ok
-    [InlineData("v1/assets")]        // mehrere gültige Segmente
-    [InlineData("A_-9.x")]           // Punkt und Minus/Underscore erlaubt
-    public void BuildSafeFullPath_SubFolder_ValidVariants_Pass(string subFolder)
+    [InlineData("/a/b.txt")]         // führender Slash -> absolutes Segment simuliert
+    [InlineData("a/b.txt/")]         // trailing Slash -> leeres Segment
+    [InlineData("a//b.txt")]         // leeres Segment in der Mitte
+    [InlineData(@"\a\b.txt")]        // führender Backslash -> nach Normalisierung "/a/b.txt"
+    [InlineData(@"a\b.txt\")]        // trailing Backslash -> nach Normalisierung "a/b.txt/"
+    [InlineData(@"a\\b.txt")]        // doppelter Backslash -> leeres Segment
+    public void BuildSafeFullPath_Key_EmptyOrAbsoluteSegments_Throws(string key)
     {
-        var full = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "a/b.txt", subFolder);
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", key));
+    }
+
+    [Theory]
+    [InlineData("A_-9.x")]
+    [InlineData("folder/Sub/name.json")]
+    [InlineData(@"folder\sub\file.txt")] // Backslashes werden normalisiert
+    public void BuildSafeFullPath_Key_ValidVariants_Pass(string key)
+    {
+        var full = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", key);
         var rootWithSep = Path.GetFullPath(_tempRoot) + Path.DirectorySeparatorChar;
         Assert.StartsWith(rootWithSep, full, StringComparison.OrdinalIgnoreCase);
         Assert.Contains(Path.Combine("tenant1"), full, StringComparison.OrdinalIgnoreCase);
