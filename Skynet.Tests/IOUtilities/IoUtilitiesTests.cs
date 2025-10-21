@@ -829,10 +829,12 @@ public class IoUtilitiesTests
         var (srcPath, srcEtag, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, Encoding.UTF8.GetBytes("move-data"));
         Assert.True(File.Exists(srcPath));
 
-        var (dstPath, dstInfo) = await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey);
+        var (moved, dstPath, dstInfo) = await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey);
+        Assert.True(moved);
 
         Assert.False(File.Exists(srcPath));
         Assert.True(File.Exists(dstPath));
+
         var (_, checkEtag, _) = await IoUtilities.OpenReadWithHashAsync(dstPath);
         Assert.Equal(srcEtag, checkEtag);
         Assert.Equal(dstPath, dstInfo.FullName);
@@ -844,10 +846,12 @@ public class IoUtilitiesTests
         var tenant = "t1";
         var srcKey = "move/sf/src.txt";
         var dstKey = "move/sf/dst.txt";
+
         var (srcPath, _, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, srcKey, Encoding.UTF8.GetBytes("y"), subFolder: "static");
         Assert.True(File.Exists(srcPath));
 
-        var (dstPath, _) = await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey, subFolder: "static");
+        var (moved, dstPath, _) = await IoUtilities.MoveSafeAsync(_tempRoot, tenant, srcKey, dstKey, subFolder: "static");
+        Assert.True(moved);
 
         Assert.False(File.Exists(srcPath));
         Assert.EndsWith(Path.Combine(tenant, "static", "move", "sf", "dst.txt"), dstPath, StringComparison.OrdinalIgnoreCase);
