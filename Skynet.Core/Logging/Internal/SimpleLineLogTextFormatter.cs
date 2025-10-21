@@ -27,7 +27,15 @@ public sealed class SimpleLineLogTextFormatter : ILogTextFormatter
 
         // Timestamp
         var ts = _useUtcTimestamps ? evt.Timestamp.ToUniversalTime() : evt.Timestamp;
-        sb.Append(ts.ToString("O"));
+        if (_useUtcTimestamps)
+        {
+            // Sicher "Z"-Suffix erzeugen
+            sb.Append(ts.UtcDateTime.ToString("O"));
+        }
+        else
+        {
+            sb.Append(ts.ToString("O"));
+        }
 
         // Level
         sb.Append(' ').Append(evt.LevelString);
