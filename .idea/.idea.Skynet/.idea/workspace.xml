@@ -9,7 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="" />
+    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,6 +74,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogTextFormatter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/PathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
@@ -480,7 +483,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761035991562</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Logging: Extend ILogEvent for .NET interop (LogLevel, EventId, Exception, Activity IDs, category, KV properties)">
+      <option name="closed" value="true" />
+      <created>1761036394230</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1761036394230</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -490,7 +501,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(time): DI-Registrierung für IClock (System/Frozen/Adjustable) testen; docs: Kommentare präzisiert" />
     <MESSAGE value="feat(time): Stopwatch robuster gegen Overflow clamping; test(time): Edge-Case-Tests für IStopwatch hinzugefügt" />
     <MESSAGE value="feat(time/logging): ScopedStopwatchFactory integriert mit ILoggingClient; test(time): Logging-Integrationstests für ScopedStopwatchFactory" />
     <MESSAGE value="feat(time): ScopedStopwatchFactory in BootstrapClockStep via DI registriert" />
@@ -515,7 +525,8 @@
     <MESSAGE value="test(io): TDD-Tests für DirectoryExistsSafe und DirectoryDeleteSafeAsync; feat(io): Implementierung von DirectoryExistsSafe/DirectoryDeleteSafeAsync" />
     <MESSAGE value="test(io): TDD-Tests für CopySafeAsync und MoveSafeAsync; feat(io): Implementierung CopySafeAsync/MoveSafeAsync" />
     <MESSAGE value="Logging: Add SimpleBackpressurePolicy with tests (TDD base for client backpressure)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add SimpleBackpressurePolicy with tests (TDD base for client backpressure)" />
+    <MESSAGE value="Logging: Extend ILogEvent for .NET interop (LogLevel, EventId, Exception, Activity IDs, category, KV properties)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging: Extend ILogEvent for .NET interop (LogLevel, EventId, Exception, Activity IDs, category, KV properties)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
