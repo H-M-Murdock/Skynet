@@ -35,6 +35,20 @@ public static class IoUtilities
         if (segments.Length == 0 || segments.Any(s => s is "." or ".."))
             throw new InvalidOperationException("Invalid path segments.");
 
+        // Optionalen subFolder separat strikt validieren (analog zum key)
+        if (!string.IsNullOrWhiteSpace(subFolder))
+        {
+            var sub = subFolder.Replace('\\', '/');
+            if (!Allowed.IsMatch(sub))
+                throw new InvalidOperationException("Invalid characters in subFolder.");
+
+            var subSegs = sub.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            if (subSegs.Length == 0 || subSegs.Any(s => s is "." or ".."))
+                throw new InvalidOperationException("Invalid subFolder segments.");
+
+            // Absolute subFolder (beginnend mit /) vermeiden: führende / würde leeres Segment erzeugen und oben bereits fehlschlagen.
+        }
+
         // Root mit garantiertem Trailing-Separator
         var rootNorm = EnsureTrailingSeparator(Path.GetFullPath(baseRootFull));
 

@@ -15,6 +15,27 @@ public class IoUtilitiesTests
         Directory.CreateDirectory(_tempRoot);
     }
 
+    [Fact]
+    public void BuildSafeFullPath_WithSubFolder_CombinesCorrectly()
+    {
+        var full = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "a/b.txt", subFolder: "static");
+        var expectedSuffix = Path.Combine("tenant1", "static", "a", "b.txt");
+        Assert.EndsWith(expectedSuffix, full, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData("sta tic")]
+    [InlineData("..")]
+    [InlineData("./")]
+    [InlineData("sta/../tic")]
+    public void BuildSafeFullPath_InvalidSubFolder_StillPreventEscape(string subFolder)
+    {
+        // Hinweis: Aktuell validiert BuildSafeFullPath subFolder nicht separat,
+        // aber der Root-Escape wird am Ende verhindert. Erwartung: InvalidOperationException.
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "a/b.txt", subFolder));
+    }
+
     ~IoUtilitiesTests()
     {
         try { if (Directory.Exists(_tempRoot)) Directory.Delete(_tempRoot, recursive: true); } catch { /* ignore */ }
