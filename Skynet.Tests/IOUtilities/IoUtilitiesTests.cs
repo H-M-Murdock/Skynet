@@ -224,6 +224,50 @@ public class IoUtilitiesTests
     }
     
     [Theory]
+    [InlineData(".")]
+    [InlineData("..")]
+    [InlineData("/")]
+    [InlineData(@"\")]
+    public void BuildSafeFullPath_Key_OnlyDotsOrSeparators_Throws(string key)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", key));
+    }
+
+    [Theory]
+    [InlineData(".")]
+    [InlineData("..")]
+    [InlineData("/")]
+    [InlineData(@"\")]
+    public void BuildSafeFullPath_SubFolder_OnlyDotsOrSeparators_Throws(string subFolder)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+            IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "a/b.txt", subFolder));
+    }
+
+    [Fact]
+    public void BuildSafeFullPath_VeryLongKey_StillUnderRoot()
+    {
+        var longName = new string('a', 200);
+        var key = $"{longName}/{longName}/{longName}.txt";
+        var full = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", key);
+        var rootWithSep = Path.GetFullPath(_tempRoot) + Path.DirectorySeparatorChar;
+        Assert.StartsWith(rootWithSep, full, StringComparison.OrdinalIgnoreCase);
+        Assert.EndsWith(Path.Combine("tenant1", longName, longName, $"{longName}.txt"), full, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void BuildSafeFullPath_VeryLongSubFolder_StillUnderRoot()
+    {
+        var longSeg = new string('b', 180);
+        var sub = $"{longSeg}/{longSeg}";
+        var full = IoUtilities.BuildSafeFullPath(_tempRoot, "tenant1", "file.txt", sub);
+        var rootWithSep = Path.GetFullPath(_tempRoot) + Path.DirectorySeparatorChar;
+        Assert.StartsWith(rootWithSep, full, StringComparison.OrdinalIgnoreCase);
+        Assert.EndsWith(Path.Combine("tenant1", longSeg, longSeg, "file.txt"), full, StringComparison.OrdinalIgnoreCase);
+    }
+    
+    [Theory]
     [InlineData("/static")]          // führender Slash -> absolutes Segment simuliert
     [InlineData("static/")]          // trailing Slash -> leeres Segment
     [InlineData("static//images")]   // leeres Segment in der Mitte
