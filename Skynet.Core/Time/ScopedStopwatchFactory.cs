@@ -1,96 +1,54 @@
-using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Skynet.Core.Logging;
 
-namespace Skynet.Core.Time
+namespace Skynet.Core.Time;
+
+public class ScopedStopwatchFactory
 {
-    /// <summary>
-    /// Erzeugt ScopedStopwatch-Instanzen, die beim Dispose ein LogEvent über ILoggingClient senden.
-    /// </summary>
-    public class ScopedStopwatchFactory
+    private readonly IServiceProvider _sp;
+    private readonly IStopwatch _stopwatch;
+
+    public ScopedStopwatchFactory(IStopwatch stopwatch, IServiceProvider sp)
     {
-        private readonly IStopwatch _stopwatch;
-        private readonly ILoggingClient _loggingClient;
+        _stopwatch = stopwatch ?? throw new ArgumentNullException(nameof(stopwatch));
+        _sp = sp ?? throw new ArgumentNullException(nameof(sp));
+    }
 
-        public ScopedStopwatchFactory(IStopwatch stopwatch, ILoggingClient loggingClient)
+    public IDisposable Start(string operation, LogLevel level = LogLevel.Information, Dictionary<string, object?>? properties = null)
+    {
+        if (string.IsNullOrWhiteSpace(operation))
+            throw new ArgumentException("Operation darf nicht leer sein.", nameof(operation));
+
+        return new ScopedStopwatch(_stopwatch, elapsed =>
         {
-            _stopwatch = stopwatch ?? throw new ArgumentNullException(nameof(stopwatch));
-            _loggingClient = loggingClient ?? throw new ArgumentNullException(nameof(loggingClient));
-        }
-
-        /// <summary>
-        /// Startet eine Messung und gibt ein IDisposable zurück, das beim Dispose ein LogEvent schreibt.
-        /// </summary>
-        /// <param name="operation">Operationsname (z. B. "OrderService.Process").</param>
-        /// <param name="level">Log-Level (Default: Information).</param>
-        /// <param name="properties">Optionale zusätzliche Properties.</param>
-        public IDisposable Start(string operation, string level = "Information", Dictionary<string, object?>? properties = null)
-        {
-            if (string.IsNullOrWhiteSpace(operation))
-                throw new ArgumentException("Operation darf nicht leer sein.", nameof(operation));
-
-            properties ??= new Dictionary<string, object?>(StringComparer.Ordinal);
-
-            return new ScopedStopwatch(_stopwatch, elapsed =>
+            var state = new List<KeyValuePair<string, object?>>(properties?.Count ?? 0 + 2);
+            if (properties is not null)
             {
-                var elapsedMs = elapsed.TotalMilliseconds;
+                foreach (var kv in properties)
+                    state.Add(new KeyValuePair<string, object?>(kv.Key, kv.Value));
+            }
+            state.Add(new KeyValuePair<string, object?>("ElapsedMs", elapsed.TotalMilliseconds));
+            state.Add(new KeyValuePair<string, object?>("Operation", operation));
 
-                var props = new Dictionary<string, object?>(properties, StringComparer.Ordinal)
-                {
-                    ["ElapsedMs"] = elapsedMs
-                };
+            var evt = new MutableLogEvent
+            {
+                Timestamp = DateTimeOffset.UtcNow,
+                Level = level,
+                EventId = new EventId(0, "ScopedTiming"),
+                GlobalEventId = Guid.NewGuid().ToString("n"),
+                CategoryName = null,
+                Operation = operation,
+                State = state
+            };
 
-                var evt = new ScopedTimingEvent(
-                    timestamp: DateTimeOffset.UtcNow,
-                    level: level,
-                    messageTemplate: "Timing {Operation} took {ElapsedMs} ms",
-                    props: props,
-                    operation: operation
-                );
-
-                // Strikt asynchron entkoppeln UND Fehler abfangen
-                _ = SafeFireAndForgetLogAsync(evt);
-            });
-        }
-
-        private async Task SafeFireAndForgetLogAsync(ILogEvent evt)
-        {
             try
             {
-                await _loggingClient.LogAsync(evt, default).ConfigureAwait(false);
+                var client = _sp.GetService<ILoggingClient>();
+                if (client is not null)
+                    _ = client.LogAsync(evt, CancellationToken.None);
             }
-            catch
-            {
-                // Best Effort: niemals Exceptions nach außen werfen
-            }
-        }
-
-        private sealed class ScopedTimingEvent : ILogEvent
-        {
-            public ScopedTimingEvent(
-                DateTimeOffset timestamp,
-                string level,
-                string messageTemplate,
-                IReadOnlyDictionary<string, object?> props,
-                string operation)
-            {
-                Timestamp = timestamp;
-                Level = level;
-                MessageTemplate = messageTemplate;
-                Properties = props;
-                Operation = operation;
-                EventId = Guid.NewGuid().ToString("n");
-            }
-
-            public DateTimeOffset Timestamp { get; }
-            public string Level { get; }
-            public string MessageTemplate { get; }
-            public IReadOnlyDictionary<string, object?> Properties { get; }
-            public string? Exception { get; } = null;
-            public string? SourceContext { get; } = null;
-            public string? Operation { get; }
-            public int? EventCode { get; } = null;
-            public string EventId { get; }
-            public string? CorrelationId { get; } = null;
-        }
+            catch { /* niemals werfen */ }
+        });
     }
 }

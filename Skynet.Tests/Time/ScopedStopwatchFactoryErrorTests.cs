@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using Skynet.Core.Logging;
 using Skynet.Core.Time;
 using Xunit;
@@ -27,8 +28,10 @@ namespace Skynet.Tests.Time
         {
             // Arrange
             var sw = new Skynet.Core.Time.Stopwatch();
-            var client = new ThrowingLoggingClient();
-            var factory = new ScopedStopwatchFactory(sw, client);
+            var services = new ServiceCollection();
+            services.AddSingleton<ILoggingClient, ThrowingLoggingClient>();
+            var sp = services.BuildServiceProvider();
+            var factory = new ScopedStopwatchFactory(sw, sp);
 
             // Act + Assert
             // Da die Factory fire-and-forget auf LogAsync zugreift, darf Dispose nicht werfen.

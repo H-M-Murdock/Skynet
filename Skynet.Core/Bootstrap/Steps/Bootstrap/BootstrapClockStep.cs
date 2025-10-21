@@ -25,7 +25,7 @@ public sealed class BootstrapClockStep : IBootStep, IStepReport
 
         // Lazy-Factory: holt ILoggingClient erst beim Dispose eines Scopes aus dem Provider (Best Effort).
         services.AddSingleton<ScopedStopwatchFactory>(sp =>
-            new LazyScopedStopwatchFactory(sp, sp.GetRequiredService<IStopwatch>()));
+        new ScopedStopwatchFactory(sp.GetRequiredService<IStopwatch>(), sp));
 
         return Task.CompletedTask;
     }
