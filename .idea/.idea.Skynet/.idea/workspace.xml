@@ -10,8 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterMoreTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleLineLogTextFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleLineLogTextFormatter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/PathTemplateRendererTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +78,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/RedactionPolicy.cs" root0="FORCE_HIGHLIGHTING" />
@@ -111,6 +112,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherAdditionalTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/PathTemplateRendererTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/RedactionPolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleBackpressurePolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterMoreTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -560,7 +562,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761041001536</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter">
+      <option name="closed" value="true" />
+      <created>1761041138662</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1761041138662</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -570,7 +580,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): OpenReadWithHashAsync wirft FileNotFoundException bei fehlender Datei" />
     <MESSAGE value="test(io): OpenReadWithHashAsync respektiert CancellationToken" />
     <MESSAGE value="test(io): BuildSafeFullPath wirft ArgumentNullException bei Null/Whitespace-Parametern" />
     <MESSAGE value="test(io): BuildSafeFullPath verhindert Pfad-Escape (.., absolute Segmente)" />
@@ -595,7 +604,8 @@
     <MESSAGE value="Logging: Add SizeLimiter with configurable size constraints and comprehensive unit tests" />
     <MESSAGE value="Logging: Add SimpleLineLogTextFormatter (compact, schema-less) with tests" />
     <MESSAGE value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
+    <MESSAGE value="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
