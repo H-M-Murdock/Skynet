@@ -1,5 +1,6 @@
 using System.Text;
 using Skynet.Core;
+// ... existing code ...
 using Xunit;
 
 namespace Skynet.Tests.IOUtilities;
@@ -73,15 +74,22 @@ public class IoUtilitiesTests
         var content = "hello world";
         await File.WriteAllTextAsync(path, content, Encoding.UTF8);
 
-        // Act
+        // Erwarteten Hash exakt der Datei berechnen (nicht nur aus content-String)
+        string expectedHash;
+        using (var sha = System.Security.Cryptography.SHA256.Create())
+        using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024, FileOptions.SequentialScan))
+        {
+            var hash = await sha.ComputeHashAsync(fs);
+            expectedHash = Convert.ToHexString(hash);
+        }
+
         var (stream, etag, fi) = await IoUtilities.OpenReadWithHashAsync(path);
         await using var _ = stream;
 
         // Assert
         Assert.True(fi.Exists);
         Assert.Equal(new FileInfo(path).Length, fi.Length);
-        // SHA-256 von "hello world"
-        Assert.Equal("B94D27B9934D3E08A52E52D7DA7DABFAC484EFE37A5380EE9088F7ACE2EFCDE9", etag);
+        Assert.Equal(expectedHash, etag);
 
         using var sr = new StreamReader(stream, Encoding.UTF8, true, 1024, false);
         var read = await sr.ReadToEndAsync();
