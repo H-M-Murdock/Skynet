@@ -32,16 +32,13 @@ namespace Skynet.Core.Time
 
             return new ScopedStopwatch(_stopwatch, elapsed =>
             {
-                // ms als double für bessere Lesbarkeit/Analyse
                 var elapsedMs = elapsed.TotalMilliseconds;
 
-                // Properties anreichern
                 var props = new Dictionary<string, object?>(properties, StringComparer.Ordinal)
                 {
                     ["ElapsedMs"] = elapsedMs
                 };
 
-                // Minimales Event-Objekt (Adapter)
                 var evt = new ScopedTimingEvent(
                     timestamp: DateTimeOffset.UtcNow,
                     level: level,
@@ -50,9 +47,21 @@ namespace Skynet.Core.Time
                     operation: operation
                 );
 
-                // Fire-and-forget LogAsync – bewusst kein Throw (Best Effort)
-                _ = _loggingClient.LogAsync(evt, default);
+                // Strikt asynchron entkoppeln UND Fehler abfangen
+                _ = SafeFireAndForgetLogAsync(evt);
             });
+        }
+
+        private async Task SafeFireAndForgetLogAsync(ILogEvent evt)
+        {
+            try
+            {
+                await _loggingClient.LogAsync(evt, default).ConfigureAwait(false);
+            }
+            catch
+            {
+                // Best Effort: niemals Exceptions nach außen werfen
+            }
         }
 
         private sealed class ScopedTimingEvent : ILogEvent
