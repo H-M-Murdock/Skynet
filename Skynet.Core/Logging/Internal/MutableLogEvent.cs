@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Skynet.Core.Logging;
 
-sealed class MutableLogEvent : ILogEvent
+public sealed class MutableLogEvent : ILogEvent
 {
     public DateTimeOffset Timestamp { get; set; }
     public LogLevel Level { get; set; } = LogLevel.Information;
