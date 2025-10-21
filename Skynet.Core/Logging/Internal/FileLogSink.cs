@@ -19,6 +19,7 @@ public sealed class FileLogSink : ILogSink
 {
     private readonly ILogTextFormatter _formatter;
     private readonly IPathTemplateRenderer _renderer;
+    private readonly IFileRotationPolicy? _rotationPolicy;
     private FileLogSinkOptions _options;
     private readonly IDisposable? _reload;
 
@@ -28,12 +29,17 @@ public sealed class FileLogSink : ILogSink
     private System.Threading.Timer? _retentionTimer;
     private volatile bool _started;
 
-    public FileLogSink(ILogTextFormatter formatter, IPathTemplateRenderer renderer, Microsoft.Extensions.Options.IOptionsMonitor<FileLogSinkOptions> options)
+    public FileLogSink(
+        ILogTextFormatter formatter,
+        IPathTemplateRenderer renderer,
+        Microsoft.Extensions.Options.IOptionsMonitor<FileLogSinkOptions> options,
+        IFileRotationPolicy? rotationPolicy = null)
     {
         _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         _renderer = renderer ?? throw new ArgumentNullException(nameof(renderer));
         _options = options?.CurrentValue ?? new FileLogSinkOptions();
         _reload = options?.OnChange((o, _) => _options = o ?? new FileLogSinkOptions());
+        _rotationPolicy = rotationPolicy;
     }
 
     public Task StartAsync(CancellationToken ct)
@@ -73,43 +79,69 @@ public sealed class FileLogSink : ILogSink
 
         var now = _options.UseEventTimestampForPath ? evt.Timestamp : DateTimeOffset.UtcNow;
 
-        // Template-Anwendung:
-        // Falls der injizierte Renderer ein DefaultPathTemplateRenderer ist, nutzen wir die 3-Param-Variante,
-        // sonst die 2-Param-Signatur.
-        string key;
+        string relativeKey;
         if (_renderer is DefaultPathTemplateRenderer defRenderer)
-        {
-            key = defRenderer.Render(evt, now, _options.PathTemplate);
-        }
+            relativeKey = defRenderer.Render(evt, now, _options.PathTemplate);
         else
-        {
-            key = _renderer.Render(evt, now);
-        }
+            relativeKey = _renderer.Render(evt, now);
 
-        if (string.IsNullOrWhiteSpace(key)) return Task.CompletedTask;
-
-        var line = _formatter.Format(evt) + Environment.NewLine;
+        if (string.IsNullOrWhiteSpace(relativeKey)) return Task.CompletedTask;
 
         var baseRoot = _options.BaseRoot ?? AppContext.BaseDirectory!.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         var tenant = _options.Tenant ?? "logs";
         var sub = _options.SubFolder;
 
-        var app = _appenders.GetOrAdd(key, _ => new BufferedFileAppender(
-            baseRoot: baseRoot,
-            tenant: tenant,
-            key: key,
-            subFolder: sub,
-            writeThrough: _options.WriteThrough,
-            maxBytes: _options.MaxFileBytes));
+        // Ableitung des FullPath via IoUtilities
+        var fullPath = IoUtilities.BuildSafeFullPath(baseRoot, tenant, relativeKey, sub);
 
+        // RotationPolicy: ggf. Ziel überschreiben
+        if (_rotationPolicy is not null)
+        {
+            var target = _rotationPolicy.ResolveTarget(evt, now);
+            fullPath = target.FullPath;
+        }
+
+        // Appender pro FullPath
+        var app = _appenders.GetOrAdd(fullPath, _ => new BufferedFileAppender(writeThrough: _options.WriteThrough));
+
+        // Sicherstellen, dass Appender auf diesen Pfad geöffnet ist
+        var openTask = app.EnsureOpenedForAsync(fullPath, ct);
+        if (!openTask.IsCompletedSuccessfully)
+            return openTask.ContinueWith(_ => WriteCoreAsync(app, evt, now, ct)).Unwrap();
+
+        return WriteCoreAsync(app, evt, now, ct);
+    }
+
+    private async Task WriteCoreAsync(BufferedFileAppender app, ILogEvent evt, DateTimeOffset now, CancellationToken ct)
+    {
+        // RotationPolicy: vor Append prüfen
+        if (_rotationPolicy is not null)
+        {
+            var currentPath = app.CurrentFullPath!;
+            var currentBytes = app.CurrentLength;
+            var currentTarget = new FileTarget(currentPath);
+
+            if (_rotationPolicy.ShouldRotate(currentTarget, currentBytes, now))
+            {
+                // rotate zu demselben Basisnamen (Policy kann Pfad ableiten; hier: Ziel vom ResolveTarget(evt, now))
+                var target = _rotationPolicy.ResolveTarget(evt, now);
+                await app.RotateToAsync(target.FullPath, ct).ConfigureAwait(false);
+            }
+        }
+        else if (_options.MaxFileBytes > 0 && app.CurrentLength >= _options.MaxFileBytes)
+        {
+            // Fallback: einfache Größenrotation falls Policy fehlt
+            var currentPath = app.CurrentFullPath!;
+            await app.RotateToAsync(currentPath, ct).ConfigureAwait(false);
+        }
+
+        var line = _formatter.Format(evt) + Environment.NewLine;
         app.Append(line);
 
         if (_options.BufferFlushBytes > 0 && app.BufferedBytes >= _options.BufferFlushBytes)
         {
-            _ = app.FlushAsync(ct);
+            await app.FlushAsync(ct).ConfigureAwait(false);
         }
-
-        return Task.CompletedTask;
     }
 
     public async Task FlushAsync(CancellationToken ct)

@@ -22,13 +22,16 @@ public sealed class BufferedFileAppenderTests : IDisposable
     public async Task Append_And_Flush_Writes_To_File()
     {
         var key = "a/b.txt";
-        var app = new BufferedFileAppender(_root, _tenant, key);
+        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
+
+        var app = new BufferedFileAppender(writeThrough: false);
+        await app.EnsureOpenedForAsync(full, CancellationToken.None);
+
         app.Append("line1\n");
         app.Append("line2\n");
         await app.FlushAsync(CancellationToken.None);
-        await app.DisposeAsync(); // Stream schließen, um exklusiven Zugriffskonflikten vorzubeugen
+        await app.DisposeAsync(); // Stream schließen
 
-        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
         Assert.True(File.Exists(full));
         var text = await File.ReadAllTextAsync(full, Encoding.UTF8);
         Assert.Contains("line1", text);
@@ -36,21 +39,24 @@ public sealed class BufferedFileAppenderTests : IDisposable
     }
 
     [Fact]
-    public async Task Rotation_On_MaxBytes_Creates_Rotated_File()
+    public async Task Rotation_On_RotateTo_Creates_Rotated_File()
     {
         var key = "rot/test.log";
-        var app = new BufferedFileAppender(_root, _tenant, key, writeThrough: true, maxBytes: 20);
+        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
+
+        var app = new BufferedFileAppender(writeThrough: true);
+        await app.EnsureOpenedForAsync(full, CancellationToken.None);
 
         app.Append("1234567890\n"); // 11
         await app.FlushAsync(CancellationToken.None);
 
-        app.Append("ABCDEFGHIJ\n"); // weitere 11 -> Rotation
+        // Erzwinge Rotation auf denselben Basisnamen (Appender hängt .1 an)
+        await app.RotateToAsync(full, CancellationToken.None);
+
+        app.Append("ABCDEFGHIJ\n");
         await app.FlushAsync(CancellationToken.None);
 
-        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
         Assert.True(File.Exists(full));
-
-        // Es sollte eine .1 existieren
         var rotated = full + ".1";
         Assert.True(File.Exists(rotated));
 
@@ -61,7 +67,10 @@ public sealed class BufferedFileAppenderTests : IDisposable
     public async Task Multiple_Flushes_Append_To_Same_File()
     {
         var key = "append/same.log";
-        var app = new BufferedFileAppender(_root, _tenant, key);
+        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
+
+        var app = new BufferedFileAppender(writeThrough: false);
+        await app.EnsureOpenedForAsync(full, CancellationToken.None);
 
         app.Append("A\n");
         await app.FlushAsync(CancellationToken.None);
@@ -69,7 +78,6 @@ public sealed class BufferedFileAppenderTests : IDisposable
         await app.FlushAsync(CancellationToken.None);
         await app.DisposeAsync(); // schließen vor dem Lesen
 
-        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
         var lines = await File.ReadAllLinesAsync(full, Encoding.UTF8);
         Assert.Contains("A", lines[0]);
         Assert.Contains("B", lines[1]);
@@ -79,18 +87,21 @@ public sealed class BufferedFileAppenderTests : IDisposable
     public async Task Dispose_Closes_Stream()
     {
         var key = "dispose/close.log";
-        var app = new BufferedFileAppender(_root, _tenant, key);
+        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
+
+        var app = new BufferedFileAppender();
+        await app.EnsureOpenedForAsync(full, CancellationToken.None);
         app.Append("x\n");
         await app.FlushAsync(CancellationToken.None);
         await app.DisposeAsync();
 
         // erneutes Anhängen über neuen Appender
-        var app2 = new BufferedFileAppender(_root, _tenant, key);
+        var app2 = new BufferedFileAppender();
+        await app2.EnsureOpenedForAsync(full, CancellationToken.None);
         app2.Append("y\n");
         await app2.FlushAsync(CancellationToken.None);
         await app2.DisposeAsync();
 
-        var full = IoUtilities.BuildSafeFullPath(_root, _tenant, key);
         var all = await File.ReadAllTextAsync(full, Encoding.UTF8);
         Assert.Contains("x", all);
         Assert.Contains("y", all);

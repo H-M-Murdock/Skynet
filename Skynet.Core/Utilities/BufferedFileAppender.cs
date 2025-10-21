@@ -15,29 +15,14 @@ public sealed class BufferedFileAppender : IAsyncDisposable
     private readonly object _lock = new();
     private readonly StringBuilder _buffer = new(8 * 1024);
 
-    private readonly string _baseRoot;
-    private readonly string _tenant;
-    private readonly string? _subFolder;
-    private readonly string _key;
     private readonly bool _writeThrough;
-    private readonly long _maxBytes; // 0 = keine Rotation
-
     private FileStream? _stream;
     private string? _currentFullPath;
     private long _currentLength;
 
-    public BufferedFileAppender(string baseRoot, string tenant, string key, string? subFolder = null, bool writeThrough = false, long maxBytes = 0)
+    public BufferedFileAppender(bool writeThrough = false)
     {
-        if (string.IsNullOrWhiteSpace(baseRoot)) throw new ArgumentNullException(nameof(baseRoot));
-        if (string.IsNullOrWhiteSpace(tenant)) throw new ArgumentNullException(nameof(tenant));
-        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
-
-        _baseRoot = baseRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-        _tenant = tenant;
-        _subFolder = subFolder;
-        _key = key;
         _writeThrough = writeThrough;
-        _maxBytes = maxBytes;
     }
 
     public int BufferedBytes
@@ -48,10 +33,7 @@ public sealed class BufferedFileAppender : IAsyncDisposable
     public void Append(string text)
     {
         if (text is null) return;
-        lock (_lock)
-        {
-            _buffer.Append(text);
-        }
+        lock (_lock) { _buffer.Append(text); }
     }
 
     public async Task FlushAsync(CancellationToken ct)
@@ -66,84 +48,100 @@ public sealed class BufferedFileAppender : IAsyncDisposable
 
         if (string.IsNullOrEmpty(toWrite)) return;
 
-        await EnsureStreamAsync(ct).ConfigureAwait(false);
-
-        // Rotation vor dem Schreiben prüfen
-        if (_maxBytes > 0 && (_currentLength + toWrite.Length) > _maxBytes)
-        {
-            await RotateAsync(ct).ConfigureAwait(false);
-        }
-
         var bytes = Encoding.UTF8.GetBytes(toWrite);
+        await EnsureStreamAsync(ct).ConfigureAwait(false);
         await _stream!.WriteAsync(bytes, 0, bytes.Length, ct).ConfigureAwait(false);
         _currentLength += bytes.Length;
 
         if (_writeThrough)
-        {
             await _stream.FlushAsync(ct).ConfigureAwait(false);
+    }
+
+    public async Task EnsureOpenedForAsync(string fullPath, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(fullPath)) throw new ArgumentNullException(nameof(fullPath));
+        if (string.Equals(_currentFullPath, fullPath, StringComparison.OrdinalIgnoreCase))
+        {
+            await Task.CompletedTask;
+            return;
         }
+
+        await CloseStreamAsync().ConfigureAwait(false);
+        await OpenStreamAsync(fullPath, ct).ConfigureAwait(false);
+    }
+
+    public long CurrentLength
+    {
+        get { lock (_lock) return _currentLength; }
+    }
+
+    public string? CurrentFullPath
+    {
+        get { lock (_lock) return _currentFullPath; }
+    }
+
+    public async Task RotateToAsync(string newFullPath, CancellationToken ct)
+    {
+        // Schließen, existierende Datei ggf. umbenennen, neue öffnen
+        await CloseStreamAsync().ConfigureAwait(false);
+
+        // Falls die Zielbasis-Datei existiert, rotiere sie mit Suffix .1, .2, ...
+        if (File.Exists(newFullPath))
+        {
+            var i = 1;
+            string rotated;
+            do
+            {
+                rotated = newFullPath + "." + i.ToString();
+                i++;
+            } while (File.Exists(rotated));
+
+            try { File.Move(newFullPath, rotated); } catch { /* ignore */ }
+        }
+
+        await OpenStreamAsync(newFullPath, ct).ConfigureAwait(false);
     }
 
     private async Task EnsureStreamAsync(CancellationToken ct)
     {
         if (_stream is not null) return;
+        if (string.IsNullOrEmpty(_currentFullPath))
+            throw new InvalidOperationException("Appender has no current path. Call EnsureOpenedForAsync first.");
+        await OpenStreamAsync(_currentFullPath!, ct).ConfigureAwait(false);
+    }
 
-        var full = IoUtilities.BuildSafeFullPath(_baseRoot, _tenant, _key, _subFolder);
-        Directory.CreateDirectory(Path.GetDirectoryName(full)!);
+    private async Task OpenStreamAsync(string fullPath, CancellationToken ct)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
 
         var fileOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
         if (_writeThrough) fileOptions |= FileOptions.WriteThrough;
 
-        var stream = new FileStream(full, FileMode.Append, FileAccess.Write, FileShare.Read, 128 * 1024, fileOptions);
-        FileInfo fi;
-        try { fi = new FileInfo(full); }
-        catch { fi = new FileInfo(full); }
+        var stream = new FileStream(fullPath, FileMode.Append, FileAccess.Write, FileShare.Read, 128 * 1024, fileOptions);
+        var fi = new FileInfo(fullPath);
 
         lock (_lock)
         {
             _stream = stream;
-            _currentFullPath = full;
+            _currentFullPath = fullPath;
             _currentLength = fi.Exists ? fi.Length : 0L;
         }
 
         await Task.CompletedTask;
     }
 
-    private async Task RotateAsync(CancellationToken ct)
+    private async Task CloseStreamAsync()
     {
-        FileStream? toDispose;
-        string? path;
+        FileStream? s;
         lock (_lock)
         {
-            toDispose = _stream;
-            path = _currentFullPath;
+            s = _stream;
             _stream = null;
             _currentFullPath = null;
             _currentLength = 0;
         }
-
-        try { toDispose?.Dispose(); } catch { /* ignore */ }
-        if (string.IsNullOrEmpty(path)) return;
-
-        // finde nächste freie Suffix-Datei
-        var i = 1;
-        string rotated;
-        do
-        {
-            rotated = path + "." + i.ToString();
-            i++;
-        } while (File.Exists(rotated));
-
-        try
-        {
-            File.Move(path, rotated);
-        }
-        catch
-        {
-            // wenn Move fehlschlägt, einfach ohne Rotation weiter
-        }
-
-        await EnsureStreamAsync(ct).ConfigureAwait(false);
+        try { s?.Dispose(); } catch { /* ignore */ }
+        await Task.CompletedTask;
     }
 
     public ValueTask DisposeAsync()

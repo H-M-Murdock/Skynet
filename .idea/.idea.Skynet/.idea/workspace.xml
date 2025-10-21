@@ -10,8 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SingleSinkRouter.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/FileTarget.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/DayRotationPolicy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/FileRotationPolicy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IFileRotationPolicy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Utilities/BufferedFileAppender.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Utilities/BufferedFileAppender.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +72,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/DropMode.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/FileRotationPolicy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/FileTarget.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventListener.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogEventEncoder.cs" root0="FORCE_HIGHLIGHTING" />
@@ -77,6 +83,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DayRotationPolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" root0="FORCE_HIGHLIGHTING" />
@@ -115,6 +122,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherAdditionalTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkIntegrationTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -602,7 +610,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761044158477</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests">
+      <option name="closed" value="true" />
+      <created>1761044288262</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1761044288262</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -612,7 +628,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="feat(io): strikte subFolder-Validierung (Zeichen + Segmente wie bei key)" />
     <MESSAGE value="fix(io): subFolder – führende/trailing/doppelte Separatoren explizit verbieten" />
     <MESSAGE value="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)" />
     <MESSAGE value="test(io): Sonderfälle für key/subFolder („.“, „..“, nur Separator) und Very-long-Path-Tests" />
@@ -637,7 +652,8 @@
     <MESSAGE value="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests" />
     <MESSAGE value="Logging: Add FileLogSink with support for file-based streaming, rotation, and retention policies, including integration tests" />
     <MESSAGE value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
+    <MESSAGE value="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
