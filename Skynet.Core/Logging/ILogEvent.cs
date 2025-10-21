@@ -12,6 +12,9 @@ public interface ILogEvent
     // String statt Enum erleichtert Schema-Evolution und externe Tools.
     string Level { get; }
 
+    // Optionale .NET-nahe Repräsentation für effiziente Filter/Router.
+    Microsoft.Extensions.Logging.LogLevel? LevelEnum { get; }
+
     // MessageTemplate nach Serilog-ähnlichem Muster, z. B. "User {UserId} created".
     // Formatierung sollte erst im Sink/Formatter erfolgen; transportiert wird Template + Properties.
     string MessageTemplate { get; }
@@ -19,6 +22,9 @@ public interface ILogEvent
     // Strukturiertes Daten-Bag. Muss serialisierbare Werte enthalten (Primitiv-/Record-ähnlich).
     // Empfohlen: flache Struktur + konventionelle Schlüssel (TenantId, Component, etc.).
     IReadOnlyDictionary<string, object?> Properties { get; }
+
+    // Optional: kompatibel zu Microsoft.Extensions.Logging State-Pattern (KeyValuePairs).
+    IReadOnlyList<KeyValuePair<string, object?>>? PropertiesList { get; }
 
     // Serialisierte Exception (vereinfacht): StackTrace/Message kombiniert.
     // Alternativ könnte ein strukturiertes Exception-Objekt verwendet werden – bewusst einfach gehalten.
@@ -40,4 +46,8 @@ public interface ILogEvent
     // Korrelation über Prozess-/Thread-Grenzen: Trace/Request/Message. Stabil über den gesamten Scope.
     // Quelle: Activity.TraceId oder im BeginScope generiert (GuidV7), falls kein Trace vorhanden.
     string? CorrelationId { get; }
+
+    // Optional: .NET Diagnostics IDs für bessere Interop mit Activity/Tracing.
+    string? TraceId { get; }
+    string? SpanId { get; }
 }
