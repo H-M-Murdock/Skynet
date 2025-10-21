@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Skynet.Core.Time;
+using Skynet.Core.Logging;
 
 namespace Skynet.Core.Bootstrap;
 
@@ -21,6 +22,14 @@ public sealed class BootstrapClockStep : IBootStep, IStepReport
 
         services.AddSingleton<IClock, SystemClock>();
         services.AddSingleton<IStopwatch, Stopwatch>();
+
+        // Factory für Scoped-Messungen mit Logging-Integration
+        // Hinweis: ILoggingClient sollte bereits in einem vorherigen Bootstrap-Step registriert sein.
+        services.AddSingleton<ScopedStopwatchFactory>(sp =>
+            new ScopedStopwatchFactory(
+                sp.GetRequiredService<IStopwatch>(),
+                sp.GetRequiredService<ILoggingClient>()));
+
         return Task.CompletedTask;
     }
 
