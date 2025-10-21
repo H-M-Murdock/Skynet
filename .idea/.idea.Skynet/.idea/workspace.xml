@@ -9,7 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="" />
+    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/ScopedStopwatchFactoryLazy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +48,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1ff12748f9cf237ee59518603564fda4aeff2655358e148a39e284766c2b2/ILoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/eacce541aea4343da72fa852aadb945151e86e945e6ae0b260527f81a84e2e/ILoggerFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/ScopedStopwatchFactoryLazy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -203,7 +208,7 @@
       <workItem from="1760510765740" duration="3770000" />
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
-      <workItem from="1761023741681" duration="1716000" />
+      <workItem from="1761023741681" duration="2736000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -325,7 +330,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761025433140</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="ix(time): ScopedStopwatchFactory – LogAsync strikt asynchron und mit internem Exception-Schutz (Dispose wirft nicht)">
+      <option name="closed" value="true" />
+      <created>1761025681233</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1761025681233</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -350,7 +363,8 @@
     <MESSAGE value="feat(time/logging): ScopedStopwatchFactory integriert mit ILoggingClient; test(time): Logging-Integrationstests für ScopedStopwatchFactory" />
     <MESSAGE value="feat(time): ScopedStopwatchFactory in BootstrapClockStep via DI registriert" />
     <MESSAGE value="test(time): Parallelitäts-Test für AdjustableClock; Fehlerrobustheit von ScopedStopwatchFactory; DI-Integrationstest für BootstrapClockStep&#10;&#10;(RED)" />
-    <option name="LAST_COMMIT_MESSAGE" value="test(time): Parallelitäts-Test für AdjustableClock; Fehlerrobustheit von ScopedStopwatchFactory; DI-Integrationstest für BootstrapClockStep&#10;&#10;(RED)" />
+    <MESSAGE value="ix(time): ScopedStopwatchFactory – LogAsync strikt asynchron und mit internem Exception-Schutz (Dispose wirft nicht)" />
+    <option name="LAST_COMMIT_MESSAGE" value="ix(time): ScopedStopwatchFactory – LogAsync strikt asynchron und mit internem Exception-Schutz (Dispose wirft nicht)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

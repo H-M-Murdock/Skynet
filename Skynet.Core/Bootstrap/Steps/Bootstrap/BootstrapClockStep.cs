@@ -23,12 +23,9 @@ public sealed class BootstrapClockStep : IBootStep, IStepReport
         services.AddSingleton<IClock, SystemClock>();
         services.AddSingleton<IStopwatch, Stopwatch>();
 
-        // Factory für Scoped-Messungen mit Logging-Integration
-        // Hinweis: ILoggingClient sollte bereits in einem vorherigen Bootstrap-Step registriert sein.
+        // Lazy-Factory: holt ILoggingClient erst beim Dispose eines Scopes aus dem Provider (Best Effort).
         services.AddSingleton<ScopedStopwatchFactory>(sp =>
-            new ScopedStopwatchFactory(
-                sp.GetRequiredService<IStopwatch>(),
-                sp.GetRequiredService<ILoggingClient>()));
+            new LazyScopedStopwatchFactory(sp, sp.GetRequiredService<IStopwatch>()));
 
         return Task.CompletedTask;
     }
@@ -36,3 +33,4 @@ public sealed class BootstrapClockStep : IBootStep, IStepReport
     public string GetReport()
         => $"UTC now (at step): {_observedUtc:O}, Today: {_observedToday}";
 }
+

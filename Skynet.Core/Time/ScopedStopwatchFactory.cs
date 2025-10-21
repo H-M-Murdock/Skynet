@@ -6,7 +6,7 @@ namespace Skynet.Core.Time
     /// <summary>
     /// Erzeugt ScopedStopwatch-Instanzen, die beim Dispose ein LogEvent über ILoggingClient senden.
     /// </summary>
-    public sealed class ScopedStopwatchFactory
+    public class ScopedStopwatchFactory
     {
         private readonly IStopwatch _stopwatch;
         private readonly ILoggingClient _loggingClient;
