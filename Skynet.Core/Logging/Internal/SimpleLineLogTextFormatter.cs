@@ -106,7 +106,13 @@ public sealed class SimpleLineLogTextFormatter : ILogTextFormatter
         // Exception
         if (!string.IsNullOrEmpty(evt.Exception))
         {
-            sb.Append(" ex=").Append(evt.Exception);
+            // Newlines und Tabs entfernen, um Einzeiligkeit zu garantieren
+            var ex = evt.Exception!
+                .Replace("\r\n", " ")
+                .Replace('\n', ' ')
+                .Replace('\r', ' ')
+                .Replace('\t', ' ');
+            sb.Append(" ex=").Append(ex);
         }
 
         return sb.ToString();
