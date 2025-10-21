@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Skynet.Tests.IOUtilities;
 
-public class IoUtilitiesTests
+public class IoUtilitiesTests: IDisposable
 {
     private readonly string _tempRoot;
 
@@ -13,6 +13,19 @@ public class IoUtilitiesTests
     {
         _tempRoot = Path.Combine(Path.GetTempPath(), "IoUtilitiesTests_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempRoot);
+    }
+
+    public void Dispose()
+    {
+        try
+        {
+            if (Directory.Exists(_tempRoot))
+                Directory.Delete(_tempRoot, recursive: true);
+        }
+        catch
+        {
+            // Falls Handles offen sind, bestenfalls ignorieren – OS-Temp wird periodisch bereinigt.
+        }
     }
 
     [Fact]
