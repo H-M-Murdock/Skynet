@@ -570,4 +570,83 @@ public class IoUtilitiesTests
             IoUtilities.ExistsSafe(baseRoot!, tenant!, key!));
         Assert.Equal(expectedParam, ex.ParamName);
     }
+    
+    
+    [Fact]
+    public async Task DeleteSafeAsync_DeletesExistingFile_ReturnsTrue()
+    {
+        var tenant = "t1";
+        var key = "del/existing.txt";
+        var (path, _, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, Encoding.UTF8.GetBytes("x"));
+        Assert.True(File.Exists(path));
+
+        var deleted = await IoUtilities.DeleteSafeAsync(_tempRoot, tenant, key);
+        Assert.True(deleted);
+        Assert.False(File.Exists(path));
+    }
+
+    [Fact]
+    public async Task DeleteSafeAsync_MissingFile_ReturnsFalse()
+    {
+        var deleted = await IoUtilities.DeleteSafeAsync(_tempRoot, "t1", "del/missing.txt");
+        Assert.False(deleted);
+    }
+
+    [Fact]
+    public async Task DeleteSafeAsync_WithSubFolder_Works()
+    {
+        var tenant = "t1";
+        var key = "a/b.txt";
+        var (path, _, _) = await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, Encoding.UTF8.GetBytes("x"), "static");
+        Assert.True(File.Exists(path));
+
+        var deleted = await IoUtilities.DeleteSafeAsync(_tempRoot, tenant, key, "static");
+        Assert.True(deleted);
+        Assert.False(File.Exists(path));
+    }
+
+    [Fact]
+    public async Task DeleteSafeAsync_RespectsCancellation()
+    {
+        var cts = new CancellationTokenSource();
+        cts.Cancel();
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await IoUtilities.DeleteSafeAsync(_tempRoot, "t", "k.txt", ct: cts.Token));
+    }
+
+    [Theory]
+    [InlineData(null, "t", "k.txt", "baseRootFull")]
+    [InlineData("", "t", "k.txt", "baseRootFull")]
+    [InlineData(" ", "t", "k.txt", "baseRootFull")]
+    [InlineData("root", null, "k.txt", "tenantIdString")]
+    [InlineData("root", "", "k.txt", "tenantIdString")]
+    [InlineData("root", " ", "k.txt", "tenantIdString")]
+    [InlineData("root", "t", null, "key")]
+    [InlineData("root", "t", " ", "key")]
+    public async Task DeleteSafeAsync_NullOrWhitespace_Throws(string? baseRoot, string? tenant, string? key, string expectedParam)
+    {
+        var ex = await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await IoUtilities.DeleteSafeAsync(baseRoot!, tenant!, key!));
+        Assert.Equal(expectedParam, ex.ParamName);
+    }
+
+    [Theory]
+    [InlineData("../evil.txt")]
+    [InlineData("a//b.txt")]
+    [InlineData("/abs.txt")]
+    public async Task DeleteSafeAsync_InvalidKey_Throws(string key)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.DeleteSafeAsync(_tempRoot, "tenant1", key));
+    }
+
+    [Theory]
+    [InlineData("..")]
+    [InlineData("/static")]
+    [InlineData("static//images")]
+    public async Task DeleteSafeAsync_InvalidSubFolder_Throws(string subFolder)
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await IoUtilities.DeleteSafeAsync(_tempRoot, "tenant1", "a/b.txt", subFolder));
+    }
 }

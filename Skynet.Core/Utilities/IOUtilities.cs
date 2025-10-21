@@ -283,4 +283,41 @@ public static class IoUtilities
             throw;
         }
     }
+
+    /// <summary>
+    /// Löscht die durch baseRoot/tenantId/key[+subFolder] adressierte Datei sicher.
+    /// Gibt true zurück, wenn eine Datei vorhanden war und gelöscht wurde; false, wenn sie fehlte.
+    /// Validiert Pfad via BuildSafeFullPath. Wirft nur bei ungültigen Eingaben oder Abbruch.
+    /// </summary>
+    public static async Task<bool> DeleteSafeAsync(
+        string baseRootFull,
+        string tenantIdString,
+        string key,
+        string? subFolder = null,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(baseRootFull)) throw new ArgumentNullException(nameof(baseRootFull));
+        if (string.IsNullOrWhiteSpace(tenantIdString)) throw new ArgumentNullException(nameof(tenantIdString));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+        ct.ThrowIfCancellationRequested();
+
+        var full = BuildSafeFullPath(baseRootFull, tenantIdString, key, subFolder);
+
+        // Delete synchron, aber in Task verpackt für einheitliches Async-API
+        return await Task.Run(() =>
+        {
+            if (!File.Exists(full))
+                return false;
+
+            try
+            {
+                File.SetAttributes(full, FileAttributes.Normal); // ReadOnly ggf. entfernen
+            }
+            catch { /* ignore attribute issues */ }
+
+            File.Delete(full);
+            return true;
+        }, ct).ConfigureAwait(false);
+    }
 }
