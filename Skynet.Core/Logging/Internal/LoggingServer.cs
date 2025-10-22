@@ -1,0 +1,320 @@
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Threading.Channels;
+using Microsoft.Extensions.Logging;
+
+namespace Skynet.Core.Logging;
+
+/// <summary>
+/// Produktionsfähiger Logging-Server, der eingehende Verbindungen (\see IEventListener)
+/// akzeptiert, Frames liest (\see IEventChannel.ReadAsync), Events decodiert (\see ILogEventEncoder)
+/// und über einen Router (\see ILogRouter) zu Sinks dispatcht.
+///
+/// Schwerpunkte:
+/// - Keine Blockier-/Deadlock-Risiken: zentrale bounded Channel-Queue schützt vor OOM.
+/// - Backpressure/Drop-Strategie konfigurierbar.
+/// - Saubere Beendigung (StopAsync) mit finalem Flush aller bekannten Sinks.
+/// - Ausführliche Kommentare zur Wartbarkeit.
+///
+/// Threading-Modell:
+/// - 1 Accept-Loop Task: akzeptiert Verbindungen und startet je Verbindung einen Reader-Task.
+/// - N Worker-Tasks: entnehmen Frames aus der zentralen Queue, decodieren und dispatchen.
+/// - Optionaler Flush-Timer: periodisches Flush aller bekannten Sinks (z. B. Dateisinks).
+///
+/// Fehlerstrategie:
+/// - Exceptions in Readern/Workern werden geloggt und führen nicht zum Prozessabbruch.
+/// - Ungültige Frames werden verworfen und gezählt.
+/// </summary>
+public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
+{
+    private readonly IEventListener _listener;
+    private readonly ILogEventEncoder _encoder;
+    private readonly ILogRouter _router;
+    private readonly IEnumerable<IEnricher>? _enrichers;
+    private readonly ILogger<LoggingServer>? _logger;
+    private readonly LoggingServerOptions _options;
+
+    private readonly Channel<ReadOnlyMemory<byte>> _dispatch;
+    private readonly CancellationTokenSource _cts = new();
+
+    private Task? _acceptLoop;
+    private readonly ConcurrentBag<Task> _readerTasks = new();
+    private readonly List<Task> _workers = new();
+    private Task? _flushLoop;
+
+    private volatile int _started; // 0/1
+    private volatile int _stopped; // 0/1
+
+    // Alle Sinks, die während der Laufzeit aufgetreten sind (für Stop/Flush).
+    private readonly ConcurrentDictionary<ILogSink, byte> _knownSinks = new();
+
+    // Zähler/Telemetry (einfach gehalten; ggf. durch Meter/Counter ersetzen)
+    public long DroppedFrames => _droppedFrames;
+    public long DecodingErrors => _decodingErrors;
+    private long _droppedFrames;
+    private long _decodingErrors;
+
+    public LoggingServer(
+        IEventListener listener,
+        ILogEventEncoder encoder,
+        ILogRouter router,
+        LoggingServerOptions? options = null,
+        IEnumerable<IEnricher>? enrichers = null,
+        ILogger<LoggingServer>? logger = null)
+    {
+        _listener = listener ?? throw new ArgumentNullException(nameof(listener));
+        _encoder = encoder ?? throw new ArgumentNullException(nameof(encoder));
+        _router = router ?? throw new ArgumentNullException(nameof(router));
+        _enrichers = enrichers;
+        _logger = logger;
+        _options = options ?? new LoggingServerOptions();
+
+        var bounded = new BoundedChannelOptions(_options.MaxQueueLength)
+        {
+            AllowSynchronousContinuations = false,
+            SingleReader = false,
+            SingleWriter = false,
+            // Drop/Wait-Strategie: produktiv oft "Wait"; hier konfigurierbar.
+            FullMode = _options.QueueFullMode
+        };
+        _dispatch = Channel.CreateBounded<ReadOnlyMemory<byte>>(bounded);
+    }
+
+    /// <inheritdoc />
+    public async Task StartAsync(CancellationToken ct)
+    {
+        if (Interlocked.Exchange(ref _started, 1) == 1)
+            return; // idempotent
+
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, _cts.Token);
+        var token = linked.Token;
+
+        _logger?.LogInformation("LoggingServer Start: Encoder={ContentType}@{Version}, Workers={Workers}, MaxQueue={MaxQueue}",
+            _encoder.ContentType, _encoder.Version, _options.WorkerCount, _options.MaxQueueLength);
+
+        // Bind Listener
+        await _listener.BindAsync(token).ConfigureAwait(false);
+
+        // Accept-Loop
+        _acceptLoop = Task.Run(() => AcceptLoopAsync(token), token);
+
+        // Worker-Pool
+        for (int i = 0; i < _options.WorkerCount; i++)
+        {
+            var worker = Task.Run(() => WorkerLoopAsync(token), token);
+            _workers.Add(worker);
+        }
+
+        // Optionaler Flush-Timer
+        if (_options.PeriodicFlushInterval > TimeSpan.Zero)
+        {
+            _flushLoop = Task.Run(() => FlushLoopAsync(token), token);
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task StopAsync(CancellationToken ct)
+    {
+        if (Interlocked.Exchange(ref _stopped, 1) == 1)
+            return; // idempotent
+
+        _logger?.LogInformation("LoggingServer Stop initiated.");
+
+        _cts.Cancel(); // signalisiert Abbruch an Loops
+
+        // Stoppt Accept (neue Verbindungen verhindern)
+        try { await _listener.CloseAsync(CancellationToken.None).ConfigureAwait(false); }
+        catch (Exception ex) { _logger?.LogWarning(ex, "Listener.CloseAsync threw."); }
+
+        using var stopTimeoutCts = new CancellationTokenSource(_options.StopTimeout);
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, stopTimeoutCts.Token);
+        var token = linked.Token;
+
+        // Warten auf Accept/Flush
+        await SafeWaitAsync(_acceptLoop, token, nameof(_acceptLoop));
+        await SafeWaitAsync(_flushLoop, token, nameof(_flushLoop));
+
+        // Reader-Tasks dürfen noch frames in die Queue schieben; wir geben ihnen kurz Zeit.
+        await SafeWhenAllAsync(_readerTasks.ToArray(), token, "reader");
+
+        // Signal: Keine neuen Frames mehr
+        _dispatch.Writer.TryComplete();
+
+        // Worker auslaufen lassen
+        await SafeWhenAllAsync(_workers.ToArray(), token, "workers");
+
+        // Finaler Flush aller bekannten Sinks
+        await FlushAllSinksAsync(token).ConfigureAwait(false);
+
+        _logger?.LogInformation("LoggingServer stopped. DroppedFrames={Dropped}, DecodeErrors={DecodeErrors}", DroppedFrames, DecodingErrors);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try { await StopAsync(CancellationToken.None); } catch { /* best-effort */ }
+        _cts.Dispose();
+    }
+
+    private async Task AcceptLoopAsync(CancellationToken ct)
+    {
+        while (!ct.IsCancellationRequested)
+        {
+            try
+            {
+                var ch = await _listener.AcceptAsync(ct).ConfigureAwait(false);
+                // Für jede Verbindung: separaten Reader-Task starten
+                var readerTask = Task.Run(() => ReaderLoopAsync(ch, ct), ct);
+                _readerTasks.Add(readerTask);
+            }
+            catch (OperationCanceledException)
+            {
+                break; // Stop/Cancel
+            }
+            catch (InvalidOperationException inv) when (inv.Message.Contains("No pending channels", StringComparison.OrdinalIgnoreCase))
+            {
+                // Test-/InMemory-Listener liefert "No pending channels." statt zu blocken. Kurz pausieren.
+                await Task.Delay(_options.AcceptBackoff, ct).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "AcceptAsync failed");
+                await Task.Delay(_options.AcceptBackoff, ct).ConfigureAwait(false);
+            }
+        }
+    }
+
+    private async Task ReaderLoopAsync(IEventChannel ch, CancellationToken ct)
+    {
+        try
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                ReadOnlyMemory<byte>? frame;
+                try
+                {
+                    frame = await ch.ReadAsync(ct).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+
+                if (frame is null)
+                    break; // Ende der Verbindung
+
+                // In zentrale, begrenzte Queue einfügen (ggf. warten oder droppen – je nach FullMode)
+                if (_options.QueueFullMode == BoundedChannelFullMode.Wait)
+                {
+                    await _dispatch.Writer.WriteAsync(frame.Value, ct).ConfigureAwait(false);
+                }
+                else
+                {
+                    if (!_dispatch.Writer.TryWrite(frame.Value))
+                    {
+                        Interlocked.Increment(ref _droppedFrames);
+                        // optional: Metrik/Trace
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "ReaderLoop error.");
+        }
+        finally
+        {
+            try { await ch.CloseAsync(CancellationToken.None).ConfigureAwait(false); }
+            catch { /* ignore */ }
+            await ch.DisposeAsync();
+        }
+    }
+
+    private async Task WorkerLoopAsync(CancellationToken ct)
+    {
+        var reader = _dispatch.Reader;
+        while (await reader.WaitToReadAsync(ct).ConfigureAwait(false))
+        {
+            while (reader.TryRead(out var payload))
+            {
+                try
+                {
+                    if (!_encoder.TryDecode(payload.Span, out var evt) || evt is null)
+                    {
+                        Interlocked.Increment(ref _decodingErrors);
+                        continue;
+                    }
+
+                    // Optionale serverseitige Enrichment-Phase (leichtgewichtige, synchrone Mutationen)
+                    if (_enrichers is not null)
+                    {
+                        foreach (var e in _enrichers)
+                        {
+                            try { e.Enrich(evt); } catch (Exception enrEx) { _logger?.LogWarning(enrEx, "Enricher failed."); }
+                        }
+                    }
+
+                    var sink = _router.Resolve(evt);
+                    _knownSinks.TryAdd(sink, 0);
+
+                    await sink.WriteAsync(evt, ct).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    _logger?.LogError(ex, "Dispatch failed");
+                    // Fehler beim Dispatch einzelner Events werden geloggt und das Event verworfen.
+                }
+            }
+        }
+    }
+
+    private async Task FlushLoopAsync(CancellationToken ct)
+    {
+        var interval = _options.PeriodicFlushInterval;
+        while (!ct.IsCancellationRequested)
+        {
+            try
+            {
+                await Task.Delay(interval, ct).ConfigureAwait(false);
+                await FlushAllSinksAsync(ct).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogWarning(ex, "Periodic flush failed.");
+            }
+        }
+    }
+
+    private async Task FlushAllSinksAsync(CancellationToken ct)
+    {
+        foreach (var sink in _knownSinks.Keys)
+        {
+            try { await sink.FlushAsync(ct).ConfigureAwait(false); }
+            catch (OperationCanceledException) { /* stop */ }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Sink flush failed."); }
+        }
+    }
+
+    private static async Task SafeWhenAllAsync(Task[] tasks, CancellationToken ct, string name)
+    {
+        if (tasks.Length == 0) return;
+        try { await Task.WhenAll(tasks).WaitAsync(ct).ConfigureAwait(false); }
+        catch (OperationCanceledException) { /* ignore */ }
+        catch (Exception) { /* aggregated already surfaced in logs; ignore */ }
+    }
+
+    private static async Task SafeWaitAsync(Task? task, CancellationToken ct, string name)
+    {
+        if (task is null) return;
+        try { await task.WaitAsync(ct).ConfigureAwait(false); }
+        catch (OperationCanceledException) { /* ignore */ }
+        catch (Exception) { /* surfaced in logs; ignore */ }
+    }
+}
