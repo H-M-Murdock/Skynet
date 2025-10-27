@@ -10,15 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogEventMaterializer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultLogEventMaterializer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/JsonElementExt.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransportFactory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportFactoryTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/NdjsonLogEventEncoder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/NdjsonLogEventEncoder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +87,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransportFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MemoryLogSink.cs" root0="FORCE_HIGHLIGHTING" />
@@ -137,6 +132,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkIntegrationTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventListenerTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportFactoryTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkConcurrencyTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -249,15 +245,7 @@
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
       <workItem from="1761031026654" duration="3052000" />
-      <workItem from="1761546831127" duration="5599000" />
-    </task>
-    <task id="LOCAL-00004" summary="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements.">
-      <option name="closed" value="true" />
-      <created>1760447039242</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1760447039242</updated>
+      <workItem from="1761546831127" duration="9014000" />
     </task>
     <task id="LOCAL-00005" summary="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256.">
       <option name="closed" value="true" />
@@ -643,7 +631,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761548914317</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability.">
+      <option name="closed" value="true" />
+      <created>1761552797086</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1761552797086</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -653,7 +649,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="fix(io): WriteAtomicAsync – Race bei parallelem Move beheben, immer Replace nutzen (Zielstub)" />
     <MESSAGE value="test(io): WriteAtomicAsync – ungültiger key/subFolder führen zu InvalidOperationException" />
     <MESSAGE value="test(io): WriteAtomicAsync – leerer Inhalt (ETag), schreibgeschütztes Ziel, sehr lange Pfade" />
     <MESSAGE value="test(io): TDD-Tests für ExistsSafe; feat(io): ExistsSafe implementiert" />
@@ -678,7 +673,8 @@
     <MESSAGE value="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests" />
     <MESSAGE value="Added Logging server" />
     <MESSAGE value="Remove unused IntelliJ IDEA workspace files from the repository" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove unused IntelliJ IDEA workspace files from the repository" />
+    <MESSAGE value="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability." />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
