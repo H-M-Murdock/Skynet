@@ -144,7 +144,18 @@ public sealed class InMemoryEventTransport : IEventTransport
 
         public Task CloseAsync(CancellationToken ct)
         {
+            // Stoppt Producer: keine neuen Items mehr
             _buffer.CompleteAdding();
+
+            // WICHTIG: lokal alle nicht konsumierten Items verwerfen,
+            // sonst hängt Flush()/Stop(), wenn kein Server liest.
+            while (_buffer.TryTake(out _))
+            {
+                // Inflight-Korrektur, falls gezählt
+                Interlocked.Decrement(ref _inflight);
+                if (ct.IsCancellationRequested) break;
+            }
+
             return Task.CompletedTask;
         }
 
