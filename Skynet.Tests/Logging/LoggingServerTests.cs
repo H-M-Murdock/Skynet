@@ -31,7 +31,12 @@ namespace Skynet.Tests.Logging
                 PeriodicFlushInterval = TimeSpan.FromMilliseconds(200)
             };
 
-            _server = new LoggingServer(_listener, _encoder, _router, opts);
+            _server = new LoggingServer(
+                _listener,
+                _encoder,
+                _router,
+                new DefaultLogEventMaterializer(), // <— neu: Materializer
+                opts);
         }
 
         public async Task InitializeAsync() => await _server.StartAsync(CancellationToken.None);
@@ -73,7 +78,10 @@ namespace Skynet.Tests.Logging
                 QueueFullMode = System.Threading.Channels.BoundedChannelFullMode.Wait,
                 PeriodicFlushInterval = TimeSpan.Zero
             };
-            var tmpServer = new LoggingServer(_listener, _encoder, smallRouter, opts);
+            var tmpServer = new LoggingServer(
+                _listener, _encoder, smallRouter,
+                new DefaultLogEventMaterializer(), // <— neu
+                opts);
             await tmpServer.StartAsync(CancellationToken.None);
 
             var many = Enumerable.Range(0, 20)
@@ -97,7 +105,9 @@ namespace Skynet.Tests.Logging
         {
             var sink = new MemoryLogSink(capacity: 5);
             var router = new SingleSinkRouter(sink);
-            var server = new LoggingServer(_listener, _encoder, router,
+            var server = new LoggingServer(
+                _listener, _encoder, router,
+                new DefaultLogEventMaterializer(), // <— neu
                 new LoggingServerOptions { PeriodicFlushInterval = TimeSpan.Zero });
 
             await server.StartAsync(CancellationToken.None);

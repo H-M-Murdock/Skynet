@@ -10,11 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_10_2025_12_55_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_10_2025_12_55__Changes_.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/ILogEventMaterializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultLogEventMaterializer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/JsonElementExt.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/NdjsonLogEventEncoder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/NdjsonLogEventEncoder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +77,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventListener.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogEventEncoder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogEventMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogHealthMonitor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogRouter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogSink.cs" root0="FORCE_HIGHLIGHTING" />
@@ -82,6 +87,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DayRotationPolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultLogEventMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -243,15 +249,7 @@
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
       <workItem from="1761031026654" duration="3052000" />
-      <workItem from="1761546831127" duration="1935000" />
-    </task>
-    <task id="LOCAL-00003" summary="Add `Skynet.LicenseRequest` project for client metadata generation and runtime information CLI tool.">
-      <option name="closed" value="true" />
-      <created>1760446104353</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1760446104353</updated>
+      <workItem from="1761546831127" duration="5599000" />
     </task>
     <task id="LOCAL-00004" summary="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements.">
       <option name="closed" value="true" />
@@ -637,7 +635,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761132603779</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Remove unused IntelliJ IDEA workspace files from the repository">
+      <option name="closed" value="true" />
+      <created>1761548914316</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1761548914317</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -647,7 +653,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)" />
     <MESSAGE value="fix(io): WriteAtomicAsync – Race bei parallelem Move beheben, immer Replace nutzen (Zielstub)" />
     <MESSAGE value="test(io): WriteAtomicAsync – ungültiger key/subFolder führen zu InvalidOperationException" />
     <MESSAGE value="test(io): WriteAtomicAsync – leerer Inhalt (ETag), schreibgeschütztes Ziel, sehr lange Pfade" />
@@ -672,7 +677,8 @@
     <MESSAGE value="Logging: Add DayRotationPolicy with daily rotation logic, integration with FileLogSink, and unit tests" />
     <MESSAGE value="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests" />
     <MESSAGE value="Added Logging server" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Logging server" />
+    <MESSAGE value="Remove unused IntelliJ IDEA workspace files from the repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove unused IntelliJ IDEA workspace files from the repository" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

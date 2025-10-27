@@ -30,6 +30,7 @@ public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
     private readonly IEventListener _listener;
     private readonly ILogEventEncoder _encoder;
     private readonly ILogRouter _router;
+    private readonly ILogEventMaterializer _materializer;
     private readonly IEnumerable<IEnricher>? _enrichers;
     private readonly ILogger<LoggingServer>? _logger;
     private readonly LoggingServerOptions _options;
@@ -58,13 +59,16 @@ public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
         IEventListener listener,
         ILogEventEncoder encoder,
         ILogRouter router,
+        ILogEventMaterializer materializer,
         LoggingServerOptions? options = null,
         IEnumerable<IEnricher>? enrichers = null,
-        ILogger<LoggingServer>? logger = null)
+        ILogger<LoggingServer>? logger = null
+        )
     {
         _listener = listener ?? throw new ArgumentNullException(nameof(listener));
         _encoder = encoder ?? throw new ArgumentNullException(nameof(encoder));
         _router = router ?? throw new ArgumentNullException(nameof(router));
+        _materializer = materializer;
         _enrichers = enrichers;
         _logger = logger;
         _options = options ?? new LoggingServerOptions();
@@ -238,12 +242,13 @@ public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
             {
                 try
                 {
-                    if (!_encoder.TryDecode(payload.Span, out var evt) || evt is null)
+                    if (!_encoder.TryDecode(payload.Span, out var decoded) || decoded is null)
                     {
                         Interlocked.Increment(ref _decodingErrors);
                         continue;
                     }
 
+                    var evt = _materializer.Materialize(decoded); 
                     // Optionale serverseitige Enrichment-Phase (leichtgewichtige, synchrone Mutationen)
                     if (_enrichers is not null)
                     {
@@ -253,6 +258,7 @@ public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
                         }
                     }
 
+                    
                     var sink = _router.Resolve(evt);
                     _knownSinks.TryAdd(sink, 0);
 
@@ -317,4 +323,8 @@ public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
         catch (OperationCanceledException) { /* ignore */ }
         catch (Exception) { /* surfaced in logs; ignore */ }
     }
+    
+    
+    
+
 }

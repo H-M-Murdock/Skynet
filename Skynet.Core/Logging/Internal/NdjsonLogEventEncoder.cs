@@ -170,6 +170,12 @@ public sealed class NdjsonLogEventEncoder : ILogEventEncoder
     {
         private byte[] _buffer;
         private int _written;
+        public byte[] ToArray()
+        {
+            var result = new byte[_written];
+            Buffer.BlockCopy(_buffer, 0, result, 0, _written);
+            return result;
+        }
 
         public PooledBufferWriter(int initialSize) => _buffer = ArrayPool<byte>.Shared.Rent(initialSize);
 
@@ -192,17 +198,26 @@ public sealed class NdjsonLogEventEncoder : ILogEventEncoder
 
         public ReadOnlyMemory<byte> WrittenMemory => new ReadOnlyMemory<byte>(_buffer, 0, _written);
 
+        // NdjsonLogEventEncoder.Encode(...)
+        public ReadOnlyMemory<byte> Encode(ILogEvent evt)
+        {
+            using var buffer = new PooledBufferWriter(1024);
+            using (var writer = new Utf8JsonWriter(buffer, WriterOptions))
+            {
+                writer.WriteStartObject();
+                writer.WriteEndObject();
+                writer.Flush();
+            }
+
+            // WICHTIG: gepoolten Speicher nicht direkt herausgeben
+            return buffer.ToArray(); // <-- sicheres, eigenes Array zurückgeben
+        }
+        
         public void Dispose()
         {
             ArrayPool<byte>.Shared.Return(_buffer);
-            _buffer = Array.Empty<byte>();
+            _buffer = [];
             _written = 0;
         }
     }
-}
-
-file static class JsonElementExt
-{
-    public static JsonElement? GetPropertyOrDefault(this JsonElement el, string name)
-        => el.ValueKind == JsonValueKind.Object && el.TryGetProperty(name, out var prop) ? prop : null;
 }

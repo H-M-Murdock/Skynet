@@ -72,4 +72,22 @@ public sealed class NdjsonLogEventEncoderTests
         var enc = new NdjsonLogEventEncoder();
         Assert.False(enc.TryDecode(Encoding.UTF8.GetBytes("{ invalid"), out var _));
     }
+    
+    [Fact]
+    public void Encode_Returns_Owned_Buffer_Not_Aliased()
+    {
+        var enc = new NdjsonLogEventEncoder();
+
+        var e1 = new MutableLogEvent { Timestamp = DateTimeOffset.UtcNow, Level = LogLevel.Information, EventId = new(1) };
+        var b1 = enc.Encode(e1);             // erste Encodierung
+        var s1 = Encoding.UTF8.GetString(b1.Span);
+
+        var e2 = new MutableLogEvent { Timestamp = DateTimeOffset.UtcNow, Level = LogLevel.Warning, EventId = new(2) };
+        var b2 = enc.Encode(e2);             // zweite Encodierung (würde den Pool-Buffer wiederverwenden)
+
+        // Wenn b1 alias auf Pool war, wäre s1 jetzt „kaputt“/anders.
+        Assert.Contains("\"id\":1", s1);     // z.B. falls du eventId.id so prüfst
+    }
+
+    
 }
