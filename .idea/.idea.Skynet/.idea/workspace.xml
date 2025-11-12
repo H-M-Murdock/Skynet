@@ -10,14 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/CallLoggingProxy.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/LogCallAttribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -254,15 +247,7 @@
       <workItem from="1761546831127" duration="17855000" />
       <workItem from="1762855073821" duration="3410000" />
       <workItem from="1762943430059" duration="504000" />
-      <workItem from="1762944236956" duration="8483000" />
-    </task>
-    <task id="LOCAL-00007" summary="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings.">
-      <option name="closed" value="true" />
-      <created>1760955728191</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1760955728191</updated>
+      <workItem from="1762944236956" duration="8952000" />
     </task>
     <task id="LOCAL-00008" summary="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces.">
       <option name="closed" value="true" />
@@ -648,7 +633,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761560478395</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ workspace and ancillary file updates for improved project configuration.">
+      <option name="closed" value="true" />
+      <created>1762952828484</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1762952828485</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -658,7 +651,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): TDD-Tests für ExistsSafe; feat(io): ExistsSafe implementiert" />
     <MESSAGE value="test(io): TDD-Tests für DeleteSafeAsync; feat(io): DeleteSafeAsync implementiert" />
     <MESSAGE value="test(io): TDD-Tests für DirectoryExistsSafe und DirectoryDeleteSafeAsync; feat(io): Implementierung von DirectoryExistsSafe/DirectoryDeleteSafeAsync" />
     <MESSAGE value="test(io): TDD-Tests für CopySafeAsync und MoveSafeAsync; feat(io): Implementierung CopySafeAsync/MoveSafeAsync" />
@@ -683,7 +675,8 @@
     <MESSAGE value="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability." />
     <MESSAGE value="Added TrasnportFactory" />
     <MESSAGE value="Logging Client" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging Client" />
+    <MESSAGE value="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -700,19 +693,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs</url>
-          <line>152</line>
-          <properties documentPath="E:\Rider\Kns\Skynet\Skynet.Tests\Logging\LoggingServerTests.cs" containingFunctionPresentation="Method 'Overflow_DropsOldest_KeepsLatest'">
-            <startOffsets>
-              <option value="5734" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5762" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

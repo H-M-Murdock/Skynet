@@ -143,7 +143,7 @@ namespace Skynet.Tests.Logging
 
             // 1. Der Client (Test) signalisiert: "Ich bin fertig mit Senden für DIESEN Transport".
             // Dies bewirkt, dass der zugehörige ReaderLoop im Server endet.
-            //await transport.CloseAsync(CancellationToken.None);
+            await transport.CloseAsync(CancellationToken.None);
 
             // 2. Der Test signalisiert: "Fahre jetzt den GESAMTEN Server herunter".
             // Die jetzt robuste StopAsync-Methode orchestriert den Rest.
