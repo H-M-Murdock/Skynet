@@ -10,11 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingClient.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientOptions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingClientTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/CallLoggingProxy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/LogCallAttribute.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +27,10 @@
   </component>
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="11" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -45,12 +53,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d06f7d9172c5489caefe6387ae3e795738910/e3/d3b2e7bc/ResourceType.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/41cc61bcbc19425f8f9018ba4b79c072e8e918/_9dd0e/FileShare.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/824050f6eff6bd7b1a4eb53c5730dfff4ff268df2f27baa9945666965d9bc/RuntimeInformation.Windows.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8789586b575d44528c2aa18853f6eb96f3e8f8d3f4fa7eb9d6a56b54b49d7/Task.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1ff12748f9cf237ee59518603564fda4aeff2655358e148a39e284766c2b2/ILoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/eacce541aea4343da72fa852aadb945151e86e945e6ae0b260527f81a84e2e/ILoggerFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -68,6 +70,8 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/CallLoggingProxy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/LogCallAttribute.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/DropMode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/FileTarget.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -165,35 +169,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.Skynet.LicenseGrant.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.Skynet.LicenseRequest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.49963424&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/logging&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.Skynet.LicenseGrant.executor": "Run",
+    ".NET Project.Skynet.LicenseRequest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor": "Debug",
+    "git-widget-placeholder": "feat/logging",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
       <option name="PROGRAM_PARAMETERS" value="c --req license-request.json" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0" />
       <option name="PASS_PARENT_ENVS" value="1" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
@@ -213,10 +216,8 @@
       <option name="PROGRAM_PARAMETERS" value="v --license license-envelope.json --verify-key server-sign.pub" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Skynet.LicenseRequest/bin/Debug/net9.0" />
       <option name="PASS_PARENT_ENVS" value="1" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
@@ -250,15 +251,10 @@
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1761023741681" duration="2736000" />
       <workItem from="1761031026654" duration="3052000" />
-      <workItem from="1761546831127" duration="12738000" />
-    </task>
-    <task id="LOCAL-00006" summary="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning.">
-      <option name="closed" value="true" />
-      <created>1760519412178</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1760519412178</updated>
+      <workItem from="1761546831127" duration="17855000" />
+      <workItem from="1762855073821" duration="3410000" />
+      <workItem from="1762943430059" duration="504000" />
+      <workItem from="1762944236956" duration="8483000" />
     </task>
     <task id="LOCAL-00007" summary="Add tenant-aware i18n framework with translation, rendering, validation, and export/import interfaces. Update IntelliJ workspace settings.">
       <option name="closed" value="true" />
@@ -644,7 +640,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761556539766</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Logging Client">
+      <option name="closed" value="true" />
+      <created>1761560478395</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1761560478395</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -654,7 +658,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): WriteAtomicAsync – leerer Inhalt (ETag), schreibgeschütztes Ziel, sehr lange Pfade" />
     <MESSAGE value="test(io): TDD-Tests für ExistsSafe; feat(io): ExistsSafe implementiert" />
     <MESSAGE value="test(io): TDD-Tests für DeleteSafeAsync; feat(io): DeleteSafeAsync implementiert" />
     <MESSAGE value="test(io): TDD-Tests für DirectoryExistsSafe und DirectoryDeleteSafeAsync; feat(io): Implementierung von DirectoryExistsSafe/DirectoryDeleteSafeAsync" />
@@ -679,7 +682,8 @@
     <MESSAGE value="Remove unused IntelliJ IDEA workspace files from the repository" />
     <MESSAGE value="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability." />
     <MESSAGE value="Added TrasnportFactory" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added TrasnportFactory" />
+    <MESSAGE value="Logging Client" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logging Client" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -696,6 +700,19 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs</url>
+          <line>152</line>
+          <properties documentPath="E:\Rider\Kns\Skynet\Skynet.Tests\Logging\LoggingServerTests.cs" containingFunctionPresentation="Method 'Overflow_DropsOldest_KeepsLatest'">
+            <startOffsets>
+              <option value="5734" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5762" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

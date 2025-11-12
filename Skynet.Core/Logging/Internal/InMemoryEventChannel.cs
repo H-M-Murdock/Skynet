@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+using System.Threading.Channels;
 
 namespace Skynet.Core.Logging;
 
@@ -11,37 +11,76 @@ namespace Skynet.Core.Logging;
 /// </summary>
 public sealed class InMemoryEventChannel : IEventChannel
 {
-    private readonly ConcurrentQueue<ReadOnlyMemory<byte>> _frames;
-    private volatile bool _closed;
+    private readonly Channel<ReadOnlyMemory<byte>> _channel;
 
+    public InMemoryEventChannel(int capacity)
+    {
+        var options = new BoundedChannelOptions(capacity)
+        {
+            AllowSynchronousContinuations = false,
+            FullMode = BoundedChannelFullMode.DropWrite // Oder eine andere passende Strategie
+        };
+        _channel = Channel.CreateBounded<ReadOnlyMemory<byte>>(options);
+    }
+    
     public InMemoryEventChannel(IEnumerable<ReadOnlyMemory<byte>> frames)
     {
         ArgumentNullException.ThrowIfNull(frames);
-        _frames = new ConcurrentQueue<ReadOnlyMemory<byte>>(frames);
+        var frameList = frames as IReadOnlyCollection<ReadOnlyMemory<byte>> ?? frames.ToList();
+        var options = new BoundedChannelOptions(frameList.Count > 0 ? frameList.Count : 1)
+        {
+            AllowSynchronousContinuations = false,
+            FullMode = BoundedChannelFullMode.DropWrite
+        };
+        _channel = Channel.CreateBounded<ReadOnlyMemory<byte>>(options);
+
+        foreach (var frame in frameList)
+        {
+            _channel.Writer.TryWrite(frame);
+        }
+
+        _channel.Writer.TryComplete();
     }
 
-    public Task<ReadOnlyMemory<byte>?> ReadAsync(CancellationToken ct)
+    /// <summary>
+    /// Wird vom InMemoryEventTransport aufgerufen, um Daten in den Kanal zu schreiben.
+    /// </summary>
+    public bool TryWrite(ReadOnlyMemory<byte> frame)
     {
-        ct.ThrowIfCancellationRequested();
-        if (_closed) return Task.FromResult<ReadOnlyMemory<byte>?>(null);
-
-        if (_frames.TryDequeue(out var frame))
-            return Task.FromResult<ReadOnlyMemory<byte>?>(frame);
-
-        // nichts mehr vorhanden -> Ende
-        _closed = true;
-        return Task.FromResult<ReadOnlyMemory<byte>?>(null);
+        return _channel.Writer.TryWrite(frame);
     }
 
+    /// <summary>
+    /// Wird vom LoggingServer aufgerufen, um Daten aus dem Kanal zu lesen.
+    /// </summary>
+    public async Task<ReadOnlyMemory<byte>?> ReadAsync(CancellationToken ct)
+    {
+        try
+        {
+            // Wartet, bis ein Element verfügbar ist oder der Channel geschlossen wurde.
+            // Gibt dann das Element zurück.
+            return await _channel.Reader.ReadAsync(ct);
+        }
+        catch (ChannelClosedException)
+        {
+            // Dies ist das korrekte, erwartete Signal für "End of File" (EOF).
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Schließt den Kanal für weitere Schreibvorgänge. Der Reader kann den Puffer
+    /// danach noch vollständig leeren.
+    /// </summary>
     public Task CloseAsync(CancellationToken ct)
     {
-        _closed = true;
+        _channel.Writer.TryComplete();
         return Task.CompletedTask;
     }
 
     public ValueTask DisposeAsync()
     {
-        _closed = true;
+        _channel.Writer.TryComplete();
         return ValueTask.CompletedTask;
     }
 }

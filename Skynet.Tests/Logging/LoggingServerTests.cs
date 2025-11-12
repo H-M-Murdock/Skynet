@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Xunit;
 using Skynet.Core.Logging;
 
@@ -39,6 +40,50 @@ namespace Skynet.Tests.Logging
                 opts);
         }
 
+        private sealed class TestEncoder : ILogEventEncoder
+        {
+            public string ContentType => "application/x-test";
+            public string Version => "1.0";
+
+            public ReadOnlyMemory<byte> Encode(ILogEvent evt)
+            {
+                var id = evt.EventId.Id;
+                return Encoding.UTF8.GetBytes($"id:{id}");
+            }
+
+            public bool TryDecode(ReadOnlySpan<byte> payload, out ILogEvent? evt)
+            {
+                var s = Encoding.UTF8.GetString(payload);
+                if (!s.StartsWith("id:", StringComparison.Ordinal) || !int.TryParse(s.AsSpan(3), out var n))
+                {
+                    evt = null;
+                    return false;
+                }
+
+                evt = new MutableLogEvent
+                {
+                    Timestamp = DateTimeOffset.UtcNow,
+                    Level = LogLevel.Information,
+                    EventId = new EventId(n, "E"),
+                    GlobalEventId = n.ToString("n"),
+                    State = new List<KeyValuePair<string, object?>>()
+                };
+                return true;
+            }
+        }
+        
+        // --- Test-Hilfen ---
+        private static MutableLogEvent E(int id) => new()
+        {
+            Timestamp = DateTimeOffset.UtcNow,
+            Level = LogLevel.Information,
+            EventId = new EventId(id, "E"),
+            GlobalEventId = id.ToString("n"),
+            State = new List<KeyValuePair<string, object?>>()
+        };
+        
+        private static ReadOnlyMemory<byte> Enc(ILogEventEncoder enc, ILogEvent evt) => enc.Encode(evt);
+        
         public async Task InitializeAsync() => await _server.StartAsync(CancellationToken.None);
         public async Task DisposeAsync()     => await _server.DisposeAsync();
 
@@ -66,38 +111,48 @@ namespace Skynet.Tests.Logging
             Assert.Contains(snap, e => e.Operation == "c2-e3");
         }
 
-        [Fact(DisplayName = "Overflow: MemoryLogSink droppt älteste Events")]
+        [Fact]
         public async Task Overflow_DropsOldest_KeepsLatest()
         {
-            var smallSink = new MemoryLogSink(capacity: 5);
-            var smallRouter = new SingleSinkRouter(smallSink);
-            var opts = new LoggingServerOptions
+            // Arrange
+            var listener = new InMemoryEventListener();
+            var encoder = new TestEncoder();
+            var sink = new MemoryLogSink(capacity: 10);
+            var router = new SingleSinkRouter(sink);
+            var materializer = new DefaultLogEventMaterializer();
+
+            var server = new LoggingServer(
+                listener, encoder, router, materializer,
+                new LoggingServerOptions
+                {
+                    MaxQueueLength = 5,
+                    QueueFullMode = System.Threading.Channels.BoundedChannelFullMode.DropOldest,
+                    WorkerCount = 1,
+                    PeriodicFlushInterval = TimeSpan.Zero
+                });
+            await server.StartAsync(CancellationToken.None);
+
+            var transport = new InMemoryEventTransport(listener, capacity: 15);
+            await transport.ConnectAsync(CancellationToken.None);
+
+            // Act
+            for (var i = 0; i < 10; i++)
             {
-                WorkerCount = 1,
-                MaxQueueLength = 64,
-                QueueFullMode = System.Threading.Channels.BoundedChannelFullMode.Wait,
-                PeriodicFlushInterval = TimeSpan.Zero
-            };
-            var tmpServer = new LoggingServer(
-                _listener, _encoder, smallRouter,
-                new DefaultLogEventMaterializer(), // <— neu
-                opts);
-            await tmpServer.StartAsync(CancellationToken.None);
+                Assert.True(await transport.TrySendAsync(Enc(encoder, E(i)), CancellationToken.None));
+            }
 
-            var many = Enumerable.Range(0, 20)
-                                 .Select(i => ToBytes($"e{i:D2}"))
-                                 .ToArray();
-            var ch = new InMemoryEventChannel(many);
-            _listener.EnqueueChannel(ch);
+            // 1. Der Client (Test) signalisiert: "Ich bin fertig mit Senden für DIESEN Transport".
+            // Dies bewirkt, dass der zugehörige ReaderLoop im Server endet.
+            //await transport.CloseAsync(CancellationToken.None);
 
-            await Task.Delay(200);
-            await tmpServer.StopAsync(CancellationToken.None);
+            // 2. Der Test signalisiert: "Fahre jetzt den GESAMTEN Server herunter".
+            // Die jetzt robuste StopAsync-Methode orchestriert den Rest.
+            await server.StopAsync(CancellationToken.None);
 
-            var snap = smallSink.Snapshot().OfType<MutableLogEvent>().ToList();
-            Assert.Equal(5, snap.Count);
-            // Die letzten 5 Operation-Werte sollten im Sink enthalten sein
-            var expected = Enumerable.Range(15, 5).Select(i => $"e{i:D2}");
-            Assert.True(expected.SequenceEqual(snap.Select(e => e.Operation)));
+            // Assert
+            Assert.Equal(5, sink.Count);
+            var ids = sink.Snapshot().Select(e => e.EventId.Id).OrderBy(x => x).ToArray();
+            Assert.Equal(new[] { 5, 6, 7, 8, 9 }, ids);
         }
 
         [Fact(DisplayName = "Stop ist idempotent")]

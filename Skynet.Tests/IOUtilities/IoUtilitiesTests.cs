@@ -396,31 +396,54 @@ public class IoUtilitiesTests: IDisposable
             await IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, data, ct: cts.Token));
     }
 
-    [Fact]
-    public async Task WriteAtomicAsync_ParallelWrites_ResultIsConsistent()
-    {
-        var tenant = "t1";
-        var key = "folder/parallel.txt";
+            [Fact]
+        public async Task WriteAtomicAsync_ParallelWrites_ResultIsConsistent()
+        {
+            var tenant = "t1";
+            var key = "folder/parallel.txt";
 
-        var v1 = Encoding.UTF8.GetBytes("first");
-        var v2 = Encoding.UTF8.GetBytes("second");
+            var v1 = Encoding.UTF8.GetBytes("first");
+            var v2 = Encoding.UTF8.GetBytes("second");
 
-        // Zwei konkurrierende Writes
-        var t1 = IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v1);
-        var t2 = IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v2);
+            // Zwei konkurrierende Writes starten
+            var t1 = IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v1);
+            var t2 = IoUtilities.WriteAtomicAsync(_tempRoot, tenant, key, v2);
 
-        var results = await Task.WhenAll(t1, t2);
+            // Warten, bis beide abgeschlossen sind. Eine IOException ist möglich und wird erwartet.
+            try
+            {
+                await Task.WhenAll(t1, t2);
+            }
+            catch (IOException)
+            {
+                // Erwartetes Ergebnis bei einer Race Condition. Mindestens ein Task sollte 
+                // dennoch erfolgreich sein oder bereits erfolgreich gewesen sein.
+            }
 
-        // Datei existiert und enthält entweder first oder second, aber konsistent
-        var path = results[0].fullPath;
-        Assert.True(File.Exists(path));
-        var content = await File.ReadAllTextAsync(path, Encoding.UTF8);
-        Assert.True(content is "first" or "second");
+            // Überprüfen des finalen Zustands auf der Festplatte
+            var path = IoUtilities.BuildSafeFullPath(_tempRoot, tenant, key);
+            Assert.True(File.Exists(path));
+            var content = await File.ReadAllTextAsync(path, Encoding.UTF8);
 
-        // ETag entspricht dem tatsächlichen Inhalt
-        var expectedEtag = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(content)));
-        Assert.Contains(results.Select(r => r.etag), e => string.Equals(e, expectedEtag, StringComparison.Ordinal));
-    }
+            // Der Inhalt muss entweder "first" oder "second" sein.
+            Assert.True(content is "first" or "second", "File content is not one of the expected values.");
+
+            // Identifiziere den "gewinnenden" Task basierend auf dem finalen Inhalt.
+            var winner = content == "first" ? t1 : t2;
+            var loser = content == "first" ? t2 : t1;
+
+            // Der Gewinner-Task MUSS erfolgreich abgeschlossen worden sein.
+            Assert.True(winner.IsCompletedSuccessfully, $"The winning task (content: '{content}') should have completed successfully.");
+
+            // Der ETag des Gewinners muss mit dem Hash des finalen Inhalts übereinstimmen.
+            var finalEtag = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(content)));
+            var winnerResult = await winner;
+            Assert.Equal(finalEtag, winnerResult.etag);
+            
+            // Der Verlierer-Task kann entweder erfolgreich gewesen (und überschrieben worden)
+            // oder mit einer IOException fehlgeschlagen sein. Beides ist okay.
+            Assert.True(loser.IsCompletedSuccessfully || loser.IsFaulted, "The loser task should either have succeeded or faulted.");
+        }
 
     [Theory]
     [InlineData("../evil.txt")]

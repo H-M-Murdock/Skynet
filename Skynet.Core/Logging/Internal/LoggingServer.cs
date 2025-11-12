@@ -124,31 +124,38 @@ public sealed class LoggingServer : ILoggingServer, IAsyncDisposable
 
         _logger?.LogInformation("LoggingServer Stop initiated.");
 
-        _cts.Cancel(); // signalisiert Abbruch an Loops
-
-        // Stoppt Accept (neue Verbindungen verhindern)
-        try { await _listener.CloseAsync(CancellationToken.None).ConfigureAwait(false); }
-        catch (Exception ex) { _logger?.LogWarning(ex, "Listener.CloseAsync threw."); }
-
         using var stopTimeoutCts = new CancellationTokenSource(_options.StopTimeout);
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, stopTimeoutCts.Token);
-        var token = linked.Token;
+        var overallStopToken = linked.Token;
 
-        // Warten auf Accept/Flush
-        await SafeWaitAsync(_acceptLoop, token, nameof(_acceptLoop));
-        await SafeWaitAsync(_flushLoop, token, nameof(_flushLoop));
+        // SCHRITT 1: Das "Eingangstor" schließen.
+        // Dies ist der entscheidende Auslöser für den gesamten Shutdown.
+        // Der AcceptLoop wird dadurch beendet, weil AcceptAsync eine Exception wirft.
+        try { await _listener.CloseAsync(CancellationToken.None).ConfigureAwait(false); }
+        catch (Exception ex) { _logger?.LogWarning(ex, "Listener.CloseAsync threw."); }
+    
+        // Warten, bis der AcceptLoop dies bemerkt hat und sich beendet.
+        await SafeWaitAsync(_acceptLoop, overallStopToken, nameof(_acceptLoop));
 
-        // Reader-Tasks dürfen noch frames in die Queue schieben; wir geben ihnen kurz Zeit.
-        await SafeWhenAllAsync(_readerTasks.ToArray(), token, "reader");
+        // SCHRITT 2: Warten, bis alle Reader-Tasks von sich aus fertig sind.
+        // Sie enden, weil ihre Quellen (die Transports) vom Client geschlossen wurden
+        // oder der Listener sie nicht mehr bedient.
+        await SafeWhenAllAsync(_readerTasks.ToArray(), overallStopToken, "reader");
 
-        // Signal: Keine neuen Frames mehr
+        // SCHRITT 3: Signalisiere, dass keine neuen Daten mehr in die zentrale Queue kommen.
         _dispatch.Writer.TryComplete();
 
-        // Worker auslaufen lassen
-        await SafeWhenAllAsync(_workers.ToArray(), token, "workers");
+        // SCHRITT 4: Warten, bis die Worker-Tasks die Queue vollständig abgearbeitet haben.
+        await SafeWhenAllAsync(_workers.ToArray(), overallStopToken, "workers");
 
-        // Finaler Flush aller bekannten Sinks
-        await FlushAllSinksAsync(token).ConfigureAwait(false);
+        // SCHRITT 5: Erst jetzt das globale Abbruchsignal senden, um restliche Hintergrund-Tasks zu beenden.
+        _cts.Cancel();
+
+        // Warten auf den periodischen Flush-Loop.
+        await SafeWaitAsync(_flushLoop, overallStopToken, nameof(_flushLoop));
+
+        // SCHRITT 6: Ein finaler Flush, um sicherzustellen, dass alle Puffer geleert sind.
+        await FlushAllSinksAsync(CancellationToken.None).ConfigureAwait(false);
 
         _logger?.LogInformation("LoggingServer stopped. DroppedFrames={Dropped}, DecodeErrors={DecodeErrors}", DroppedFrames, DecodingErrors);
     }
