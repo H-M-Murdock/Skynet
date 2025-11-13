@@ -10,8 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventListenerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventListenerTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +22,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="11" />
+    <option name="cachedIndexableFilesCount" value="16" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -162,26 +162,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.Skynet.LicenseGrant.executor": "Run",
-    ".NET Project.Skynet.LicenseRequest.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor": "Debug",
-    "git-widget-placeholder": "feat/logging",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.Skynet.LicenseGrant.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.Skynet.LicenseRequest.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/logging&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
@@ -247,15 +247,8 @@
       <workItem from="1761546831127" duration="17855000" />
       <workItem from="1762855073821" duration="3410000" />
       <workItem from="1762943430059" duration="504000" />
-      <workItem from="1762944236956" duration="8952000" />
-    </task>
-    <task id="LOCAL-00008" summary="Add core enhancements: tenant resolution, licensing updates, i18n notifier, monotonic clock, and resource write policies. Expand crypto with AAD support, strengthen lifecycle management, and refine logging interfaces.">
-      <option name="closed" value="true" />
-      <created>1760960032310</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1760960032310</updated>
+      <workItem from="1762944236956" duration="9121000" />
+      <workItem from="1763026149661" duration="1328000" />
     </task>
     <task id="LOCAL-00009" summary="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy.">
       <option name="closed" value="true" />
@@ -641,7 +634,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762952828485</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management.">
+      <option name="closed" value="true" />
+      <created>1762953344210</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1762953344210</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -651,7 +652,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): TDD-Tests für DeleteSafeAsync; feat(io): DeleteSafeAsync implementiert" />
     <MESSAGE value="test(io): TDD-Tests für DirectoryExistsSafe und DirectoryDeleteSafeAsync; feat(io): Implementierung von DirectoryExistsSafe/DirectoryDeleteSafeAsync" />
     <MESSAGE value="test(io): TDD-Tests für CopySafeAsync und MoveSafeAsync; feat(io): Implementierung CopySafeAsync/MoveSafeAsync" />
     <MESSAGE value="Logging: Add SimpleBackpressurePolicy with tests (TDD base for client backpressure)" />
@@ -676,7 +676,8 @@
     <MESSAGE value="Added TrasnportFactory" />
     <MESSAGE value="Logging Client" />
     <MESSAGE value="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ" />
+    <MESSAGE value="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management." />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
