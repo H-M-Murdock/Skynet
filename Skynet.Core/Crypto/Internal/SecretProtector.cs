@@ -17,7 +17,6 @@ public sealed class SecretProtector : ISecretProtector
     }
 
     // String (UTF-8) -> Base64 (ohne AAD)
-    // Sicherheit: plainText wird in ein Byte-Array konvertiert; dieses wird nach Nutzung genullt.
     public string Protect(string plainText)
     {
         if (plainText is null) throw new ArgumentNullException(nameof(plainText));
@@ -97,7 +96,6 @@ public sealed class SecretProtector : ISecretProtector
     }
 
     // Bytes -> Bytes (verpacktes Format: [nonce|tag|cipher]) ohne AAD
-    // Hinweis: Caller besitzt Ownership der Eingabe 'plain' und sollte diese ggf. selbst wipen.
     public byte[] Protect(byte[] plain)
     {
         if (plain is null) throw new ArgumentNullException(nameof(plain));
@@ -109,7 +107,6 @@ public sealed class SecretProtector : ISecretProtector
         Buffer.BlockCopy(tag, 0, result, nonce.Length, tag.Length);
         Buffer.BlockCopy(cipher, 0, result, nonce.Length + tag.Length, cipher.Length);
 
-        // Temporäre Arrays (nonce, tag, cipher) enthalten keine Klartexte, werden aber defensiv gelöscht.
         CryptographicOperations.ZeroMemory(nonce);
         CryptographicOperations.ZeroMemory(tag);
         CryptographicOperations.ZeroMemory(cipher);
@@ -172,17 +169,20 @@ public sealed class SecretProtector : ISecretProtector
         using var ms = new MemoryStream();
         cipherStream.CopyTo(ms);
         var packed = ms.ToArray();
-        byte[]? plain = null;
+        
+        // BUGFIX: Wir dürfen 'plain' hier NICHT wipen, da der zurückgegebene MemoryStream
+        // direkt auf diesem Array arbeitet (by reference).
+        byte[] plain;
         try
         {
             plain = UnpackAndDecrypt(packed);
-            return new MemoryStream(plain, writable: false) { Position = 0 };
         }
         finally
         {
             CryptographicOperations.ZeroMemory(packed);
-            if (plain is not null) CryptographicOperations.ZeroMemory(plain);
         }
+        
+        return new MemoryStream(plain, writable: false) { Position = 0 };
     }
 
     // Stream -> Stream (mit AAD) – Rückgabe-Stream Position = 0
@@ -209,17 +209,19 @@ public sealed class SecretProtector : ISecretProtector
         using var ms = new MemoryStream();
         cipherStream.CopyTo(ms);
         var packed = ms.ToArray();
-        byte[]? plain = null;
+        
+        // BUGFIX: plain nicht wipen
+        byte[] plain;
         try
         {
             plain = UnpackAndDecrypt(packed, aad);
-            return new MemoryStream(plain, writable: false) { Position = 0 };
         }
         finally
         {
             CryptographicOperations.ZeroMemory(packed);
-            if (plain is not null) CryptographicOperations.ZeroMemory(plain);
         }
+        
+        return new MemoryStream(plain, writable: false) { Position = 0 };
     }
 
     // Async (ohne AAD)
