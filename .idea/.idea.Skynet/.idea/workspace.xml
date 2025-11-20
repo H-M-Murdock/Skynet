@@ -10,9 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Crypto/AesGcmAeadCryptographyTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Crypto/HkdfKeyDerivationTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,6 +126,9 @@
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/AesGcmAeadCryptographyTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/DefaultKeyPairGeneratorTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/EcdhKeyAgreementTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/HkdfKeyDerivationTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTemplateResolutionTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -253,30 +255,6 @@
       <workItem from="1762944236956" duration="9121000" />
       <workItem from="1763026149661" duration="1328000" />
       <workItem from="1763630160122" duration="3492000" />
-    </task>
-    <task id="LOCAL-00009" summary="Remove obsolete unit tests for time management, localization, and culture utilities to streamline codebase and eliminate redundancy.">
-      <option name="closed" value="true" />
-      <created>1760960558443</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1760960558443</updated>
-    </task>
-    <task id="LOCAL-00010" summary="test(time): Basis-Tests für IClock und IStopwatch hinzufügen">
-      <option name="closed" value="true" />
-      <created>1760960890121</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1760960890121</updated>
-    </task>
-    <task id="LOCAL-00011" summary="test(time): DI-Registrierung für IClock (System/Frozen/Adjustable) testen; docs: Kommentare präzisiert">
-      <option name="closed" value="true" />
-      <created>1760961089882</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1760961089882</updated>
     </task>
     <task id="LOCAL-00012" summary="feat(time): Stopwatch robuster gegen Overflow clamping; test(time): Edge-Case-Tests für IStopwatch hinzugefügt">
       <option name="closed" value="true" />
@@ -646,7 +624,31 @@
       <option name="project" value="LOCAL" />
       <updated>1762953344210</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="feat(crypto): Add `AesGcmAeadCryptographyTests` for AES-GCM encryption and decryption&#10;&#10;- Introduced comprehensive unit tests for `AesGcmAead`, covering encryption, decryption, AAD support, key/nonce/tag validation, async operations, and edge cases.&#10;- Updated `Skynet.Tests.csproj` to include new test folder for `Crypto`.&#10;- Minor IntelliJ workspace adjustments for test management and project consistency.">
+      <option name="closed" value="true" />
+      <created>1763636459408</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1763636459408</updated>
+    </task>
+    <task id="LOCAL-00059" summary="feat(crypto): Add `DefaultKeyPairGeneratorTests` for ECDH and ECDSA key generation&#10;&#10;- Implemented unit tests for `DefaultKeyPairGenerator` covering ECDH and ECDSA key generation, validity, determinism, and interoperability.&#10;- Validated algorithm support, error handling, and edge cases like empty seeds.">
+      <option name="closed" value="true" />
+      <created>1763636650134</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1763636650134</updated>
+    </task>
+    <task id="LOCAL-00060" summary="feat(crypto): Add `EcdhKeyAgreementTests` for ECDH key agreement validation&#10;&#10;- Implemented unit tests for `EcdhKeyAgreement`, covering shared secret derivation, symmetry, invalid key handling, and edge cases.&#10;- Verified error handling for unsupported algorithms, null/empty keys, and invalid key formats.&#10;- Ensured robust testing against misuse of improper key types and format inconsistencies.">
+      <option name="closed" value="true" />
+      <created>1763636757457</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1763636757457</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -656,9 +658,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="test(io): TDD-Tests für DirectoryExistsSafe und DirectoryDeleteSafeAsync; feat(io): Implementierung von DirectoryExistsSafe/DirectoryDeleteSafeAsync" />
-    <MESSAGE value="test(io): TDD-Tests für CopySafeAsync und MoveSafeAsync; feat(io): Implementierung CopySafeAsync/MoveSafeAsync" />
-    <MESSAGE value="Logging: Add SimpleBackpressurePolicy with tests (TDD base for client backpressure)" />
     <MESSAGE value="Logging: Extend ILogEvent for .NET interop (LogLevel, EventId, Exception, Activity IDs, category, KV properties)" />
     <MESSAGE value="Logging: Simplify ILogEvent for .NET interop" />
     <MESSAGE value="Logging: Refactor ScopedStopwatchFactory and ILogEvent; add DefaultEnricher with unit tests" />
@@ -681,7 +680,10 @@
     <MESSAGE value="Logging Client" />
     <MESSAGE value="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ" />
     <MESSAGE value="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management." />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management." />
+    <MESSAGE value="feat(crypto): Add `AesGcmAeadCryptographyTests` for AES-GCM encryption and decryption&#10;&#10;- Introduced comprehensive unit tests for `AesGcmAead`, covering encryption, decryption, AAD support, key/nonce/tag validation, async operations, and edge cases.&#10;- Updated `Skynet.Tests.csproj` to include new test folder for `Crypto`.&#10;- Minor IntelliJ workspace adjustments for test management and project consistency." />
+    <MESSAGE value="feat(crypto): Add `DefaultKeyPairGeneratorTests` for ECDH and ECDSA key generation&#10;&#10;- Implemented unit tests for `DefaultKeyPairGenerator` covering ECDH and ECDSA key generation, validity, determinism, and interoperability.&#10;- Validated algorithm support, error handling, and edge cases like empty seeds." />
+    <MESSAGE value="feat(crypto): Add `EcdhKeyAgreementTests` for ECDH key agreement validation&#10;&#10;- Implemented unit tests for `EcdhKeyAgreement`, covering shared secret derivation, symmetry, invalid key handling, and edge cases.&#10;- Verified error handling for unsupported algorithms, null/empty keys, and invalid key formats.&#10;- Ensured robust testing against misuse of improper key types and format inconsistencies." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(crypto): Add `EcdhKeyAgreementTests` for ECDH key agreement validation&#10;&#10;- Implemented unit tests for `EcdhKeyAgreement`, covering shared secret derivation, symmetry, invalid key handling, and edge cases.&#10;- Verified error handling for unsupported algorithms, null/empty keys, and invalid key formats.&#10;- Ensured robust testing against misuse of improper key types and format inconsistencies." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
