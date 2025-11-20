@@ -9,12 +9,17 @@ using System.Threading.Channels;
 /// - Batch-Verarbeitung und periodisches Flush.
 /// - Integration in lokale InMemory-Transports.
 /// </summary>
-public sealed class LoggingClient : IAsyncDisposable
+public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
 {
     private readonly IEventTransportFactory _transportFactory;
     private readonly ILogEventEncoder _encoder;
     private readonly IBackpressurePolicy _backpressurePolicy;
     private readonly LoggingClientOptions _options;
+
+    // Enricher und Redaction Policies könnten hier optional injiziert werden (fehlen im aktuellen Konstruktor noch)
+    // private readonly IEnumerable<IEnricher> _enrichers;
+    // private readonly IRedactionPolicy _redactionPolicy;
+    // private readonly ISizeLimiter _sizeLimiter;
 
     private readonly Channel<ILogEvent> _queue;
     private readonly CancellationTokenSource _cts = new();
@@ -24,10 +29,11 @@ public sealed class LoggingClient : IAsyncDisposable
 
     private long _droppedQueue;
     private long _droppedTransport;
-
-    public int InQueueCount => _queue.Reader.Count;
-    public long DroppedDueToQueueFull => Interlocked.Read(ref _droppedQueue);
-    public long DroppedDueToTransport => Interlocked.Read(ref _droppedTransport);
+    
+    // NEU: Metriken als Properties implementieren
+    public long DroppedCount => Interlocked.Read(ref _droppedQueue) + Interlocked.Read(ref _droppedTransport);
+    public int QueueLength => _queue.Reader.Count;
+    public int QueueCapacity => _options.QueueCapacity;
 
     public LoggingClient(
         IEventTransportFactory transportFactory,
@@ -51,7 +57,7 @@ public sealed class LoggingClient : IAsyncDisposable
     public async Task StartAsync(CancellationToken ct)
     {
         if (_transport != null)
-            return;
+            return; // Idempotent
 
         var transport = _transportFactory.Create();
         await transport.ConnectAsync(ct).ConfigureAwait(false);
@@ -60,94 +66,113 @@ public sealed class LoggingClient : IAsyncDisposable
         _senderTask = Task.Run(() => SenderLoopAsync(_cts.Token), CancellationToken.None);
     }
 
-    public async Task StopAsync(CancellationToken ct)
+    // Refaktorisiertes LogAsync (siehe vorherigen Schritt)
+    public async ValueTask LogAsync(ILogEvent evt, CancellationToken ct)
     {
-        _cts.Cancel();
-        _queue.Writer.TryComplete();
+        if (evt == null) return;
 
-        if (_senderTask != null)
-            await Task.WhenAny(_senderTask, Task.Delay(2000, ct)).ConfigureAwait(false);
+        // Hier würden normalerweise Enricher, Redaction und Limiter aufgerufen werden:
+        // foreach(var enr in _enrichers) enr.Enrich(evt);
+        // _redactionPolicy.Redact(evt);
+        // _sizeLimiter.Truncate(evt);
 
-        if (_transport != null)
-        {
-            try { await _transport.CloseAsync(ct).ConfigureAwait(false); } catch { }
-            // Flush nach Close ist nun idempotent und schnell (Buffer bereits geleert)
-            try { await _transport.FlushAsync(ct).ConfigureAwait(false); } catch { }
-        }
+        if (_queue.Writer.TryWrite(evt)) return;
+        await HandleBackpressureAsync(evt, ct).ConfigureAwait(false);
     }
 
-
-    /// <summary>
-    /// Fügt ein Event in die Queue ein (nicht blockierend).
-    /// Die BackpressurePolicy entscheidet, ob gedroppt oder blockiert wird.
-    /// </summary>
-    public bool TryLog(ILogEvent evt)
+    private async ValueTask HandleBackpressureAsync(ILogEvent evt, CancellationToken ct)
     {
-        if (evt == null) return false;
-
-        // 1) Schnellpfad: passt rein
-        if (_queue.Writer.TryWrite(evt))
-            return true;
-
-        // 2) Voll: Policy entscheidet
-        var capacity = Math.Max(1, _options.QueueCapacity); // defensive
+        var capacity = Math.Max(1, _options.QueueCapacity);
         var loadMode = _backpressurePolicy.Decide(_queue.Reader.Count, capacity);
 
         switch (loadMode)
         {
             case DropMode.DropNewest:
-                // Neuankömmling verwerfen
                 Interlocked.Increment(ref _droppedQueue);
-                return false;
+                break;
 
             case DropMode.DropOldest:
-                // ZUERST sicher 1 Element entfernen (wenn möglich) und Drop zählen
                 if (_queue.Reader.TryRead(out _))
-                {
                     Interlocked.Increment(ref _droppedQueue);
-                }
                 else
                 {
-                    // Falls aus Race kein Element gelesen werden konnte -> wie DropNewest behandeln
                     Interlocked.Increment(ref _droppedQueue);
-                    return false;
+                    return;
                 }
 
-                // Dann den neuen schreiben; wenn das wieder nicht klappt, erneut zählen und false
-                if (_queue.Writer.TryWrite(evt))
-                    return true;
-
-                Interlocked.Increment(ref _droppedQueue);
-                return false;
+                if (!_queue.Writer.TryWrite(evt))
+                    Interlocked.Increment(ref _droppedQueue);
+                break;
 
             case DropMode.Block:
                 try
                 {
-                    // BLOCKIEREND bis Kapazität frei – Achtung im Produktiveinsatz!
-                    _queue.Writer.WriteAsync(evt).AsTask().Wait();
-                    return true;
+                    await _queue.Writer.WriteAsync(evt, ct).ConfigureAwait(false);
                 }
                 catch
                 {
                     Interlocked.Increment(ref _droppedQueue);
-                    return false;
                 }
+                break;
 
             case DropMode.None:
             default:
-                // Keine Gegenmaßnahme: wir versuchen EINE letzte, nicht-blockierende Einreihung
-                // und geben deren Ergebnis korrekt zurück.
-                return _queue.Writer.TryWrite(evt);
+                if (!_queue.Writer.TryWrite(evt))
+                    Interlocked.Increment(ref _droppedQueue);
+                break;
         }
     }
 
+    // NEU: Implementierung von StopAsync mit Drain-Option
+    public async Task StopAsync(bool drain, CancellationToken ct)
+    {
+        // 1. Queue schließen, damit keine neuen Events mehr angenommen werden.
+        // Das führt dazu, dass der SenderLoop "zu Ende" läuft, sobald die Queue leer ist.
+        _queue.Writer.TryComplete();
 
+        if (!drain)
+        {
+            // Sofortiger Abbruch: Cancellation Token feuern
+            _cts.Cancel();
+        }
 
-    /// <summary>
-    /// Wartet, bis Queue und Transport leer sind.
-    /// </summary>
+        // 2. Auf den Sender-Loop warten
+        if (_senderTask != null)
+        {
+            if (drain)
+            {
+                // Warten, bis der Loop von alleine fertig ist (Queue leer)
+                // Optional: Ein Timeout für das Drain setzen, damit wir nicht ewig hängen
+                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10), ct);
+                await Task.WhenAny(_senderTask, timeoutTask).ConfigureAwait(false);
+            }
+            else
+            {
+                // Bei Sofort-Abbruch nur kurz warten, ob er sauber rauskommt
+                try 
+                { 
+                    await _senderTask.WaitAsync(ct).ConfigureAwait(false); 
+                } 
+                catch (OperationCanceledException) { /* Expected */ }
+            }
+        }
+
+        // 3. Transport schließen
+        if (_transport != null)
+        {
+            try { await _transport.CloseAsync(ct).ConfigureAwait(false); } catch { /* Best effort */ }
+            
+            // Bei Drain noch versuchen, den Transport zu flushen
+            if (drain)
+            {
+                try { await _transport.FlushAsync(ct).ConfigureAwait(false); } catch { /* Best effort */ }
+            }
+        }
+    }
+
     public async Task FlushAsync(CancellationToken ct)
     {
+        // Warten, bis die Queue leer ist (Polling mit Delay ist hier oft das einfachste Mittel)
         while (_queue.Reader.Count > 0)
         {
             ct.ThrowIfCancellationRequested();
@@ -164,25 +189,17 @@ public sealed class LoggingClient : IAsyncDisposable
         var batch = new List<ReadOnlyMemory<byte>>(_options.BatchSize);
         var flushInterval = _options.FlushInterval;
 
-        while (!ct.IsCancellationRequested)
+        // Wir nutzen WaitToReadAsync, das false zurückgibt, wenn Writer.Complete() gerufen wurde UND Queue leer ist.
+        while (await _queue.Reader.WaitToReadAsync(ct).ConfigureAwait(false))
         {
-            try
+            while (batch.Count < _options.BatchSize && _queue.Reader.TryRead(out var evt))
             {
-                if (await _queue.Reader.WaitToReadAsync(ct).ConfigureAwait(false))
-                {
-                    while (batch.Count < _options.BatchSize && _queue.Reader.TryRead(out var evt))
-                    {
-                        var payload = _encoder.Encode(evt);
-                        batch.Add(payload);
-                    }
-                }
+                var payload = _encoder.Encode(evt);
+                batch.Add(payload);
+            }
 
-                if (batch.Count == 0)
-                {
-                    await Task.Delay(flushInterval, ct).ConfigureAwait(false);
-                    continue;
-                }
-
+            if (batch.Count > 0)
+            {
                 foreach (var payload in batch)
                 {
                     if (!await transport.TrySendAsync(payload, ct).ConfigureAwait(false))
@@ -190,35 +207,26 @@ public sealed class LoggingClient : IAsyncDisposable
                         Interlocked.Increment(ref _droppedTransport);
                     }
                 }
-
                 batch.Clear();
+                
+                // Flush nach jedem Batch oder Intervall? Hier vereinfacht nach Batch.
+                // In Hochlast-Szenarien würde man das Entkoppeln (Timer für Flush).
                 await transport.FlushAsync(ct).ConfigureAwait(false);
             }
-            catch (OperationCanceledException)
+            else
             {
-                break;
-            }
-            catch
-            {
-                await Task.Delay(50, CancellationToken.None).ConfigureAwait(false);
+                // Wenn WaitToRead true war, aber TryRead false (Race), kurz warten
+                 await Task.Delay(1, ct).ConfigureAwait(false);
             }
         }
-
-        // Graceful shutdown: verbleibende Events noch versuchen zu senden
-        while (_queue.Reader.TryRead(out var evt))
-        {
-            var payload = _encoder.Encode(evt);
-            var sent = await transport.TrySendAsync(payload, CancellationToken.None).ConfigureAwait(false);
-            if (!sent)
-                Interlocked.Increment(ref _droppedTransport);
-        }
-
-        try { await transport.FlushAsync(CancellationToken.None).ConfigureAwait(false); } catch { }
+        
+        // Loop Ende (Queue completed & empty oder Cancelled)
     }
 
     public async ValueTask DisposeAsync()
     {
-        await StopAsync(CancellationToken.None);
+        // Dispose macht standardmäßig keinen langen Drain, um Hänger beim GC zu vermeiden.
+        await StopAsync(drain: false, CancellationToken.None).ConfigureAwait(false);
         _cts.Dispose();
     }
 }

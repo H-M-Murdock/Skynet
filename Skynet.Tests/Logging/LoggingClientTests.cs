@@ -102,17 +102,17 @@ public sealed class LoggingClientTests
         await client.StartAsync(CancellationToken.None);
 
         // Act
-        Assert.True(client.TryLog(E(1)));
-        Assert.True(client.TryLog(E(2)));
+        await client.LogAsync(E(1), default);
+        await client.LogAsync(E(2), default);
         await client.FlushAsync(CancellationToken.None);
 
         await server.StopAsync(CancellationToken.None);
-        await client.StopAsync(CancellationToken.None);
+        await client.StopAsync(drain: true, CancellationToken.None);
 
         // Assert
         var ids = sink.Events.Select(e => e.EventId.Id).OrderBy(x => x).ToArray();
         Assert.Equal(new[] { 1, 2 }, ids);
-        Assert.Equal(0, client.InQueueCount);
+        Assert.Equal(0, client.QueueLength);
     }
 
     [Fact]
@@ -140,15 +140,15 @@ public sealed class LoggingClientTests
         // *** WICHTIG: NICHT starten! ***
         // Wir füllen die Queue vor StartAsync, damit der Sender-Loop nichts wegliest
         for (int i = 0; i < 50; i++)
-            client.TryLog(E(i));
+            await client.LogAsync(E(i), default);
 
         // Jetzt sollte die Policy mehrfach gegriffen haben (DropOldest),
         // ohne dass etwas versendet wurde:
-        Assert.True(client.DroppedDueToQueueFull > 0);
+        Assert.True(client.DroppedCount > 0);
 
         // Optional: jetzt erst starten und sauber stoppen (soll nicht hängen)
         await client.StartAsync(CancellationToken.None);
-        await client.StopAsync(CancellationToken.None);
+        await client.StopAsync(drain: false, CancellationToken.None);
     }
 
 
@@ -190,26 +190,26 @@ public sealed class LoggingClientTests
 
         // Act: vier Events -> ein voller Batch
         for (int i = 0; i < 4; i++)
-            Assert.True(client.TryLog(E(i)));
+            await client.LogAsync(E(i), default);
 
         await client.FlushAsync(CancellationToken.None);
         await server.StopAsync(CancellationToken.None);
-        await client.StopAsync(CancellationToken.None);
+        await client.StopAsync(drain: true, CancellationToken.None);
 
         // Assert
         var ids = sink.Events.Select(x => x.EventId.Id).OrderBy(x => x).ToArray();
         Assert.Equal(new[] { 0, 1, 2, 3 }, ids);
-        Assert.Equal(0, client.InQueueCount);
-        Assert.Equal(0, client.DroppedDueToQueueFull);
+        Assert.Equal(0, client.QueueLength);
+        Assert.Equal(0, client.DroppedCount);
     }
-    
+
     private sealed class AlwaysDropOldestPolicy : IBackpressurePolicy
     {
         public DropMode Decide(int _, int __) => DropMode.DropOldest;
     }
 
     [Fact]
-    public void TryLog_Counts_Drops_When_DropOldest()
+    public async Task LogAsync_Counts_Drops_When_DropOldest()
     {
         var listener = new InMemoryEventListener();
         // Transport/Server sind hier egal; wir starten den Client NICHT.
@@ -221,14 +221,13 @@ public sealed class LoggingClientTests
             new LoggingClientOptions { QueueCapacity = 2 });
 
         // zwei passen rein:
-        Assert.True(client.TryLog(E(1)));
-        Assert.True(client.TryLog(E(2)));
+        await client.LogAsync(E(1), default);
+        await client.LogAsync(E(2), default);
 
         // alle weiteren triggern DropOldest:
         for (int i = 3; i <= 10; i++)
-            client.TryLog(E(i));
+            await client.LogAsync(E(i), default);
 
-        Assert.True(client.DroppedDueToQueueFull > 0);
+        Assert.True(client.DroppedCount > 0);
     }
-    
 }
