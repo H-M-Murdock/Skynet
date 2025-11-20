@@ -63,10 +63,18 @@ public sealed class ResourceLocator : IResourceLocator
         cancellationToken.ThrowIfCancellationRequested();
 
         var res = await TryGetAsync(request, options, cancellationToken).ConfigureAwait(false);
+        
         if (res.Status is ResourceLookupStatus.Found or ResourceLookupStatus.NotModified)
             return res.Resource!;
 
-        // Diagnose: TenantChain + Providerliste + Reason
+        // Fehlerbehandlung verfeinert
+        if (res.Status == ResourceLookupStatus.Forbidden)
+            throw new UnauthorizedAccessException($"Zugriff auf Ressource '{request.Key}' verweigert: {res.Reason}");
+
+        if (res.Status == ResourceLookupStatus.Error)
+            throw new InvalidOperationException($"Fehler beim Abruf von Ressource '{request.Key}': {res.Reason}");
+
+        // Fallback: NotFound
         var chain = string.Join(" -> ", _tenantContext.ResolutionChain.Select(t => t.ToString()));
         var providerList = _readProviders.Length == 0
             ? "(keine Provider registriert)"
@@ -103,38 +111,43 @@ public sealed class ResourceLocator : IResourceLocator
 
             string? lastReason = null;
 
-            // Vorfilterung: nur Provider, die (für CurrentTenant) grundsätzlich können
-            var currentTenant = _tenantContext.ResolutionChain.FirstOrDefault();
-
-            ImmutableArray<IResourceReader> filteredProviders = _readProviders;
-            if (currentTenant is { } ct)
-            {
-                var probeRequest = request with { TenantId = ct };
-                filteredProviders = [.._readProviders.Where(p => p.CanHandle(probeRequest))];
-            }
+            // KORREKTUR: Vorfilterung entfernt. 
+            // Grund: Ein "GlobalProvider" ignoriert die TenantId im Request evtl. komplett (ist ihm egal),
+            // er muss aber trotzdem gefragt werden, auch wenn er für den "CurrentTenant" (der spezifischste)
+            // vielleicht "CanHandle" false liefern würde (unwahrscheinlich, aber möglich).
+            // Wichtiger: CanHandle prüft meist Key-Pattern/ResourceKind, nicht Tenant.
 
             foreach (var tenant in _tenantContext.ResolutionChain)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var scoped = request with { TenantId = tenant };
+                var scopedRequest = request with { TenantId = tenant };
 
-                foreach (var provider in filteredProviders)
+                foreach (var provider in _readProviders)
                 {
-                    if (!provider.CanHandle(scoped)) continue;
+                    if (!provider.CanHandle(scopedRequest)) continue;
 
-                    var lookup = await provider.TryGetAsync(scoped, cancellationToken).ConfigureAwait(false);
+                    var lookup = await provider.TryGetAsync(scopedRequest, cancellationToken).ConfigureAwait(false);
 
                     switch (lookup.Status)
                     {
                         case ResourceLookupStatus.Found:
                         case ResourceLookupStatus.NotModified:
+                            // Treffer! Hier brechen wir sofort ab (First Match Wins über Tenants & Provider hinweg)
                             return lookup;
+
+                        case ResourceLookupStatus.Forbidden:
+                            // Explizites Verbot unterbricht die Chain sofort (Security)
+                            return lookup;
+                            
+                        case ResourceLookupStatus.Error:
+                             // Fehler merken, aber vielleicht haben wir Glück bei einem anderen Provider?
+                             // Strategie-Entscheidung: Fail-Fast oder Continue? 
+                             // Meistens: Continue bei Error, Break bei Forbidden.
+                             lastReason = lookup.Reason ?? lastReason;
+                             break;
 
                         case ResourceLookupStatus.NotFound:
                             lastReason = lookup.Reason ?? lastReason;
-                            break;
-
-                        default:
                             break;
                     }
                 }
@@ -185,82 +198,86 @@ public sealed class ResourceLocator : IResourceLocator
     // Auswahlstrategie für Writer: nach Fähigkeiten/Policy und Priorität.
     private IResourceWriter? SelectWriter(ResourceRequest request)
     {
-        // 1) Writer mit IResourceWriteCapabilities filtern, die CanHandle(request) true liefern.
-        var withCaps = _writeProviders
-            .Select(w => (writer: w, caps: w as IResourceWriteCapabilities))
-            .Where(x => x.caps?.CanHandle(request) != false) // true oder null (kein Interface) zulassen
-            .ToArray();
+        // 1) Capabilities prüfen
+        var candidates = _writeProviders
+            .Where(w => w is not IResourceWriteCapabilities caps || caps.CanHandle(request))
+            .ToList(); // Materialize
 
-        if (withCaps.Length == 0)
-            return null;
+        if (candidates.Count == 0) return null;
+        if (candidates.Count == 1) return candidates[0];
 
-        // 2) Wenn mehrere Kandidaten: nach Priority (falls vorhanden) sortieren, sonst Reihenfolge beibehalten.
-        var ordered = withCaps
-            .OrderBy(x => x.caps?.Priority ?? int.MaxValue)
-            .Select(x => x.writer)
-            .ToArray();
+        // 2) Sortieren nach Priority (Interface IResourceWriteCapabilities)
+        // Writer ohne Interface bekommen Priority int.MaxValue (ganz hinten)
+        var ordered = candidates.OrderBy(w => 
+            w is IResourceWriteCapabilities caps ? caps.Priority : int.MaxValue);
 
-        // 3) Policy-Beispiel: Secrets niemals an FileSystemWriter routen (sofern ein anderer Writer existiert).
-        if (request.ResourceType == ResourceKind.Secret && ordered.Count() > 1)
+        // 3) Hardcoded Policy (vermeidet Secrets im Filesystem, wenn Alternativen da sind)
+        if (request.ResourceType == ResourceKind.Secret)
         {
-            var preferred = ordered.FirstOrDefault(w => w is not FileSystemResourceWriter);
-            if (preferred is not null) return preferred;
+             // Wenn wir Alternativen zum FileSystem haben, nimm diese.
+             var nonFs = ordered.FirstOrDefault(w => w.GetType().Name != "FileSystemResourceWriter");
+             if (nonFs != null) return nonFs;
         }
 
-        // 4) Default: erster geeigneter Writer.
         return ordered.FirstOrDefault();
     }
-    
-    
+
+    // -------------------- LIST --------------------
+
     public async Task<IResourceListResult> ListKeysAsync(
         ResourceRequest request,
         CancellationToken cancellationToken = default)
     {
+        // Strategieänderung: Wir unterstützen hier KEIN echtes Paging über Provider hinweg,
+        // da das Token-Management zu komplex/fehleranfällig ist.
+        // Wir sammeln alle Keys von allen Tenants/Providern (Overlay) und geben sie zurück.
+        // Falls der Consumer Paging braucht, muss er das Resultat filtern, oder wir
+        // implementieren hier "In-Memory-Paging" auf der Gesamtmenge.
+        
         cancellationToken.ThrowIfCancellationRequested();
 
-        var keys = new HashSet<string>(StringComparer.Ordinal);
-        string? continuationToken = null;
-        ProviderId? lastProviderId = null;
-
-        var currentTenant = _tenantContext.ResolutionChain.FirstOrDefault();
-        ImmutableArray<IResourceReader> filteredProviders = _readProviders;
-        if (currentTenant is { } ct)
-        {
-            var probe = request with { TenantId = ct };
-            filteredProviders = [.._readProviders.Where(p => p.CanHandle(probe))];
-        }
+        var allKeys = new HashSet<string>(StringComparer.Ordinal);
+        
+        // Hinweis: Wir iterieren hier über die Chain (spezifisch -> global).
+        // Da es ein Set ist, gewinnen Keys, die wir zuerst sehen? Nein, Keys sind nur Strings.
+        // Aber: Ein Key "appsettings.json", der in Tenant A existiert und in Global, 
+        // erscheint im Set nur einmal. Das ist korrekt (Overlay-Effekt).
 
         foreach (var tenant in _tenantContext.ResolutionChain)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var scoped = request with { TenantId = tenant };
+            var scopedRequest = request with { TenantId = tenant };
 
-            foreach (var provider in filteredProviders)
+            foreach (var provider in _readProviders)
             {
-                if (!provider.CanHandle(scoped)) continue;
+                if (!provider.CanHandle(scopedRequest)) continue;
 
-                var (pageKeys, nextToken) = await provider.ListKeysAsync(
-                        scoped,
-                        continuationToken: continuationToken,
-                        limit: null,
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-
-                foreach (var k in pageKeys)
-                    keys.Add(k);
-
-                if (!string.IsNullOrEmpty(nextToken))
+                // Wir fordern "alles" vom Provider an (limit null).
+                // Warnung: Bei riesigen Buckets (S3 mit Mio Files) ist das gefährlich.
+                // Für Config/Templates ist es okay.
+                try 
                 {
-                    continuationToken = nextToken;
-                    lastProviderId = provider.Id;
+                    var (providerKeys, _) = await provider.ListKeysAsync(
+                        scopedRequest, 
+                        continuationToken: null, 
+                        limit: null, 
+                        cancellationToken: cancellationToken).ConfigureAwait(false);
+
+                    foreach (var k in providerKeys)
+                    {
+                        allKeys.Add(k);
+                    }
+                }
+                catch (NotSupportedException) 
+                {
+                    // Provider unterstützt kein Listing -> ignorieren
                 }
             }
         }
 
-        var sorted = keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
-        return new ResourceListResult(request, sorted, continuationToken, lastProviderId);
+        var sortedKeys = allKeys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
+
+        // Rückgabe ohne ContinuationToken, da wir alles geholt haben.
+        return new ResourceListResult(request, sortedKeys, continuationToken: null, providerId: null);
     }
-    
-    
-    
 }

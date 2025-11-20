@@ -1,8 +1,9 @@
-// Skynet.Core/ResourceProvider/MemoryResourceProvider.cs
+// Skynet.Core/ResourceProvider/MemoryResourceReader.cs
 namespace Skynet.Core.ResourceProvider;
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic; // Wichtig für IReadOnlyList
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -12,8 +13,8 @@ using System.Threading.Tasks;
 using Skynet.Core.Tenant;
 
 /// <summary>
-/// Simple memory-backed provider for tests and bootstrapping.
-/// Stores resources per (TenantId, Key) with metadata and SHA-256 version.
+/// Einfacher In-Memory-Provider für Tests und Bootstrapping.
+/// Speichert Ressourcen pro (TenantId, Key) mit Metadaten und SHA-256 Version.
 /// </summary>
 public sealed class MemoryResourceReader : IResourceReader
 {
@@ -23,11 +24,21 @@ public sealed class MemoryResourceReader : IResourceReader
         DateTimeOffset LastModified,
         string Version);
 
+    // Thread-sicherer Store
     private readonly ConcurrentDictionary<(TenantId TenantId, string Key), Entry> _store = new();
 
-    public int Priority => 10;
-    public bool CanHandle(ResourceRequest request) => true; // handles all keys by design
-    public ProviderId Id => new ProviderId(new Guid("2A73B3F3-E629-44AC-8153-7B4A077B9B08"));
+    // Statische ID für diesen Typ von Provider (oder pro Instanz via Konstruktor, wenn gewünscht)
+    private static readonly ProviderId StaticId = new(new Guid("2A73B3F3-E629-44AC-8153-7B4A077B9B08"));
+
+    public MemoryResourceReader(int priority = 10)
+    {
+        Priority = priority;
+    }
+
+    public ProviderId Id => StaticId;
+    public int Priority { get; }
+
+    public bool CanHandle(ResourceRequest request) => true; // Nimmt alles an
 
     public ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
@@ -37,7 +48,12 @@ public sealed class MemoryResourceReader : IResourceReader
 
         if (!_store.TryGetValue((request.TenantId, request.Key), out var e))
             return ValueTask.FromResult(ResourceLookupResult.NotFound());
+
+        // Wir erzeugen einen NEUEN Stream über das Byte-Array.
+        // ResourceResult übernimmt Ownership (Dispose), was beim MemoryStream unkritisch ist,
+        // da das Byte-Array im _store davon unberührt bleibt.
         var ms = new MemoryStream(e.Bytes, writable: false);
+
         IResourceResult rr = new ResourceResult(
             tenantId: request.TenantId,
             key: request.Key,
@@ -46,15 +62,11 @@ public sealed class MemoryResourceReader : IResourceReader
             lastModified: e.LastModified,
             contentLength: e.Bytes.LongLength,
             version: e.Version,
-            providerId: Id); // ProviderId im Result setzen
+            providerId: Id);
 
         return ValueTask.FromResult(ResourceLookupResult.Found(rr));
     }
 
-    /// <summary>
-    /// Listet Keys aus dem In-Memory-Store anhand des Prefixes (request.Key) und TenantId.
-    /// Paging wird über continuationToken (letzter Key der vorherigen Page) und optionales limit unterstützt.
-    /// </summary>
     public Task<(IReadOnlyList<string> keys, string? nextContinuationToken)> ListKeysAsync(
         ResourceRequest request,
         string? continuationToken = null,
@@ -65,40 +77,48 @@ public sealed class MemoryResourceReader : IResourceReader
 
         var prefix = request.Key ?? string.Empty;
 
-        // Basismenge: erst filtern, DANN genau einmal sortieren
+        // 1. Filtern (Tenant & Prefix)
         var query = _store.Keys
             .Where(k => k.TenantId.Equals(request.TenantId) && k.Key.StartsWith(prefix, StringComparison.Ordinal))
-            .Select(k => k.Key)
-            .OrderBy(k => k, StringComparer.Ordinal);
+            .Select(k => k.Key);
 
-        // Continuation: exklusiv nach dem Token
+        // 2. Continuation (Paging Filter VOR dem Sortieren ist effizienter, wenn möglich, 
+        // aber bei String-Vergleich muss man aufpassen. Hier filtern wir einfach auf Lexikographie.)
         if (!string.IsNullOrEmpty(continuationToken))
         {
-            query = query.Where(k => string.Compare(k, continuationToken, StringComparison.Ordinal) > 0)
-                .OrderBy(k => k, StringComparer.Ordinal);
+            query = query.Where(k => string.Compare(k, continuationToken, StringComparison.Ordinal) > 0);
         }
 
+        // 3. Sortieren & Limitieren
+        var orderedQuery = query.OrderBy(k => k, StringComparer.Ordinal);
+        
         var take = (limit is > 0) ? limit.Value : int.MaxValue;
-        var page = query.Take(take).ToArray();
+        var page = orderedQuery.Take(take).ToArray();
 
         string? nextToken = page.Length == take ? page[^1] : null;
 
         return Task.FromResult(((IReadOnlyList<string>)page, nextToken));
     }
 
-    // --- Convenience writers (for tests/dev/bootstrap) ---
+    // --- Convenience Writer (Backdoor für Tests) ---
 
     public void PutText(TenantId tenantId, string key, string text, string contentType = "text/plain")
     {
         var bytes = Encoding.UTF8.GetBytes(text);
-        _store[(tenantId, key)] = new Entry(bytes, contentType, DateTimeOffset.UtcNow, ComputeHash(bytes));
+        var hash = ComputeHash(bytes);
+        _store[(tenantId, key)] = new Entry(bytes, contentType, DateTimeOffset.UtcNow, hash);
     }
 
     public void PutBytes(TenantId tenantId, string key, byte[] data, string? contentType = null)
     {
-        // store reference as-is; if mutation is a concern, copy: data = data.ToArray();
-        _store[(tenantId, key)] = new Entry(data, contentType, DateTimeOffset.UtcNow, ComputeHash(data));
+        // Defensive Copy, falls der Aufrufer das Array später ändert
+        var copy = data.ToArray(); 
+        var hash = ComputeHash(copy);
+        _store[(tenantId, key)] = new Entry(copy, contentType, DateTimeOffset.UtcNow, hash);
     }
+    
+    // Helper um schnell ganze Sets zu laden
+    public void Clear() => _store.Clear();
 
     private static string ComputeHash(byte[] data)
     {

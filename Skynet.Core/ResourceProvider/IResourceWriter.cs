@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 /// <summary>
 /// Schreib-/Mutationsschnittstelle für Ressourcen (ergänzt den read-only Locator).
 /// Unterstützt Erstellen/Aktualisieren/Löschen mit optimistischer Nebenläufigkeit (ETag).
-/// Implementierungen dürfen die Semantik pro ResourceKind einschränken.
+/// Implementierungen dürfen die Semantik pro ResourceKind einschränken (z.B. nur Configs schreiben).
 /// </summary>
 public interface IResourceWriter
 {
     /// <summary>
     /// Erstellt oder aktualisiert eine Ressource.
-    /// - createIfMissing: true => Ressource wird neu angelegt, falls nicht vorhanden.
-    /// - ifMatch: ETag, das übereinstimmen muss (optimistisches Locking) – null = keine Bedingung.
-    /// - contentType: optionaler MIME-Typ (z. B. "application/json").
     /// </summary>
+    /// <param name="request">Ziel-Key und Tenant.</param>
+    /// <param name="content">Der zu schreibende Inhalt (Stream).</param>
+    /// <param name="createIfMissing">True => Ressource wird neu angelegt, falls nicht vorhanden. False => Fehler, wenn nicht vorhanden.</param>
+    /// <param name="ifMatch">Erwartetes ETag für optimistisches Locking. Bei Mismatch wird eine Exception geworfen (z.B. IOException/PreconditionFailed). Null = Überschreiben erzwingen.</param>
+    /// <param name="contentType">Optionaler MIME-Typ (z. B. "application/json").</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Metadaten des Schreibvorgangs (z. B. neues ETag/LastModified).</returns>
     Task<IResourceWriteResult> WriteAsync(
         ResourceRequest request,
@@ -28,8 +31,10 @@ public interface IResourceWriter
 
     /// <summary>
     /// Löscht eine Ressource.
-    /// - ifMatch: ETag, das übereinstimmen muss (optimistisches Locking) – null = keine Bedingung.
     /// </summary>
+    /// <param name="request">Ziel-Key und Tenant.</param>
+    /// <param name="ifMatch">Erwartetes ETag. Bei Mismatch wird nicht gelöscht und Fehler geworfen. Null = bedingungslos löschen.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
     Task<IResourceDeleteResult> DeleteAsync(
         ResourceRequest request,
         string? ifMatch = null,
@@ -39,6 +44,7 @@ public interface IResourceWriter
 /// <summary>
 /// Optionale Fähigkeitenbeschreibung für Writer zur konsistenten Auswahl.
 /// Implementierungen können signalisieren, welche Requests sie schreiben können.
+/// Writer, die dieses Interface NICHT implementieren, werden als "Fallback" mit niedrigster Priorität behandelt.
 /// </summary>
 public interface IResourceWriteCapabilities
 {
@@ -49,8 +55,8 @@ public interface IResourceWriteCapabilities
     bool CanHandle(ResourceRequest request);
 
     /// <summary>
-    /// Optional: Priorität für Schreibauswahl (kleiner = bevorzugt).
+    /// Priorität für die Schreibauswahl (kleiner = bevorzugt).
+    /// Default ist 1000 (niedrige Priorität).
     /// </summary>
     int Priority => 1000;
 }
-

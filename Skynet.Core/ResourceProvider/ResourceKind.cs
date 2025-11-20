@@ -3,23 +3,70 @@ namespace Skynet.Core.ResourceProvider;
 
 /// <summary>
 /// Logische Ressourcentypen.
-/// ContentType-Policy (Default-Heuristik bei fehlender expliziter Angabe):
-/// - Config   → "application/json" (UTF-8 JSON-Konfiguration)
-/// - Template → "text/plain; charset=utf-8" (reiner Text/Template)
-/// - Secret   → "application/octet-stream" (binär; kein implizites Klartext-Format)
-/// - Asset    → abhängig vom Dateinamen/Erweiterung (Heuristik), sonst "application/octet-stream"
-/// - License  → "application/json"
-/// - Certificate → je nach Container "application/x-pkcs12", "application/x-pem-file" o. ä. (Implementierung definiert)
-/// - File     → Heuristik anhand Extension; unbekannt → "application/octet-stream"
-/// Hinweis: Implementierungen dürfen diese Defaults überschreiben, sollten aber konsistent bleiben.
 /// </summary>
 public enum ResourceKind
 {
-    File = 0,
-    Config = 1,
-    Certificate = 2,
-    License = 3,
-    Asset = 4,
-    Template = 5,
-    Secret = 6
+    // Sicherheitsnetz: Uninitialisierte Variablen fallen hierhin, nicht auf "File".
+    Unknown = 0,
+    
+    File = 1,
+    Config = 2,
+    Certificate = 3,
+    License = 4,
+    Asset = 5,
+    Template = 6,
+    Secret = 7,
+    // Sinnvolle Ergänzung für I18n-Systeme
+    Localization = 8, 
+    // Sinnvoll für gespeicherte Skripte (Lua, Python, JS)
+    Script = 9 
+}
+
+/// <summary>
+/// Zentralisiert die Policies, die zuvor nur im Kommentar standen.
+/// </summary>
+public static class ResourceKindExtensions
+{
+    /// <summary>
+    /// Liefert den empfohlenen Default-MIME-Type für diesen Ressourcentyp.
+    /// </summary>
+    public static string GetDefaultContentType(this ResourceKind kind)
+    {
+        return kind switch
+        {
+            ResourceKind.Config       => "application/json",
+            ResourceKind.License      => "application/json",
+            ResourceKind.Template     => "text/plain; charset=utf-8",
+            ResourceKind.Script       => "text/plain; charset=utf-8",
+            ResourceKind.Localization => "application/json", // oder text/xml bei .resx
+            
+            // Binär-Defaults
+            ResourceKind.Secret       => "application/octet-stream",
+            ResourceKind.Certificate  => "application/octet-stream", // Oft pkcs12, aber octet ist sicherer Fallback
+            ResourceKind.Asset        => "application/octet-stream", // Sollte via Dateiendung verfeinert werden
+            ResourceKind.File         => "application/octet-stream",
+            
+            _ => "application/octet-stream"
+        };
+    }
+
+    /// <summary>
+    /// Gibt an, ob dieser Typ sensible Daten enthält (für Logging/Caching-Policies).
+    /// </summary>
+    public static bool IsSensitive(this ResourceKind kind)
+    {
+        return kind is ResourceKind.Secret or ResourceKind.Certificate;
+    }
+
+    /// <summary>
+    /// Gibt an, ob dieser Typ üblicherweise textbasiert ist (z.B. für Editor-Anzeige).
+    /// </summary>
+    public static bool IsTextBased(this ResourceKind kind)
+    {
+        return kind is ResourceKind.Config 
+                    or ResourceKind.Template 
+                    or ResourceKind.License 
+                    or ResourceKind.Script
+                    or ResourceKind.Localization;
+    }
 }

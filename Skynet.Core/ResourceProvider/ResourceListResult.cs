@@ -12,6 +12,17 @@ public sealed class ResourceListResult : IResourceListResult
         IReadOnlyList<string> keys,
         string? continuationToken = null,
         ProviderId? providerId = null)
-        => (Request, Keys, ContinuationToken, ProviderId)
-            = (request, keys, continuationToken, providerId);
+    {
+        Request = request ?? throw new ArgumentNullException(nameof(request));
+        Keys = keys ?? throw new ArgumentNullException(nameof(keys));
+        ContinuationToken = continuationToken;
+        ProviderId = providerId;
+    }
+
+    public override string ToString()
+    {
+        var providerInfo = ProviderId.HasValue ? ProviderId.ToString() : "aggregated";
+        var tokenInfo = ContinuationToken != null ? " (+more)" : "";
+        return $"ResourceListResult {{ Keys = {Keys.Count}, Source = {providerInfo}{tokenInfo} }}";
+    }
 }

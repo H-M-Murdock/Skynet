@@ -5,6 +5,8 @@ namespace Skynet.Core.ResourceProvider;
 /// <summary>Default sealed implementation of <see cref="IResourceResult"/>.</summary>
 public sealed class ResourceResult : IResourceResult
 {
+    private bool _disposed;
+    
     public ResourceResult(
         TenantId tenantId,
         string key,
@@ -34,6 +36,15 @@ public sealed class ResourceResult : IResourceResult
     public string? Version { get; }
     public ProviderId? ProviderId { get; }
 
-    public void Dispose() => Content.Dispose();
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+        Content.Dispose();
+    }
     public ValueTask DisposeAsync() => Content.DisposeAsync();
+    public override string ToString()
+    {
+        return $"ResourceResult {{ Key = {Key}, Tenant = {TenantId}, Type = {ContentType ?? "N/A"}, Size = {ContentLength?.ToString() ?? "?"} bytes }}";
+    }
 }

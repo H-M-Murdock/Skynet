@@ -1,6 +1,7 @@
 // Skynet.Core/ResourceProvider/IResourceProvider.cs
 namespace Skynet.Core.ResourceProvider;
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,20 +10,33 @@ using System.Threading.Tasks;
 /// - Id: stabile technische Kennung (für Logging/Tracing/Diagnostik).
 /// - Priority: Ausführungsreihenfolge im Locator (kleiner = zuerst).
 /// - CanHandle: schneller Vorab-Check, ob der Provider eine Anfrage grundsätzlich bedienen kann.
-/// - TryGetAsync: führt den eigentlichen Lookup aus und liefert ein strukturiertes Ergebnis ohne Exceptions für Nichttreffer.
+/// - TryGetAsync: führt den eigentlichen Lookup aus und liefert ein strukturiertes Ergebnis.
 /// </summary>
 public interface IResourceReader
 {
-    /// <summary>Ausführungsreihenfolge im Locator (kleiner = höhere Priorität).</summary>
+    /// <summary>
+    /// Ausführungsreihenfolge im Locator (kleiner = höhere Priorität).
+    /// </summary>
     int Priority { get; }
 
-    bool CanHandle(ResourceRequest request);
+    /// <summary>
+    /// Eindeutige ID des Providers.
+    /// </summary>
     ProviderId Id { get; }
 
+    /// <summary>
+    /// Prüft, ob der Provider diesen Request grundsätzlich bedienen kann (z.B. passender Key-Prefix).
+    /// </summary>
+    bool CanHandle(ResourceRequest request);
+
+    /// <summary>
+    /// Versucht die Ressource abzurufen.
+    /// Sollte im Fehlerfall (Nicht gefunden) keine Exception werfen, sondern ResourceLookupResult.NotFound zurückgeben.
+    /// </summary>
     ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
         CancellationToken cancellationToken = default);
-    
+
     /// <summary>
     /// Listet Ressourcenschlüssel für den angegebenen Scope.
     /// Interpretation:
