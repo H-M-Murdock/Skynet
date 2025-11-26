@@ -10,10 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/GlobalUsingsAndInternals.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceReaderTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,6 +159,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SizeLimiterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceLocatorTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -266,15 +266,7 @@
       <workItem from="1763641488305" duration="18000" />
       <workItem from="1764065346695" duration="312000" />
       <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="1910000" />
-    </task>
-    <task id="LOCAL-00015" summary="test(time): Parallelitäts-Test für AdjustableClock; Fehlerrobustheit von ScopedStopwatchFactory; DI-Integrationstest für BootstrapClockStep&#10;&#10;(RED)">
-      <option name="closed" value="true" />
-      <created>1761025433140</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1761025433140</updated>
+      <workItem from="1764146445444" duration="2344000" />
     </task>
     <task id="LOCAL-00016" summary="ix(time): ScopedStopwatchFactory – LogAsync strikt asynchron und mit internem Exception-Schutz (Dispose wirft nicht)">
       <option name="closed" value="true" />
@@ -660,7 +652,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763647392989</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="EnvironmentResourceReaderTests.cs">
+      <option name="closed" value="true" />
+      <created>1764148418459</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1764148418459</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -670,7 +670,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Introduce RedactionPolicy with flexible masking options and comprehensive unit tests" />
     <MESSAGE value="Logging: Add SizeLimiter with configurable size constraints and comprehensive unit tests" />
     <MESSAGE value="Logging: Add SimpleLineLogTextFormatter (compact, schema-less) with tests" />
     <MESSAGE value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
@@ -695,7 +694,8 @@
     <MESSAGE value="SecretProtector.cs" />
     <MESSAGE value="SecretProtectorTests.cs" />
     <MESSAGE value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
+    <MESSAGE value="EnvironmentResourceReaderTests.cs" />
+    <option name="LAST_COMMIT_MESSAGE" value="EnvironmentResourceReaderTests.cs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
