@@ -10,11 +10,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeFactoryTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/CurrentCultureProviderTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/DateTimeFormatterTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Localization/InMemoryLocalizationStoreTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ProviderIdTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/MemoryResourceReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceListResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/ResourceListResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/ResourceLocator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/ResourceResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Internal/CultureThreadScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Internal/CultureThreadScopeFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/CurrentCultureProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Internal/CurrentCultureProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Internal/DateTimeFormatter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ICurrentCultureProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ICurrentCultureProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/ILocalizationStore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/ILocalizationStore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/InMemoryLocalizationStore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Internal/InMemoryLocalizationStore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationChangeNotifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationChangeNotifier.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj.DotSettings" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,20 +66,19 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/53428d95742549e8968df3e76ebd1d7de8e928/_cc311/IAsyncDisposable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8bfc57955751d07e3fad13bb97d5f66af412d7a34486ec29ad916547ec8ce6b/Path.Windows.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/GlobalUsingsAndInternals.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScope.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureThreadScopeFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CurrentCultureProvider.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/DateTimeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/DateTimePattern.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ICultureThreadScopeFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ICurrentCultureProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ILocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/InMemoryLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/CultureThreadScope.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/CultureThreadScopeFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/CurrentCultureProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/DateTimeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/InMemoryLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationChangeNotifier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
@@ -138,6 +152,10 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/HkdfKeyDerivationTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/SecretProtectorTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeFactoryTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CurrentCultureProviderTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/DateTimeFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/InMemoryLocalizationStoreTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/AttribiteLogging/CallLoggingProxyTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTemplateResolutionTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -162,12 +180,6 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SizeLimiterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceWriterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceDeserializerTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceLocatorTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceSerializerTestsIntHandling.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -182,26 +194,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.Skynet.LicenseGrant.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.Skynet.LicenseRequest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/resource&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.Skynet.LicenseGrant.executor": "Run",
+    ".NET Project.Skynet.LicenseRequest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor": "Debug",
+    "git-widget-placeholder": "feat/localization",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
