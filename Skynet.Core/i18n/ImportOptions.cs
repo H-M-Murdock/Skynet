@@ -3,7 +3,7 @@ namespace Skynet.Core.i18n;
 /// <summary>
 /// Optionen für den Importvorgang.
 /// </summary>
-public sealed class ImportOptions
+public sealed record ImportOptions // class -> record
 {
     /// <summary>Bestehende Varianten überschreiben (true) oder bestehen lassen (false).</summary>
     public bool OverwriteExisting { get; init; } = false;

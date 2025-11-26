@@ -20,6 +20,7 @@
     <ItemGroup>
       <Folder Include="Bootstrap\Steps\Core\" />
       <Folder Include="Configuration\" />
+      <Folder Include="i18n\Internal\" />
       <Folder Include="Licensing\Internal\" />
       <Folder Include="ResourceProvider\Materializer\Converter\" />
       <Folder Include="ResourceProvider\Materializer\Deserializer\" />

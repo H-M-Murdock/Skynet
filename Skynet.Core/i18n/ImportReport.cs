@@ -1,14 +1,11 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Skynet.Core.i18n;
 
 /// <summary>
 /// Bericht über einen Importlauf (Erfolg, Fehler, Warnungen).
 /// </summary>
-public sealed class ImportReport
+public sealed record ImportReport // class -> record
 {
     public bool Succeeded { get; init; }
 

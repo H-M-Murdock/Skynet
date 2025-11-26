@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <Folder Include="Crypto\" />
+      <Folder Include="i18n\" />
       <Folder Include="Logging\AttribiteLogging\" />
       <Folder Include="ResourceProvider\" />
       <Folder Include="Time\" />

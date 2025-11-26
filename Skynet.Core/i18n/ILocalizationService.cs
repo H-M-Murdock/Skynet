@@ -7,15 +7,26 @@ using Skynet.Core.Tenant;
 namespace Skynet.Core.i18n;
 
 /// <summary>
-/// High-Level-API: Findet Templates (mit Fallback über ITenantContext) und rendert sie mit Parametern.
-/// Nutzt intern ITemplateLookupService + ITemplateRenderer.
+/// High-Level-API für die Lokalisierung.
+/// Orchestriert die Suche nach Templates (Lookup) und deren Aufbereitung (Rendering).
 /// </summary>
 public interface ILocalizationService
 {
     /// <summary>
-    /// Rendert den Text zum Key unter Berücksichtigung der Tenant-Fallback-Kette und Kultur-Fallbacks.
-    /// requestedCulture: optional explizite Kultur; null → tenantContext.DefaultCulture-basierte Kette.
+    /// Formatiert einen Textbaustein für einen spezifischen Tenant und eine Kultur.
     /// </summary>
+    /// <param name="tenantContext">Der Kontext, in dem gesucht wird (bestimmt die ResolutionChain).</param>
+    /// <param name="key">Der logische Schlüssel des Textes.</param>
+    /// <param name="parameters">Optionale Parameter für Platzhalter im Template.</param>
+    /// <param name="requestedCulture">
+    /// Die gewünschte Zielkultur. 
+    /// Wenn null, wird <see cref="ITenantContext.DefaultCulture"/> oder <see cref="CultureInfo.CurrentUICulture"/> verwendet.
+    /// </param>
+    /// <param name="cancellationToken">Abbruch-Token.</param>
+    /// <returns>
+    /// Den formatierten String. 
+    /// Falls kein Template gefunden wird, wird eine String-Repräsentation des Keys zurückgegeben (Graceful Degrade).
+    /// </returns>
     Task<string> FormatAsync(
         ITenantContext tenantContext,
         I18NKey key,
