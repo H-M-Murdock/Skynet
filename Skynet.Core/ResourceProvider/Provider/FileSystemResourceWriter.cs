@@ -1,9 +1,18 @@
 // Skynet.Core/ResourceProvider/FileSystemResourceWriter.cs
+
 using System.Security.Cryptography;
 using Skynet.Core.Tenant;
 
 namespace Skynet.Core.ResourceProvider;
 
+/// <summary>
+/// Schreibt Ressourcen in das Dateisystem.
+/// Features:
+/// - Atomic Writes (via Temp-File + Move/Overwrite).
+/// - Optimistic Locking (ETag Check vor Überschreiben).
+/// - Streaming Support (speicherschonend für große Assets).
+/// - Security Policy (verweigert das Schreiben von Secrets).
+/// </summary>
 public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCapabilities
 {
     private readonly string _rootFull;
@@ -13,23 +22,23 @@ public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCa
 
     public FileSystemResourceWriter(string root, int priority)
     {
-        ArgumentNullException.ThrowIfNull(root);
+        if (string.IsNullOrWhiteSpace(root)) throw new ArgumentNullException(nameof(root));
         _rootFull = Path.GetFullPath(root);
         Priority = priority;
 
-        // Erzeuge eine stabile ID pro Root (Hash des normalisierten Pfads), damit Reader/Writer derselben Quelle übereinstimmen können.
-        // Wenn du explizit gleiche IDs mit dem Reader willst, verwende dasselbe Verfahren auch dort.
+        // ID muss mit dem Reader übereinstimmen, wenn sie denselben Root nutzen.
         _providerId = new ProviderId(DeterministicGuidFromString(_rootFull));
     }
 
-    // Policy: FS-Writer akzeptiert standardmäßig keine Secrets (um Klartext-Files in Prod zu vermeiden).
-    // Config/Template/Asset/License/File sind erlaubt.
+    // Policy: FS-Writer akzeptiert standardmäßig keine Secrets.
     public bool CanHandle(ResourceRequest request)
-        => request.ResourceType is ResourceKind.Config
-                                or ResourceKind.Template
-                                or ResourceKind.Asset
-                                or ResourceKind.License
-                                or ResourceKind.File;
+    {
+        return request.ResourceType is ResourceKind.Config
+                                    or ResourceKind.Template
+                                    or ResourceKind.Asset
+                                    or ResourceKind.License
+                                    or ResourceKind.File;
+    }
 
     public async Task<IResourceWriteResult> WriteAsync(
         ResourceRequest request,
@@ -44,9 +53,7 @@ public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCa
         if (!CanHandle(request))
             throw new NotSupportedException($"FileSystemResourceWriter: ResourceKind '{request.ResourceType}' is not allowed by policy.");
 
-        if (string.IsNullOrWhiteSpace(request.Key))
-            throw new ArgumentException("Key must be specified for file system writes.", nameof(request));
-
+        // 1. Pfad sicher auflösen
         string fullPath;
         try
         {
@@ -61,43 +68,66 @@ public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCa
             throw new InvalidOperationException($"Invalid path: {ex.Message}", ex);
         }
 
+        // Verzeichnis sicherstellen
         var dir = Path.GetDirectoryName(fullPath)!;
         Directory.CreateDirectory(dir);
 
         var exists = File.Exists(fullPath);
 
+        // 2. Pre-Conditions prüfen
         if (!exists && !createIfMissing)
-            throw new IOException("Resource does not exist and createIfMissing=false.");
+            throw new IOException($"Resource '{request.Key}' does not exist and createIfMissing=false.");
 
         if (exists && !string.IsNullOrEmpty(ifMatch))
         {
+            // Optimistic Locking: Hash der bestehenden Datei prüfen
             var currentEtag = await ComputeFileHashHexAsync(fullPath, cancellationToken).ConfigureAwait(false);
             if (!string.Equals(currentEtag, ifMatch, StringComparison.Ordinal))
-                throw new IOException("ETag mismatch (ifMatch).");
+                throw new IOException($"ETag mismatch. Expected: {ifMatch}, Actual: {currentEtag}");
         }
 
-        var tmpPath = fullPath + ".tmp-" + Guid.NewGuid().ToString("N");
-        await using (var fs = new FileStream(tmpPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
+        // 3. Atomic Write Pattern:
+        //    a) Schreiben in temporäre Datei (Streaming)
+        //    b) Atomares Verschieben (Overwrite)
+        var tmpPath = fullPath + $".tmp_{Guid.NewGuid():N}";
+        
+        try
         {
-            await content.CopyToAsync(fs, cancellationToken).ConfigureAwait(false);
-        }
+            // Stream kopieren
+            await using (var fs = new FileStream(tmpPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
+            {
+                await content.CopyToAsync(fs, cancellationToken).ConfigureAwait(false);
+            }
 
-        if (exists)
+            // Atomarer Replace (Move mit overwrite=true ist auf POSIX und NTFS atomar für Dateien im selben Volume)
+            File.Move(tmpPath, fullPath, overwrite: true);
+        }
+        catch
         {
-            File.Delete(fullPath);
+            // Cleanup bei Fehler
+            try { File.Delete(tmpPath); } catch { /* best effort */ }
+            throw;
         }
-        File.Move(tmpPath, fullPath);
 
+        // 4. Metadaten des neuen Inhalts berechnen
         var (etag, fi) = await ComputeFileMetaAsync(fullPath, cancellationToken).ConfigureAwait(false);
 
-        // ContentType-Defaulting gemäß ResourceKind-Policy
-        var resolvedContentType = contentType ?? ResolveDefaultContentType(request.ResourceType, fullPath);
+        // ContentType bestimmen: Explizit > Enum-Default > Extension-Guess
+        var resolvedContentType = contentType 
+                                  ?? request.ResourceType.GetDefaultContentType(); // Extension Method nutzen
 
-        return new FsResourceWriteResult(
+        // Falls Enum-Default "octet-stream" lieferte, versuchen wir es nochmal über die Dateiendung zu verfeinern
+        if (resolvedContentType == "application/octet-stream")
+        {
+            var guessed = IoUtilities.GuessContentType(fullPath);
+            if (guessed != null) resolvedContentType = guessed;
+        }
+
+        return new ResourceWriteResult(
             tenantId: request.TenantId,
-            key: request.Key!,
+            key: request.Key,
             version: etag,
-            lastModified: new DateTimeOffset(fi.LastWriteTimeUtc, TimeSpan.Zero),
+            lastModified: fi.LastWriteTimeUtc,
             contentLength: fi.Length,
             providerId: _providerId,
             contentType: resolvedContentType);
@@ -111,10 +141,7 @@ public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCa
         cancellationToken.ThrowIfCancellationRequested();
 
         if (!CanHandle(request))
-            throw new NotSupportedException($"FileSystemResourceWriter: ResourceKind '{request.ResourceType}' is not allowed by policy.");
-
-        if (string.IsNullOrWhiteSpace(request.Key))
-            throw new ArgumentException("Key must be specified for file system deletes.", nameof(request));
+            throw new NotSupportedException($"ResourceKind '{request.ResourceType}' is not allowed.");
 
         string fullPath;
         try
@@ -132,46 +159,34 @@ public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCa
 
         if (!File.Exists(fullPath))
         {
-            return new FsResourceDeleteResult(
+            // Idempotent: Nichts zu tun, gilt als gelöscht.
+            return new ResourceDeleteResult(
                 tenantId: request.TenantId,
-                key: request.Key!,
+                key: request.Key,
                 deleted: false,
                 previousVersion: null,
                 providerId: _providerId);
         }
 
-        if (!string.IsNullOrEmpty(ifMatch))
+        // Locking prüfen
+        string? currentEtag = null;
+        if (!string.IsNullOrEmpty(ifMatch) || true) // Wir brauchen den Etag auch für 'PreviousVersion'
         {
-            var currentEtag = await ComputeFileHashHexAsync(fullPath, cancellationToken).ConfigureAwait(false);
-            if (!string.Equals(currentEtag, ifMatch, StringComparison.Ordinal))
-                throw new IOException("ETag mismatch (ifMatch).");
+            currentEtag = await ComputeFileHashHexAsync(fullPath, cancellationToken).ConfigureAwait(false);
+            
+            if (!string.IsNullOrEmpty(ifMatch) && !string.Equals(currentEtag, ifMatch, StringComparison.Ordinal))
+                throw new IOException("ETag mismatch during delete.");
         }
 
-        var prevEtag = await ComputeFileHashHexAsync(fullPath, cancellationToken).ConfigureAwait(false);
+        // Löschen
         File.Delete(fullPath);
 
-        return new FsResourceDeleteResult(
+        return new ResourceDeleteResult(
             tenantId: request.TenantId,
-            key: request.Key!,
+            key: request.Key,
             deleted: true,
-            previousVersion: prevEtag,
+            previousVersion: currentEtag,
             providerId: _providerId);
-    }
-
-    private static string ResolveDefaultContentType(ResourceKind kind, string path)
-    {
-        // Heuristik gemäß dokumentierter Policy
-        return kind switch
-        {
-            ResourceKind.Config   => "application/json",
-            ResourceKind.Template => "text/plain; charset=utf-8",
-            ResourceKind.Secret   => "application/octet-stream",
-            ResourceKind.License  => "application/json",
-            ResourceKind.Asset    => IoUtilities.GuessContentType(path) ?? "application/octet-stream",
-            ResourceKind.Certificate => IoUtilities.GuessContentType(path) ?? "application/octet-stream",
-            ResourceKind.File     => IoUtilities.GuessContentType(path) ?? "application/octet-stream",
-            _ => "application/octet-stream"
-        };
     }
 
     private static async Task<(string etag, FileInfo fi)> ComputeFileMetaAsync(string fullPath, CancellationToken ct)
@@ -192,63 +207,8 @@ public sealed class FileSystemResourceWriter : IResourceWriter, IResourceWriteCa
     private static Guid DeterministicGuidFromString(string input)
     {
         using var sha = SHA256.Create();
-        var bytes = System.Text.Encoding.UTF8.GetBytes(input.ToUpperInvariant());
+        var bytes = Encoding.UTF8.GetBytes(input.ToUpperInvariant());
         var hash = sha.ComputeHash(bytes);
-        // Nimm die ersten 16 Bytes als GUID
-        Span<byte> guidBytes = stackalloc byte[16];
-        hash.AsSpan(0, 16).CopyTo(guidBytes);
-        return new Guid(guidBytes);
-    }
-
-    private sealed class FsResourceWriteResult : IResourceWriteResult
-    {
-        public FsResourceWriteResult(
-            TenantId tenantId,
-            string key,
-            string? version,
-            DateTimeOffset? lastModified,
-            long? contentLength,
-            ProviderId? providerId,
-            string? contentType)
-        {
-            TenantId = tenantId;
-            Key = key;
-            Version = version;
-            LastModified = lastModified;
-            ContentLength = contentLength;
-            ProviderId = providerId;
-            ContentType = contentType;
-        }
-
-        public TenantId TenantId { get; }
-        public string Key { get; }
-        public string? Version { get; }
-        public DateTimeOffset? LastModified { get; }
-        public long? ContentLength { get; }
-        public ProviderId? ProviderId { get; }
-        public string? ContentType { get; }
-    }
-
-    private sealed class FsResourceDeleteResult : IResourceDeleteResult
-    {
-        public FsResourceDeleteResult(
-            TenantId tenantId,
-            string key,
-            bool deleted,
-            string? previousVersion,
-            ProviderId? providerId)
-        {
-            TenantId = tenantId;
-            Key = key;
-            Deleted = deleted;
-            PreviousVersion = previousVersion;
-            ProviderId = providerId;
-        }
-
-        public TenantId TenantId { get; }
-        public string Key { get; }
-        public bool Deleted { get; }
-        public string? PreviousVersion { get; }
-        public ProviderId? ProviderId { get; }
+        return new Guid(hash.AsSpan(0, 16));
     }
 }

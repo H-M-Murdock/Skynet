@@ -9,11 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceReaderTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceReader.cs" afterDir="false" />
-    </list>
+    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -266,15 +262,7 @@
       <workItem from="1763641488305" duration="18000" />
       <workItem from="1764065346695" duration="312000" />
       <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="2344000" />
-    </task>
-    <task id="LOCAL-00016" summary="ix(time): ScopedStopwatchFactory – LogAsync strikt asynchron und mit internem Exception-Schutz (Dispose wirft nicht)">
-      <option name="closed" value="true" />
-      <created>1761025681233</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1761025681233</updated>
+      <workItem from="1764146445444" duration="2574000" />
     </task>
     <task id="LOCAL-00017" summary="test(io): korrigiere xUnit Assert-Parameterreihenfolge (StartsWith/EndsWith)">
       <option name="closed" value="true" />
@@ -660,7 +648,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764148418459</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="FileSystemResourceReader">
+      <option name="closed" value="true" />
+      <created>1764148926942</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1764148926942</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -670,7 +666,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Add SizeLimiter with configurable size constraints and comprehensive unit tests" />
     <MESSAGE value="Logging: Add SimpleLineLogTextFormatter (compact, schema-less) with tests" />
     <MESSAGE value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
     <MESSAGE value="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter" />
@@ -695,7 +690,8 @@
     <MESSAGE value="SecretProtectorTests.cs" />
     <MESSAGE value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
     <MESSAGE value="EnvironmentResourceReaderTests.cs" />
-    <option name="LAST_COMMIT_MESSAGE" value="EnvironmentResourceReaderTests.cs" />
+    <MESSAGE value="FileSystemResourceReader" />
+    <option name="LAST_COMMIT_MESSAGE" value="FileSystemResourceReader" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
