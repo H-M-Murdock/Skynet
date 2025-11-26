@@ -10,22 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceLocatorTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/GlobalUsingsAndInternals.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceDeleteResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceDeleteResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceListResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceListResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceLocator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriteResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriteResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/IResourceWriter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ProviderId.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ProviderId.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceKind.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceKind.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceListResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceListResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLookupResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +49,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/53428d95742549e8968df3e76ebd1d7de8e928/_cc311/IAsyncDisposable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/GlobalUsingsAndInternals.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -115,6 +104,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
@@ -169,6 +159,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SizeLimiterTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceLocatorTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -184,26 +175,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.Skynet.LicenseGrant.executor": "Run",
-    ".NET Project.Skynet.LicenseRequest.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor": "Debug",
-    "git-widget-placeholder": "feat/resource",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.Skynet.LicenseGrant.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.Skynet.LicenseRequest.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/resource&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
@@ -273,14 +264,9 @@
       <workItem from="1763026149661" duration="1328000" />
       <workItem from="1763630160122" duration="3492000" />
       <workItem from="1763641488305" duration="18000" />
-    </task>
-    <task id="LOCAL-00014" summary="feat(time): ScopedStopwatchFactory in BootstrapClockStep via DI registriert">
-      <option name="closed" value="true" />
-      <created>1761023929282</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1761023929282</updated>
+      <workItem from="1764065346695" duration="312000" />
+      <workItem from="1764146314244" duration="47000" />
+      <workItem from="1764146445444" duration="1910000" />
     </task>
     <task id="LOCAL-00015" summary="test(time): Parallelitäts-Test für AdjustableClock; Fehlerrobustheit von ScopedStopwatchFactory; DI-Integrationstest für BootstrapClockStep&#10;&#10;(RED)">
       <option name="closed" value="true" />
@@ -666,7 +652,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763641453963</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency.">
+      <option name="closed" value="true" />
+      <created>1763647392989</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1763647392989</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -676,7 +670,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Refactor DefaultEnricher to support mutable/immutable events, update tests accordingly" />
     <MESSAGE value="Logging: Introduce RedactionPolicy with flexible masking options and comprehensive unit tests" />
     <MESSAGE value="Logging: Add SizeLimiter with configurable size constraints and comprehensive unit tests" />
     <MESSAGE value="Logging: Add SimpleLineLogTextFormatter (compact, schema-less) with tests" />
@@ -701,7 +694,8 @@
     <MESSAGE value="feat(crypto): Add `HkdfKeyDerivationTests` for HKDF-based key derivation&#10;&#10;- Added unit tests for HKDF SHA-256 and SHA-512, covering deterministic key generation, salt/context variations, long key expansion, and edge cases.&#10;- Included validation for null/empty inputs and out-of-range lengths.&#10;- Verified compliance with RFC 5869 test vectors." />
     <MESSAGE value="SecretProtector.cs" />
     <MESSAGE value="SecretProtectorTests.cs" />
-    <option name="LAST_COMMIT_MESSAGE" value="SecretProtectorTests.cs" />
+    <MESSAGE value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

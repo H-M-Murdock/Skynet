@@ -1,4 +1,4 @@
-// Skynet.Core/ResourceProvider/EnvironmentResourceProvider.cs
+// Skynet.Core/ResourceProvider/EnvironmentResourceReader.cs
 using System.Security.Cryptography;
 using System.Text;
 using Skynet.Core.Tenant;
@@ -9,74 +9,90 @@ public enum EnvScope { Process, User, Machine }
 
 public sealed class EnvironmentResourceReader : IResourceReader
 {
-    private static readonly ProviderId StaticId = new(new Guid("CF8A9E7B-0F7C-4E22-9F3F-2A3C7D0E6B11"));
-    public ProviderId Id => StaticId;
-
+    public ProviderId Id { get; }
     public int Priority { get; }
 
     private readonly string _appPrefix;
     private readonly EnvScope _scope;
+    
+    // Delegates für Testbarkeit
+    private readonly Func<string, EnvScope, string?> _envGetter;
+    private readonly Func<EnvScope, IEnumerable<string>> _envLister;
 
+    /// <summary>
+    /// Erstellt einen neuen Environment-Reader.
+    /// </summary>
+    /// <param name="scope">Der Scope der Umgebungsvariablen (Process, User, Machine).</param>
+    /// <param name="priority">Die Priorität im ResourceLocator.</param>
+    /// <param name="appPrefix">Globaler App-Prefix (z.B. "SKYNET").</param>
     public EnvironmentResourceReader(EnvScope scope, int priority, string appPrefix = "SKYNET")
+        : this(scope, priority, appPrefix, null, null)
+    {
+        // Delegiert an den internen Konstruktor
+    }
+
+    /// <summary>
+    /// Interner Konstruktor für Tests (ermöglicht Mocking von Environment-Zugriffen).
+    /// Benötigt [InternalsVisibleTo] im AssemblyInfo.
+    /// </summary>
+    internal EnvironmentResourceReader(
+        EnvScope scope, 
+        int priority, 
+        string appPrefix,
+        Func<string, EnvScope, string?>? envGetter,         
+        Func<EnvScope, IEnumerable<string>>? envLister)     
     {
         _scope = scope;
         Priority = priority;
         _appPrefix = string.IsNullOrWhiteSpace(appPrefix) ? "SKYNET" : appPrefix.ToUpperInvariant();
+        Id = GenerateId(_scope, _appPrefix);
+
+        // Defaults setzen (System.Environment Wrapper)
+        _envGetter = envGetter ?? GetEnvSystem;
+        _envLister = envLister ?? GetAllEnvNamesSystem;
     }
 
     public bool CanHandle(ResourceRequest request)
-        => request.ResourceType is ResourceKind.Config or ResourceKind.Secret or ResourceKind.Template
-           && !string.IsNullOrWhiteSpace(request.Key);
+    {
+        return request.ResourceType.IsTextBased() || request.ResourceType == ResourceKind.Secret;
+    }
 
-    public async ValueTask<ResourceLookupResult> TryGetAsync(
+    public ValueTask<ResourceLookupResult> TryGetAsync(
         ResourceRequest request,
         CancellationToken cancellationToken = default)
     {
         if (!CanHandle(request))
-            return ResourceLookupResult.NotFound("Unsupported resource type or empty key.");
+            return ValueTask.FromResult(ResourceLookupResult.NotFound("Unsupported resource type."));
 
         var tenant = request.TenantId.ToString().ToUpperInvariant();
         var key = NormalizeKey(request.Key);
         var envKey = BuildEnvKey(_appPrefix, request.ResourceType, tenant, key);
 
-        var value = GetEnv(envKey, _scope);
+        // Nutzung des Delegates (Testbar)
+        var value = _envGetter(envKey, _scope);
+        
         if (string.IsNullOrEmpty(value))
-            return ResourceLookupResult.NotFound($"ENV not found: {envKey} ({_scope})");
+            return ValueTask.FromResult(ResourceLookupResult.NotFound($"ENV not found: {envKey} ({_scope})"));
 
         var bytes = Encoding.UTF8.GetBytes(value);
-        var etag = await ComputeSha256HexAsync(bytes, cancellationToken).ConfigureAwait(false);
+        var etag = ComputeHash(bytes);
         var stream = new MemoryStream(bytes, writable: false);
 
-        var contentType = request.ResourceType switch
-        {
-            ResourceKind.Config => "application/json",
-            ResourceKind.Secret => "text/plain; charset=utf-8",
-            ResourceKind.Template => "text/plain; charset=utf-8",
-            _ => "text/plain; charset=utf-8"
-        };
+        var contentType = request.ResourceType.GetDefaultContentType();
 
         var result = new ResourceResult(
             tenantId: request.TenantId,
             key: request.Key,
             content: stream,
             contentType: contentType,
-            lastModified: null,
+            lastModified: null, 
             contentLength: bytes.LongLength,
             version: etag,
             providerId: Id);
 
-        return ResourceLookupResult.Found(result);
+        return ValueTask.FromResult(ResourceLookupResult.Found(result));
     }
 
-    /// <summary>
-    /// Listet Keys aus den Umgebungsvariablen für den angegebenen Request:
-    /// - request.Key ist das Prefix (vor Normalisierung).
-    /// - TenantId und ResourceType werden in das ENV-Namensschema gemappt.
-    /// Paging:
-    /// - continuationToken: letzter bereits gelieferter Normalized-Key (lexikographisch), exklusiv.
-    /// - limit: optionale Obergrenze.
-    /// Hinweis: ENV bietet kein echtes Paging; wir simulieren Paging durch Sortierung/Take.
-    /// </summary>
     public Task<(IReadOnlyList<string> keys, string? nextContinuationToken)> ListKeysAsync(
         ResourceRequest request,
         string? continuationToken = null,
@@ -85,69 +101,64 @@ public sealed class EnvironmentResourceReader : IResourceReader
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        // Prefix-Header entsprechend dem Build-Schema, aber ohne den letzten Key-Part
         var tenant = request.TenantId.ToString().ToUpperInvariant();
         var normalizedPrefix = NormalizeKey(request.Key ?? string.Empty);
-        var envPrefix = BuildEnvPrefix(_appPrefix, request.ResourceType, tenant); // z. B. SKYNET_SECRET__TENANT__
-        // Wir filtern Variablennamen auf diesen envPrefix und extrahieren den Segment-Teil danach.
+        var envPrefix = BuildEnvPrefix(_appPrefix, request.ResourceType, tenant);
 
-        var vars = GetAllEnvNames(_scope)
-            .Where(n => n.StartsWith(envPrefix, StringComparison.Ordinal))
-            .Select(n => new { Name = n, Tail = n.Substring(envPrefix.Length) })
-            .Where(x => x.Tail.StartsWith(normalizedPrefix, StringComparison.Ordinal));
+        // KORREKTUR: Nutzung des Delegates _envLister statt direktem Aufruf
+        var vars = _envLister(_scope)
+            .Where(n => n.StartsWith(envPrefix, StringComparison.Ordinal));
 
-        // Tail = NORMALIZED_KEY; sortieren
-        var ordered = vars.Select(x => x.Tail)
-                          .OrderBy(x => x, StringComparer.Ordinal);
+        var tails = vars
+            .Select(n => n.Substring(envPrefix.Length))
+            .Where(tail => tail.StartsWith(normalizedPrefix, StringComparison.Ordinal))
+            .OrderBy(tail => tail, StringComparer.Ordinal);
 
+        var query = tails.AsEnumerable();
+    
         if (!string.IsNullOrEmpty(continuationToken))
         {
-            ordered = ordered.Where(x => string.Compare(x, continuationToken, StringComparison.Ordinal) > 0)
-                             .OrderBy(x => x, StringComparer.Ordinal);
+            query = query.Where(k => string.Compare(k, continuationToken, StringComparison.Ordinal) > 0);
         }
 
         var take = (limit is > 0) ? limit.Value : int.MaxValue;
-        var tails = ordered.Take(take).ToArray();
+        var page = query.Take(take).ToArray();
 
-        // Rückkonvertierung: aus NORMALIZED_KEY wieder das logische Key-Format ableiten.
-        // Da NormalizeKey '/', '\' und '.' zu '_' macht, ist eine verlustfreie Rückkonvertierung nicht möglich.
-        // Wir geben daher den normalisierten Key als Rückgabekey aus.
-        // Wenn du eine verlustfreie Runde möchtest, definiere ein bidirektionales Mapping.
-        var keys = tails.Select(t => DenormalizeKeyFallback(t)).ToArray();
+        var keys = page.Select(DenormalizeKeyFallback).ToArray();
+        string? nextToken = page.Length == take ? page[^1] : null;
 
-        string? nextToken = tails.Length == take ? tails[^1] : null;
         return Task.FromResult(((IReadOnlyList<string>)keys, nextToken));
     }
 
+    // ... Private Helpers ...
+
     private static string NormalizeKey(string key)
     {
-        var norm = key.Replace('/', '_').Replace('\\', '_').Replace('.', '_');
-        while (norm.Contains("__")) norm = norm.Replace("__", "_");
-        return norm.ToUpperInvariant();
+        var sb = new StringBuilder(key.Length);
+        foreach (char c in key)
+        {
+            if (c == '/' || c == '\\' || c == ':' || c == '.')
+                sb.Append('_');
+            else
+                sb.Append(char.ToUpperInvariant(c));
+        }
+        return sb.ToString();
     }
 
     private static string DenormalizeKeyFallback(string normalized)
-        => normalized.Replace('_', '/'); // best-effort; original Separatoren sind nicht rekonstruierbar
+        => normalized.Replace('_', '/');
 
     private static string BuildEnvKey(string appPrefix, ResourceKind kind, string tenant, string key)
-        => kind switch
-        {
-            ResourceKind.Config   => $"{appPrefix}_CONFIG__{tenant}__{key}",
-            ResourceKind.Secret   => $"{appPrefix}_SECRET__{tenant}__{key}",
-            ResourceKind.Template => $"{appPrefix}_TEMPLATE__{tenant}__{key}",
-            _ => $"{appPrefix}_UNKNOWN__{tenant}__{key}"
-        };
+        => $"{BuildEnvPrefix(appPrefix, kind, tenant)}{key}";
 
     private static string BuildEnvPrefix(string appPrefix, ResourceKind kind, string tenant)
-        => kind switch
-        {
-            ResourceKind.Config   => $"{appPrefix}_CONFIG__{tenant}__",
-            ResourceKind.Secret   => $"{appPrefix}_SECRET__{tenant}__",
-            ResourceKind.Template => $"{appPrefix}_TEMPLATE__{tenant}__",
-            _ => $"{appPrefix}_UNKNOWN__{tenant}__"
-        };
+    {
+        var kindStr = kind.ToString().ToUpperInvariant();
+        return $"{appPrefix}_{kindStr}__{tenant}__";
+    }
 
-    private static string? GetEnv(string name, EnvScope scope) => scope switch
+    // Implementierung für _envGetter Delegate
+    private static string? GetEnvSystem(string name, EnvScope scope) => scope switch
     {
         EnvScope.Process => Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.Process),
         EnvScope.User    => Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.User),
@@ -155,18 +166,35 @@ public sealed class EnvironmentResourceReader : IResourceReader
         _ => null
     };
 
-    private static IEnumerable<string> GetAllEnvNames(EnvScope scope) => scope switch
+    // Implementierung für _envLister Delegate
+    private static IEnumerable<string> GetAllEnvNamesSystem(EnvScope scope)
     {
-        EnvScope.Process => Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process).Keys.Cast<string>(),
-        EnvScope.User    => Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User).Keys.Cast<string>(),
-        EnvScope.Machine => Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine).Keys.Cast<string>(),
-        _ => Array.Empty<string>()
-    };
-
-    private static async Task<string> ComputeSha256HexAsync(byte[] data, CancellationToken ct)
+        var target = scope switch
+        {
+            EnvScope.Process => EnvironmentVariableTarget.Process,
+            EnvScope.User => EnvironmentVariableTarget.User,
+            EnvScope.Machine => EnvironmentVariableTarget.Machine,
+            _ => EnvironmentVariableTarget.Process
+        };
+    
+        var vars = Environment.GetEnvironmentVariables(target);
+        foreach (var key in vars.Keys)
+        {
+            if (key is string s) yield return s;
+        }
+    }
+    
+    private static string ComputeHash(byte[] data)
     {
         using var sha = SHA256.Create();
-        var hash = await sha.ComputeHashAsync(new MemoryStream(data, writable: false), ct).ConfigureAwait(false);
-        return Convert.ToHexString(hash);
+        return Convert.ToHexString(sha.ComputeHash(data));
+    }
+    
+    private static ProviderId GenerateId(EnvScope scope, string prefix)
+    {
+        var input = $"ENV::{scope}::{prefix}";
+        using var sha = SHA256.Create();
+        var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
+        return new ProviderId(new Guid(hash.AsSpan(0, 16)));
     }
 }
