@@ -4,13 +4,18 @@ using Skynet.Core.Time;
 namespace Skynet.Core.Licensing;
 
 /// <summary>
-/// Domänenmodell einer ausgewerteten (verifizierten) Lizenz.
-/// Enthält nur fachliche Informationen, keine Krypto-Transportdetails.
+/// Domänenmodell einer ausgewerteten und verifizierten Lizenz.
+/// Dient der Anwendungslogik zur Abfrage von Rechten (Claims) und Laufzeiten.
 /// </summary>
 public sealed class LicenseInfo
 {
+    /// <summary>Der Lizenznehmer (Mandant).</summary>
     public TenantId TenantId { get; }
+    
+    /// <summary>Optionale eindeutige ID der Lizenz (Tracking).</summary>
     public string? LicenseId { get; }
+    
+    /// <summary>Name der zugrundeliegenden Policy.</summary>
     public string? PolicyName { get; }
 
     /// <summary>UTC-Zeit, zu der die Lizenz ausgestellt wurde.</summary>
@@ -27,7 +32,7 @@ public sealed class LicenseInfo
 
     /// <summary>
     /// Ergebnis der Signaturprüfung der zugehörigen Hülle (Server-Signatur).
-    /// true = Signatur gültig; false = ungültig; null = nicht geprüft.
+    /// <c>true</c> = Signatur gültig; <c>false</c> = ungültig; <c>null</c> = nicht geprüft.
     /// </summary>
     public bool? SignatureValid { get; }
 
@@ -68,7 +73,18 @@ public sealed class LicenseInfo
         IssuedAtUtc = issuedAtUtc;
         ExpiresUtc = expiresUtc;
         NotBeforeUtc = notBeforeUtc;
-        Claims = claims ?? new Dictionary<string, string>();
+        
+        // Case-Insensitive Dictionary für Claims ist robuster
+        var claimsDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (claims != null)
+        {
+            foreach (var kv in claims)
+            {
+                claimsDict[kv.Key] = kv.Value;
+            }
+        }
+        Claims = claimsDict;
+
         LicenseId = licenseId;
         PolicyName = policyName;
         SignatureValid = signatureValid;
@@ -78,9 +94,13 @@ public sealed class LicenseInfo
     }
 
     /// <summary>
-    /// true, wenn (optional) Signatur gültig ist und Zeitfenster erfüllt ist.
-    /// Wenn SignatureValid null ist, wird nur das Zeitfenster geprüft.
+    /// Prüft, ob die Lizenz aktuell gültig ist (Zeitfenster).
     /// </summary>
+    /// <param name="clock">Optionaler Zeitgeber (sonst DateTimeOffset.UtcNow).</param>
+    /// <param name="requireSignature">
+    /// Wenn <c>true</c>, muss auch <see cref="SignatureValid"/> auf <c>true</c> stehen.
+    /// Standardmäßig <c>false</c>, da oft davon ausgegangen wird, dass ungültige Lizenzen gar nicht erst als LicenseInfo erzeugt werden.
+    /// </param>
     public bool IsValid(IClock? clock = null, bool requireSignature = false)
     {
         var now = (clock?.UtcNow ?? DateTimeOffset.UtcNow);
@@ -91,7 +111,7 @@ public sealed class LicenseInfo
     }
 
     /// <summary>
-    /// Tage bis zum Ablauf (negativ wenn bereits abgelaufen).
+    /// Tage bis zum Ablauf (negativ, wenn bereits abgelaufen).
     /// </summary>
     public double DaysUntilExpiry(IClock? clock = null)
     {
@@ -100,7 +120,7 @@ public sealed class LicenseInfo
     }
 
     /// <summary>
-    /// Liefert einen Claim-Wert oder null, wenn nicht vorhanden.
+    /// Liefert einen Claim-Wert oder null, wenn nicht vorhanden (Key ist case-insensitive).
     /// </summary>
     public string? GetClaim(string key)
         => Claims.TryGetValue(key, out var v) ? v : null;
@@ -111,6 +131,7 @@ public sealed class LicenseInfo
     public bool GetClaimBool(string key, bool defaultValue = false)
     {
         if (!Claims.TryGetValue(key, out var v)) return defaultValue;
+        // OrdinalIgnoreCase für "True"/"true" Toleranz
         return bool.TryParse(v, out var b) ? b : defaultValue;
     }
 

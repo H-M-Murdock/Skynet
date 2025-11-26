@@ -2,37 +2,54 @@ using Skynet.Core.Tenant;
 
 namespace Skynet.Core.Licensing;
 
+/// <summary>
+/// Steuert den kryptografischen Handshake zur Lizenzbeschaffung auf Client-Seite.
+/// </summary>
 public interface IClientLicenseInitiator
 {
-    // Erstnachricht: erstellt PubC + NonceC, hält PrivC im RAM/Store.
-    // Optional: kem/kdf/aead als Parameter, falls mehrere Profile unterstützt werden.
-    Task<(byte[] ClientPubEcdh, byte[] NonceClient, ClientInitMeta Meta, byte[]? ClientProof)> CreateInitAsync(
+    /// <summary>
+    /// Erzeugt den initialen Request-Payload für den Server.
+    /// Generiert hierfür ein ephemeres ECDH-Schlüsselpaar und eine Nonce.
+    /// </summary>
+    /// <param name="meta">Metadaten über den Client (Name, ID, etc.).</param>
+    /// <returns>
+    /// Ein Resultat-Objekt, das sowohl den Request für den Server enthält, 
+    /// als auch den privaten Schlüssel (State), der für die Finalisierung benötigt wird.
+    /// </returns>
+    Task<ClientHandshakeStartResult> CreateInitAsync(
         ClientInitMeta meta,
         CancellationToken ct = default);
 
-    // Finalisierung: erhält Server-Hülle, leitet K ab, erzeugt DEK (+DEKenc) und baut finale Lizenz.
-    // Wirft CryptographicException bei Verifikations-/KDF-/AEAD-Fehlern.
+    /// <summary>
+    /// Verarbeitet die Antwort vom Server (LicenseEnvelope).
+    /// <list type="number">
+    /// <item>Verifiziert die Server-Signatur und das Zeitfenster.</item>
+    /// <item>Führt ECDH (PrivC + PubS) durch.</item>
+    /// <item>Leitet Session-Key K ab (HKDF).</item>
+    /// <item>Generiert ggf. den DEK und verpackt ihn (dieser Schritt ist oft Teil des LicenseManagers, kann aber hier vorbereitet werden).</item>
+    /// </list>
+    /// </summary>
+    /// <param name="serverEnvelope">Die empfangene, signierte Hülle.</param>
+    /// <param name="clientPrivateEcdh">Der private Schlüssel aus Schritt 1.</param>
+    /// <param name="clientProofSecret">Optional: Secret für gegenseitige Authentifizierung.</param>
+    /// <returns>Die validierte LicenseEnvelope (ggf. angereichert/geprüft).</returns>
     Task<LicenseEnvelope> FinalizeAsync(
-        LicenseEnvelope serverEnvelope,             // Hülle inkl. PubS/Nonces/Sig (Alg-Infos konsistent)
-        byte[] clientPrivateEcdh,                   // PrivC (oder via internem Store)
-        byte[]? clientProofSecret = null,           // optional für Mutual-Auth
+        LicenseEnvelope serverEnvelope,
+        byte[] clientPrivateEcdh,
+        byte[]? clientProofSecret = null,
         CancellationToken ct = default);
 
-    // Ableitung K aus PrivC/PubS + Nonces (falls separat benötigt).
-    // Wirft ArgumentException/CryptographicException bei inkorrekten Längen oder Ableitungsfehlern.
+    /// <summary>
+    /// Hilfsmethode: Leitet den Session-Key (K) ab.
+    /// Normalerweise intern von <see cref="FinalizeAsync"/> genutzt, aber hier exposet für Diagnose oder manuelle Schritte.
+    /// HKDF-Info: "tenant/{id}/license-v1".
+    /// </summary>
     byte[] DeriveSessionKey(
         byte[] clientPrivEcdh,
         byte[] serverPubEcdh,
         byte[] nonceClient,
         byte[] nonceServer,
         TenantId tenantId);
-
-    // Optional: asynchrone Ableitung (für KMS/HSM-Fälle)
-    Task<byte[]> DeriveSessionKeyAsync(
-        byte[] clientPrivEcdh,
-        byte[] serverPubEcdh,
-        byte[] nonceClient,
-        byte[] nonceServer,
-        TenantId tenantId,
-        CancellationToken ct = default);
+        
+    // Async-Derive entfernt, da reines HKDF CPU-bound ist (außer bei HSM, siehe Anmerkung IClientDekManager).
 }

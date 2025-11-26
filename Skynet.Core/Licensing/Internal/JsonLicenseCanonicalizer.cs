@@ -20,9 +20,8 @@ public sealed class JsonLicenseCanonicalizer : ILicenseCanonicalizer
         SkipValidation = false
     };
 
-    public byte[] CanonicalizeWithoutSignature(LicenseEnvelope e, Encoding? encoding = null)
+    public byte[] CanonicalizeWithoutSignature(LicenseEnvelope e)
     {
-        encoding ??= Encoding.UTF8;
 
         using var ms = new MemoryStream();
         using (var writer = new Utf8JsonWriter(ms, WriterOptions))
