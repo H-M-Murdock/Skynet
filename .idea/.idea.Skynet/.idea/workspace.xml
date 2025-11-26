@@ -10,10 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceDeserializerTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceSerializerTestsIntHandling.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/ResourceEnvelope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/ResourceEnvelope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IBinaryResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IBinaryResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IInMemoryBinaryResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IInMemoryBinaryResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IRawResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IRawResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IStringResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IStringResource.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,6 +105,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
@@ -271,15 +272,7 @@
       <workItem from="1763641488305" duration="18000" />
       <workItem from="1764065346695" duration="312000" />
       <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="3078000" />
-    </task>
-    <task id="LOCAL-00018" summary="test(io): robuste ETag-Assertion (SHA-256 aus Datei) und korrekte xUnit-Assertions">
-      <option name="closed" value="true" />
-      <created>1761030497304</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1761030497304</updated>
+      <workItem from="1764146445444" duration="3453000" />
     </task>
     <task id="LOCAL-00019" summary="test(io): OpenReadWithHashAsync wirft FileNotFoundException bei fehlender Datei">
       <option name="closed" value="true" />
@@ -665,7 +658,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764149096236</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Materializer">
+      <option name="closed" value="true" />
+      <created>1764149566617</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1764149566617</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -675,7 +676,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
     <MESSAGE value="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter" />
     <MESSAGE value="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests" />
     <MESSAGE value="Logging: Add FileLogSink with support for file-based streaming, rotation, and retention policies, including integration tests" />
@@ -700,7 +700,8 @@
     <MESSAGE value="EnvironmentResourceReaderTests.cs" />
     <MESSAGE value="FileSystemResourceReader" />
     <MESSAGE value="FileSystemResourceWriter" />
-    <option name="LAST_COMMIT_MESSAGE" value="FileSystemResourceWriter" />
+    <MESSAGE value="Materializer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Materializer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

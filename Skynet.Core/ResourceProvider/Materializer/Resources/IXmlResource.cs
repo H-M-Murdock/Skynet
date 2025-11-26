@@ -4,7 +4,11 @@ using System.Xml.Linq;
 
 namespace Skynet.Core.ResourceProvider;
 
+/// <summary>
+/// Eine bereits geparste XML-Ressource (LINQ to XML).
+/// </summary>
 public interface IXmlResource : IStringResource
 {
-    XDocument Document { get; } // LINQ to XML
+    /// <summary>Das vollständige XML-Dokument.</summary>
+    XDocument Document { get; }
 }

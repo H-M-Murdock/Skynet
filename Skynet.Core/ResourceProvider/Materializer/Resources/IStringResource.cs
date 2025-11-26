@@ -2,9 +2,12 @@
 // Skynet.Core.ResourceProvider/IStringResource.cs
 namespace Skynet.Core.ResourceProvider;
 
-// UTF-8-Stringressource mit direktem Zugriff auf den Bytes-Puffer (In-Memory)
+/// <summary>
+/// Repräsentiert eine textbasierte Ressource (immer UTF-8).
+/// Dient als Basis für spezifische Textformate (JSON, XML, CSV).
+/// </summary>
 public interface IStringResource : IInMemoryBinaryResource
 {
-    // UTF-8-dekodierter Inhalt (keine anderen Encodings)
+    /// <summary>Der dekodierte Textinhalt.</summary>
     string Text { get; }
 }

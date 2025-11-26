@@ -2,16 +2,17 @@
 // Skynet.Core.ResourceProvider/ICsvResource.cs
 namespace Skynet.Core.ResourceProvider;
 
-// Neutrale CSV-Repräsentation (UTF-8, in-memory, string-basiert)
+/// <summary>
+/// Eine geparste CSV-Ressource (In-Memory).
+/// </summary>
 public interface ICsvResource : IStringResource
 {
-    // Optional: Header. Kann leer sein, wenn keine Kopfzeile existiert.
+    /// <summary>Header-Zeile (falls vorhanden), sonst leer.</summary>
     IReadOnlyList<string> Headers { get; }
 
-    // Zeilen als Liste von Feldern (bereits geparst/entquotet).
+    /// <summary>Datenzeilen. Jede Zeile ist eine Liste von Spaltenwerten.</summary>
     IReadOnlyList<IReadOnlyList<string>> Rows { get; }
 
-    // Optional: Trenn- und Quote-Zeichen, falls relevant (Dokumentation der Implementierung).
     char? Delimiter { get; }
     char? Quote { get; }
 }

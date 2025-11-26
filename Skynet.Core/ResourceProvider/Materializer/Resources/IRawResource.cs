@@ -1,18 +1,21 @@
 namespace Skynet.Core.ResourceProvider;
 
 /// <summary>
-/// Basiskontrakt für Rohressourcen (Stream-basiert).
-/// Abgeleitete, spezialisierte Typen (z. B. IJsonResource, IXmlResource, ITextResource)
-/// können bequeme Zugriffe (JsonDocument, XDocument, Text) anbieten.
+/// Basiskontrakt für jede Art von Ressource.
+/// Kapselt Metadaten (Key, Type) und den Zugriff auf den Inhalt als Stream.
 /// </summary>
 public interface IRawResource : IDisposable
 {
-    /// <summary>Logischer Schlüssel (tenant-neutral; Tenant steht im Aufrufkontext).</summary>
+    /// <summary>Logischer Schlüssel (tenant-neutral).</summary>
     string LogicalKey { get; }
 
-    /// <summary>Content-Type (kann null/ungenau sein; Parser/Converter dürfen sniffen).</summary>
+    /// <summary>MIME-Type (kann null sein).</summary>
     string? ContentType { get; }
 
-    /// <summary>Inhalt als Stream. Der Consumer ist für Dispose verantwortlich.</summary>
+    /// <summary>
+    /// Der Inhalt als Stream. 
+    /// HINWEIS: Bei In-Memory-Ressourcen (IStringResource etc.) erzeugt dieser Getter oft 
+    /// einen neuen MemoryStream-Wrapper um den internen Puffer.
+    /// </summary>
     Stream Content { get; }
 }

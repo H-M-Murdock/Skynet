@@ -3,8 +3,12 @@
 // Rein speicherbasierte Binärressource (kein I/O nötig), kompatibel zu IBinaryResource.
 namespace Skynet.Core.ResourceProvider;
 
+/// <summary>
+/// Markiert Ressourcen, die vollständig im Arbeitsspeicher liegen.
+/// Erlaubt synchronen, wahlfreien Zugriff ohne I/O-Overhead.
+/// </summary>
 public interface IInMemoryBinaryResource : IBinaryResource
 {
-    // Direkter Zugriff auf den Puffer; Stream kann daraus abgeleitet werden.
+    /// <summary>Der Inhalt als speicherbasierter Puffer.</summary>
     ReadOnlyMemory<byte> Buffer { get; }
 }
