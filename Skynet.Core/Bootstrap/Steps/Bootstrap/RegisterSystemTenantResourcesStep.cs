@@ -14,9 +14,11 @@ public sealed class RegisterSystemTenantResourcesStep : IBootStep, IStepReport
 
     public Task ExecuteAsync(IServiceCollection services, CancellationToken ct)
     {
+        /*
         var sys = new SystemTenantResources();
         services.AddSingleton<ITenantResources>(sys);
         _report = $"system tenant resources registered at {SystemTenantResources.SystemTenantGuid}";
+        */
         return Task.CompletedTask;
     }
 

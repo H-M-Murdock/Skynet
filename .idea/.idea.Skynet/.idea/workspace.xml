@@ -10,21 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientHandshakeStartResult.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/Licensing/LicenseVerifierTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/AssetDataTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/ProgramTenantContextTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/SystemTenantResourcesTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/TenantIdTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientInitMeta.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientInitMeta.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientLicenseRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ClientLicenseRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientDekManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientDekManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientLicenseInitiator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/IClientLicenseInitiator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseCanonicalizer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseTools.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ILicenseVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ISecretStore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ISecretStore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/JsonLicenseCanonicalizer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseEnvelope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/LicenseEnvelope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Licensing/ServerInitMeta.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/ServerInitMeta.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/AssetData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/AssetData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ProgramTenantContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/Internal/ProgramTenantContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/Internal/SystemTenantResources.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/Internal/TenantContextAccessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,13 +36,12 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="9" />
-    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+    <option name="cachedIndexableFilesCount" value="10" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feat/i18n" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -63,7 +62,7 @@
     <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/53428d95742549e8968df3e76ebd1d7de8e928/_cc311/IAsyncDisposable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8bfc57955751d07e3fad13bb97d5f66af412d7a34486ec29ad916547ec8ce6b/Path.Windows.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/GlobalUsingsAndInternals.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -72,130 +71,60 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ICurrentCultureProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/IDateTimeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ILocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/CultureThreadScope.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/CultureThreadScopeFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/CurrentCultureProvider.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/DateTimeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/Internal/InMemoryLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationChangeNotifier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/CallLoggingProxy.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/AttributeLogging/LogCallAttribute.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/DropMode.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/FileTarget.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IEventListener.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogEventEncoder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogEventMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogHealthMonitor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogRouter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogSink.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILogTextFormatter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ILoggingServer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/IPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/ISizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DayRotationPolicy.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultEnricher.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultLogEventMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/DefaultPathTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/FileLogSink.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventChannel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventListener.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransport.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/InMemoryEventTransportFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LogLevelExtensions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingClient.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggingServer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MemoryLogSink.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/MutableLogEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/NdjsonLogEventEncoder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/RedactionPolicy.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleBackpressurePolicy.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleLineLogTextFormatter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SingleSinkRouter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SizeLimiter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/LoggingClientOptions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/TransportState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/ICsvToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IIniToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IJsonToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToBinaryConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToCsvConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToIniConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToJsonConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToXmlConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/XmlToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/ICsvResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IIniResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IJsonResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IStringResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IXmlResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceConverter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IBinaryResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/ICsvResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IInMemoryBinaryResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IJsonResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IRawResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IStringResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IXmlResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/ICsvResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IIniResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IJsonResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IStringResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IXmlResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/EnvironmentResourceReader.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Provider/FileSystemResourceWriter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Tenant/Internal/TenantContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/AdjustableClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ClockServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IStopwatch.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/ScopedStopwatchFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/Stopwatch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Utilities/BufferedFileAppender.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nEntryId.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/I18nTemplate.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ILocalizationContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ILocalizationService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ILogEventLocalizer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITemplateLookupService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ITenantScopeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/ImportReport.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTenantScopeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/InMemoryTemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/SimpleTemplateRenderer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/LocalizedException.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/TemplateSetValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/AesGcmAeadCryptographyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/DefaultKeyPairGeneratorTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/EcdhKeyAgreementTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/HkdfKeyDerivationTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Crypto/SecretProtectorTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/IOUtilities/IoUtilitiesTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Licensing/LicenseVerifierTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CultureThreadScopeFactoryTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/CurrentCultureProviderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/DateTimeFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Localization/InMemoryLocalizationStoreTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/AttribiteLogging/CallLoggingProxyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/BufferedFileAppenderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTemplateResolutionTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DayRotationPolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherAdditionalTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/DefaultEnricherTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkIntegrationTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/FileLogSinkTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventListenerTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportFactoryTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/InMemoryEventTransportTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/LoggingClientTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/LoggingServerTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkConcurrencyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/MemoryLogSinkTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderMoreTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/NdjsonLogEventEncoderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/PathTemplateRendererTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/RedactionPolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleBackpressurePolicyTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterMoreTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SimpleLineLogTextFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SingleSinkRouterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SizeLimiterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceWriterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceDeserializerTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceLocatorTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceSerializerTestsIntHandling.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/i18n/DefaultTenantScopeFormatterTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/i18n/I18NEntryIdTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/i18n/I18NKeyParserTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/i18n/I18NTemplateUnitTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Tests/i18n/SimpleTemplateRendererTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/tenant/AssetDataTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/tenant/ProgramTenantContextTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/tenant/SystemTenantResourcesTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/tenant/TenantIdTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -215,9 +144,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "eb196f9c-c67f-4c3b-8e10-235feaf47c44.executor": "Debug",
-    "git-widget-placeholder": "feat/licensing",
+    "XThreadsFramesViewSplitterKey": "0.49963424",
+    "git-widget-placeholder": "feat/tenant",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -287,412 +215,81 @@
       <workItem from="1760510765740" duration="3770000" />
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
-      <workItem from="1761023741681" duration="2736000" />
-      <workItem from="1761031026654" duration="3052000" />
-      <workItem from="1761546831127" duration="17855000" />
-      <workItem from="1762855073821" duration="3410000" />
-      <workItem from="1762943430059" duration="504000" />
-      <workItem from="1762944236956" duration="9121000" />
-      <workItem from="1763026149661" duration="1328000" />
-      <workItem from="1763630160122" duration="3492000" />
-      <workItem from="1763641488305" duration="18000" />
-      <workItem from="1764065346695" duration="312000" />
-      <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="5356000" />
+      <workItem from="1760596106841" duration="11458000" />
     </task>
-    <task id="LOCAL-00024" summary="fix(io): subFolder – führende/trailing/doppelte Separatoren explizit verbieten">
+    <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
-      <created>1761031695472</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
+      <created>1756720677127</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1761031695472</updated>
+      <updated>1756720677127</updated>
     </task>
-    <task id="LOCAL-00025" summary="fix(io): key – führende/trailing/doppelte Separatoren explizit verbieten (analog subFolder)">
+    <task id="LOCAL-00002" summary="Update IntelliJ IDEA project workspace settings and metadata files for Skynet development configuration.">
       <option name="closed" value="true" />
-      <created>1761031808866</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
+      <created>1760439456923</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1761031808866</updated>
+      <updated>1760439456923</updated>
     </task>
-    <task id="LOCAL-00026" summary="test(io): Sonderfälle für key/subFolder („.“, „..“, nur Separator) und Very-long-Path-Tests">
+    <task id="LOCAL-00003" summary="Add `Skynet.LicenseRequest` project for client metadata generation and runtime information CLI tool.">
       <option name="closed" value="true" />
-      <created>1761031917219</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
+      <created>1760446104353</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1761031917219</updated>
+      <updated>1760446104353</updated>
     </task>
-    <task id="LOCAL-00027" summary="test(io): TDD – Tests für IoUtilities.WriteAtomicAsync (Happy Path, atomarer Replace, Parameter-Validierung)">
+    <task id="LOCAL-00004" summary="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements.">
       <option name="closed" value="true" />
-      <created>1761032028957</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
+      <created>1760447039242</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1761032028957</updated>
+      <updated>1760447039242</updated>
     </task>
-    <task id="LOCAL-00028" summary="fix(io): WriteAtomicAsync – Race bei parallelem Move beheben, immer Replace nutzen (Zielstub)">
+    <task id="LOCAL-00005" summary="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256.">
       <option name="closed" value="true" />
-      <created>1761032295068</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
+      <created>1760447833301</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1761032295068</updated>
+      <updated>1760447833301</updated>
     </task>
-    <task id="LOCAL-00029" summary="test(io): WriteAtomicAsync – ungültiger key/subFolder führen zu InvalidOperationException">
+    <task id="LOCAL-00006" summary="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning.">
       <option name="closed" value="true" />
-      <created>1761032366857</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
+      <created>1760519412178</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1761032366857</updated>
+      <updated>1760519412178</updated>
     </task>
-    <task id="LOCAL-00030" summary="test(io): WriteAtomicAsync – leerer Inhalt (ETag), schreibgeschütztes Ziel, sehr lange Pfade">
+    <task id="LOCAL-00007" summary="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers.">
       <option name="closed" value="true" />
-      <created>1761032646849</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
+      <created>1760525146443</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1761032646849</updated>
+      <updated>1760525146443</updated>
     </task>
-    <task id="LOCAL-00031" summary="test(io): TDD-Tests für ExistsSafe; feat(io): ExistsSafe implementiert">
+    <task id="LOCAL-00008" summary="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management.">
       <option name="closed" value="true" />
-      <created>1761032894337</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
+      <created>1760526692510</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1761032894337</updated>
+      <updated>1760526692510</updated>
     </task>
-    <task id="LOCAL-00032" summary="test(io): TDD-Tests für DeleteSafeAsync; feat(io): DeleteSafeAsync implementiert">
+    <task id="LOCAL-00009" summary="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings.">
       <option name="closed" value="true" />
-      <created>1761033148687</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
+      <created>1760528825499</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1761033148687</updated>
+      <updated>1760528825499</updated>
     </task>
-    <task id="LOCAL-00033" summary="test(io): TDD-Tests für DirectoryExistsSafe und DirectoryDeleteSafeAsync; feat(io): Implementierung von DirectoryExistsSafe/DirectoryDeleteSafeAsync">
-      <option name="closed" value="true" />
-      <created>1761033428939</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1761033428939</updated>
-    </task>
-    <task id="LOCAL-00034" summary="test(io): TDD-Tests für CopySafeAsync und MoveSafeAsync; feat(io): Implementierung CopySafeAsync/MoveSafeAsync">
-      <option name="closed" value="true" />
-      <created>1761033700046</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1761033700046</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Logging: Add SimpleBackpressurePolicy with tests (TDD base for client backpressure)">
-      <option name="closed" value="true" />
-      <created>1761035991562</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1761035991562</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Logging: Extend ILogEvent for .NET interop (LogLevel, EventId, Exception, Activity IDs, category, KV properties)">
-      <option name="closed" value="true" />
-      <created>1761036394230</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1761036394230</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Logging: Simplify ILogEvent for .NET interop">
-      <option name="closed" value="true" />
-      <created>1761037051185</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1761037051185</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Logging: Refactor ScopedStopwatchFactory and ILogEvent; add DefaultEnricher with unit tests">
-      <option name="closed" value="true" />
-      <created>1761038096640</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1761038096640</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Logging: Refactor DefaultEnricher to support mutable/immutable events, update tests accordingly">
-      <option name="closed" value="true" />
-      <created>1761039461798</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1761039461798</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Logging: Introduce RedactionPolicy with flexible masking options and comprehensive unit tests">
-      <option name="closed" value="true" />
-      <created>1761040439205</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1761040439205</updated>
-    </task>
-    <task id="LOCAL-00041" summary="Logging: Add SizeLimiter with configurable size constraints and comprehensive unit tests">
-      <option name="closed" value="true" />
-      <created>1761040591353</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1761040591353</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Logging: Add SimpleLineLogTextFormatter (compact, schema-less) with tests">
-      <option name="closed" value="true" />
-      <created>1761040890410</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1761040890410</updated>
-    </task>
-    <task id="LOCAL-00043" summary="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests">
-      <option name="closed" value="true" />
-      <created>1761041001536</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1761041001536</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter">
-      <option name="closed" value="true" />
-      <created>1761041138662</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1761041138662</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests">
-      <option name="closed" value="true" />
-      <created>1761041456218</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1761041456218</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Logging: Add FileLogSink with support for file-based streaming, rotation, and retention policies, including integration tests">
-      <option name="closed" value="true" />
-      <created>1761043930576</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1761043930576</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests">
-      <option name="closed" value="true" />
-      <created>1761044158477</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1761044158477</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests">
-      <option name="closed" value="true" />
-      <created>1761044288262</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1761044288262</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Logging: Add DayRotationPolicy with daily rotation logic, integration with FileLogSink, and unit tests">
-      <option name="closed" value="true" />
-      <created>1761045593380</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1761045593380</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests">
-      <option name="closed" value="true" />
-      <created>1761046635502</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1761046635502</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Added Logging server">
-      <option name="closed" value="true" />
-      <created>1761132603779</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1761132603779</updated>
-    </task>
-    <task id="LOCAL-00052" summary="Remove unused IntelliJ IDEA workspace files from the repository">
-      <option name="closed" value="true" />
-      <created>1761548914316</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1761548914317</updated>
-    </task>
-    <task id="LOCAL-00053" summary="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability.">
-      <option name="closed" value="true" />
-      <created>1761552797086</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1761552797086</updated>
-    </task>
-    <task id="LOCAL-00054" summary="Added TrasnportFactory">
-      <option name="closed" value="true" />
-      <created>1761556539766</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1761556539766</updated>
-    </task>
-    <task id="LOCAL-00055" summary="Logging Client">
-      <option name="closed" value="true" />
-      <created>1761560478395</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1761560478395</updated>
-    </task>
-    <task id="LOCAL-00056" summary="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ workspace and ancillary file updates for improved project configuration.">
-      <option name="closed" value="true" />
-      <created>1762952828484</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1762952828485</updated>
-    </task>
-    <task id="LOCAL-00057" summary="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management.">
-      <option name="closed" value="true" />
-      <created>1762953344210</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1762953344210</updated>
-    </task>
-    <task id="LOCAL-00058" summary="feat(crypto): Add `AesGcmAeadCryptographyTests` for AES-GCM encryption and decryption&#10;&#10;- Introduced comprehensive unit tests for `AesGcmAead`, covering encryption, decryption, AAD support, key/nonce/tag validation, async operations, and edge cases.&#10;- Updated `Skynet.Tests.csproj` to include new test folder for `Crypto`.&#10;- Minor IntelliJ workspace adjustments for test management and project consistency.">
-      <option name="closed" value="true" />
-      <created>1763636459408</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1763636459408</updated>
-    </task>
-    <task id="LOCAL-00059" summary="feat(crypto): Add `DefaultKeyPairGeneratorTests` for ECDH and ECDSA key generation&#10;&#10;- Implemented unit tests for `DefaultKeyPairGenerator` covering ECDH and ECDSA key generation, validity, determinism, and interoperability.&#10;- Validated algorithm support, error handling, and edge cases like empty seeds.">
-      <option name="closed" value="true" />
-      <created>1763636650134</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1763636650134</updated>
-    </task>
-    <task id="LOCAL-00060" summary="feat(crypto): Add `EcdhKeyAgreementTests` for ECDH key agreement validation&#10;&#10;- Implemented unit tests for `EcdhKeyAgreement`, covering shared secret derivation, symmetry, invalid key handling, and edge cases.&#10;- Verified error handling for unsupported algorithms, null/empty keys, and invalid key formats.&#10;- Ensured robust testing against misuse of improper key types and format inconsistencies.">
-      <option name="closed" value="true" />
-      <created>1763636757457</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1763636757457</updated>
-    </task>
-    <task id="LOCAL-00061" summary="feat(crypto): Add `HkdfKeyDerivationTests` for HKDF-based key derivation&#10;&#10;- Added unit tests for HKDF SHA-256 and SHA-512, covering deterministic key generation, salt/context variations, long key expansion, and edge cases.&#10;- Included validation for null/empty inputs and out-of-range lengths.&#10;- Verified compliance with RFC 5869 test vectors.">
-      <option name="closed" value="true" />
-      <created>1763640716972</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1763640716972</updated>
-    </task>
-    <task id="LOCAL-00062" summary="SecretProtectorTests.cs">
-      <option name="closed" value="true" />
-      <created>1763641453963</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1763641453963</updated>
-    </task>
-    <task id="LOCAL-00063" summary="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency.">
-      <option name="closed" value="true" />
-      <created>1763647392989</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1763647392989</updated>
-    </task>
-    <task id="LOCAL-00064" summary="EnvironmentResourceReaderTests.cs">
-      <option name="closed" value="true" />
-      <created>1764148418459</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1764148418459</updated>
-    </task>
-    <task id="LOCAL-00065" summary="FileSystemResourceReader">
-      <option name="closed" value="true" />
-      <created>1764148926942</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1764148926942</updated>
-    </task>
-    <task id="LOCAL-00066" summary="FileSystemResourceWriter">
-      <option name="closed" value="true" />
-      <created>1764149096236</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1764149096236</updated>
-    </task>
-    <task id="LOCAL-00067" summary="Materializer">
-      <option name="closed" value="true" />
-      <created>1764149566617</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1764149566617</updated>
-    </task>
-    <task id="LOCAL-00068" summary="Resourcen">
-      <option name="closed" value="true" />
-      <created>1764149987006</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1764149987006</updated>
-    </task>
-    <task id="LOCAL-00069" summary="Deserializer">
-      <option name="closed" value="true" />
-      <created>1764150192004</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1764150192004</updated>
-    </task>
-    <task id="LOCAL-00070" summary="Serializer">
-      <option name="closed" value="true" />
-      <created>1764150305191</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1764150305191</updated>
-    </task>
-    <task id="LOCAL-00071" summary="Converter">
-      <option name="closed" value="true" />
-      <created>1764150517700</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1764150517700</updated>
-    </task>
-    <task id="LOCAL-00072" summary="Localizatio">
-      <option name="closed" value="true" />
-      <created>1764155295761</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1764155295761</updated>
-    </task>
-    <option name="localTasksCounter" value="73" />
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -702,32 +299,16 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Add DayRotationPolicy with daily rotation logic, integration with FileLogSink, and unit tests" />
-    <MESSAGE value="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests" />
-    <MESSAGE value="Added Logging server" />
-    <MESSAGE value="Remove unused IntelliJ IDEA workspace files from the repository" />
-    <MESSAGE value="fix(logging): ensure NdjsonLogEventEncoder returns owned memory and add safety tests&#10;&#10;- Encode now copies data before disposing pooled buffer writer.&#10;- TryDecode avoids redundant payload copy.&#10;- Added regression test verifying buffer ownership and data stability." />
-    <MESSAGE value="Added TrasnportFactory" />
-    <MESSAGE value="Logging Client" />
-    <MESSAGE value="feat(logging): Introduce `LogCallAttribute` and `CallLoggingProxy` for enhanced method call logging&#10;&#10;- Added `LogCallAttribute` for fine-grained logging configurations on methods or classes.&#10;- Implemented `CallLoggingProxy` to dynamically log method calls with parameter/return value inspection and error handling.&#10;- Updated `IoUtilitiesTests` to ensure consistency in parallel write scenarios.&#10;- Miscellaneous IntelliJ" />
-    <MESSAGE value="fix(logging): Correct `InMemoryEventTransport` shutdown logic to prevent buffer race conditions&#10;&#10;- Removed destructive buffer clearing loop in `CloseAsync`, resolving a deadlock issue when no server is active.&#10;- Adjusted `LoggingServerTests` to call `CloseAsync` for robust transport shutdown.&#10;- Updated related IntelliJ workspace configuration for task management." />
-    <MESSAGE value="feat(crypto): Add `AesGcmAeadCryptographyTests` for AES-GCM encryption and decryption&#10;&#10;- Introduced comprehensive unit tests for `AesGcmAead`, covering encryption, decryption, AAD support, key/nonce/tag validation, async operations, and edge cases.&#10;- Updated `Skynet.Tests.csproj` to include new test folder for `Crypto`.&#10;- Minor IntelliJ workspace adjustments for test management and project consistency." />
-    <MESSAGE value="feat(crypto): Add `DefaultKeyPairGeneratorTests` for ECDH and ECDSA key generation&#10;&#10;- Implemented unit tests for `DefaultKeyPairGenerator` covering ECDH and ECDSA key generation, validity, determinism, and interoperability.&#10;- Validated algorithm support, error handling, and edge cases like empty seeds." />
-    <MESSAGE value="feat(crypto): Add `EcdhKeyAgreementTests` for ECDH key agreement validation&#10;&#10;- Implemented unit tests for `EcdhKeyAgreement`, covering shared secret derivation, symmetry, invalid key handling, and edge cases.&#10;- Verified error handling for unsupported algorithms, null/empty keys, and invalid key formats.&#10;- Ensured robust testing against misuse of improper key types and format inconsistencies." />
-    <MESSAGE value="feat(crypto): Add `HkdfKeyDerivationTests` for HKDF-based key derivation&#10;&#10;- Added unit tests for HKDF SHA-256 and SHA-512, covering deterministic key generation, salt/context variations, long key expansion, and edge cases.&#10;- Included validation for null/empty inputs and out-of-range lengths.&#10;- Verified compliance with RFC 5869 test vectors." />
-    <MESSAGE value="SecretProtector.cs" />
-    <MESSAGE value="SecretProtectorTests.cs" />
-    <MESSAGE value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
-    <MESSAGE value="EnvironmentResourceReaderTests.cs" />
-    <MESSAGE value="FileSystemResourceReader" />
-    <MESSAGE value="FileSystemResourceWriter" />
-    <MESSAGE value="Materializer" />
-    <MESSAGE value="Resourcen" />
-    <MESSAGE value="Deserializer" />
-    <MESSAGE value="Serializer" />
-    <MESSAGE value="Converter" />
-    <MESSAGE value="Localizatio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Localizatio" />
+    <MESSAGE value="Add Projekts" />
+    <MESSAGE value="Update IntelliJ IDEA project workspace settings and metadata files for Skynet development configuration." />
+    <MESSAGE value="Add `Skynet.LicenseRequest` project for client metadata generation and runtime information CLI tool." />
+    <MESSAGE value="Refactor: Replace X25519 with P-256 across cryptographic components for ECDH key agreement, key generation, and CLI tool enhancements." />
+    <MESSAGE value="Add support for `request` command in CLI to generate license request files and enhance ECDH keypair generation with P-256." />
+    <MESSAGE value="Add product-specific options and metadata validation to `request` command in CLI, extend support for AppId and versioning." />
+    <MESSAGE value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
+    <MESSAGE value="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management." />
+    <MESSAGE value="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

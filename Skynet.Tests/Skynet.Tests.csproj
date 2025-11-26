@@ -29,6 +29,7 @@
       <Folder Include="Licensing\" />
       <Folder Include="Logging\AttribiteLogging\" />
       <Folder Include="ResourceProvider\" />
+      <Folder Include="tenant\" />
       <Folder Include="Time\" />
     </ItemGroup>
 
