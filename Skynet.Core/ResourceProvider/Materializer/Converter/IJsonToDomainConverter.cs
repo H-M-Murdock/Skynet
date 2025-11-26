@@ -1,6 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IJsonToDomainConverter.cs
 namespace Skynet.Core.ResourceProvider;
 
-// JSON -> Domänentyp TDomain
+/// <summary>
+/// Wandelt ein JSON-DOM in ein typisiertes Domänenobjekt TDomain.
+/// </summary>
 public interface IJsonToDomainConverter<TDomain> : IResourceConverter<IJsonResource, TDomain> { }

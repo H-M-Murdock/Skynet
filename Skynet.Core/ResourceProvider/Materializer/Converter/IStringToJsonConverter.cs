@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IStringToJsonConverter.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// IStringResource -> IJsonResource
+/// <summary>
+/// Wandelt IStringResource (Text) in ein IJsonResource (DOM).
+/// </summary>
 public interface IStringToJsonConverter : IResourceConverter<IStringResource, IJsonResource> { }

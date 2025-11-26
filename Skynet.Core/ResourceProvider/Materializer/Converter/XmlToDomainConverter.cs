@@ -1,6 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IXmlToDomainConverter.cs
 namespace Skynet.Core.ResourceProvider;
 
-// XML -> Domänentyp TDomain
+/// <summary>
+/// Wandelt ein XML-DOM in ein typisiertes Domänenobjekt TDomain.
+/// </summary>
 public interface IXmlToDomainConverter<TDomain> : IResourceConverter<IXmlResource, TDomain> { }

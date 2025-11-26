@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IStringToIniConverter.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// IStringResource -> IIniResource
+/// <summary>
+/// Wandelt IStringResource (Text) in ein IIniResource (Sections/Keys).
+/// </summary>
 public interface IStringToIniConverter : IResourceConverter<IStringResource, IIniResource> { }

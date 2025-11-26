@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IStringToXmlConverter.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// IStringResource -> IXmlResource
+/// <summary>
+/// Wandelt IStringResource (Text) in ein IXmlResource (XDocument).
+/// </summary>
 public interface IStringToXmlConverter : IResourceConverter<IStringResource, IXmlResource> { }

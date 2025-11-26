@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IStringToBinaryConverter.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// IStringResource (UTF-8) -> IInMemoryBinaryResource
+/// <summary>
+/// Wandelt IStringResource zurück in IInMemoryBinaryResource (UTF-8 Bytes).
+/// </summary>
 public interface IStringToBinaryConverter : IResourceConverter<IStringResource, IInMemoryBinaryResource> { }

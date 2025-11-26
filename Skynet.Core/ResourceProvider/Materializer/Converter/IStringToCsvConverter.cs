@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IStringToCsvConverter.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// IStringResource -> ICsvResource
+/// <summary>
+/// Wandelt IStringResource (Text) in ein ICsvResource (Zeilen/Spalten).
+/// </summary>
 public interface IStringToCsvConverter : IResourceConverter<IStringResource, ICsvResource> { }

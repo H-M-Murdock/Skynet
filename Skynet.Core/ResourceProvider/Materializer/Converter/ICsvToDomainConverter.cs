@@ -1,6 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/ICsvToDomainConverter.cs
 namespace Skynet.Core.ResourceProvider;
 
-// CSV -> Domänentyp TDomain
+/// <summary>
+/// Wandelt CSV-Daten in eine Liste oder ein komplexes Objekt TDomain.
+/// </summary>
 public interface ICsvToDomainConverter<TDomain> : IResourceConverter<ICsvResource, TDomain> { }

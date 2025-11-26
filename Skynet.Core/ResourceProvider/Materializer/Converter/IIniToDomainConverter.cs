@@ -1,6 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Converters/IIniToDomainConverter.cs
 namespace Skynet.Core.ResourceProvider;
 
-// INI/.env -> Domänentyp TDomain
+/// <summary>
+/// Wandelt INI/Env-Daten in ein Konfigurationsobjekt TDomain.
+/// </summary>
 public interface IIniToDomainConverter<TDomain> : IResourceConverter<IIniResource, TDomain> { }
