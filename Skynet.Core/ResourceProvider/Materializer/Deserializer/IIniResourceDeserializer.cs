@@ -1,7 +1,7 @@
-// C#
-// Skynet.Core.Materialization/Deserializers/IIniResourceDeserializer.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// Deserializer für IIniResource (z. B. "text/plain; charset=utf-8")
+/// <summary>
+/// Spezialisierter Deserializer für INI-Dateien oder .env-Dateien.
+/// Erwartet typischerweise "text/plain" oder spezifische INI-Mime-Types.
+/// </summary>
 public interface IIniResourceDeserializer : IResourceDeserializer<IIniResource> { }

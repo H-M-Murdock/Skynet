@@ -1,7 +1,7 @@
-// C#
-// Skynet.Core.Materialization/Deserializers/IXmlResourceDeserializer.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// Deserializer für IXmlResource (z. B. "application/xml" / "text/xml")
+/// <summary>
+/// Spezialisierter Deserializer für XML-Daten. Erzeugt ein IXmlResource DOM (XDocument).
+/// Erwartet "application/xml" oder "text/xml".
+/// </summary>
 public interface IXmlResourceDeserializer : IResourceDeserializer<IXmlResource> { }

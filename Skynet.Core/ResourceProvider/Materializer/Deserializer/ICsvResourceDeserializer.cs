@@ -3,5 +3,8 @@
 
 namespace Skynet.Core.ResourceProvider;
 
-// Deserializer für ICsvResource (z. B. "text/csv; charset=utf-8")
+/// <summary>
+/// Spezialisierter Deserializer, der Rohdaten in eine strukturierte ICsvResource wandelt.
+/// Erwartet typischerweise "text/csv".
+/// </summary>
 public interface ICsvResourceDeserializer : IResourceDeserializer<ICsvResource> { }

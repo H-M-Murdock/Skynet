@@ -1,7 +1,7 @@
-// C#
-// Skynet.Core.Materialization/Deserializers/IJsonResourceDeserializer.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// Deserializer für IJsonResource (z. B. "application/json")
+/// <summary>
+/// Spezialisierter Deserializer für JSON-Daten. Erzeugt ein IJsonResource DOM.
+/// Erwartet "application/json".
+/// </summary>
 public interface IJsonResourceDeserializer : IResourceDeserializer<IJsonResource> { }

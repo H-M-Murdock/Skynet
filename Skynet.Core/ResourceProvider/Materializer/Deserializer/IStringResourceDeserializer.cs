@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Deserializers/IStringResourceDeserializer.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// Deserializer für IStringResource (UTF-8, z. B. "text/plain; charset=utf-8")
+/// <summary>
+/// Fallback-Deserializer, der beliebige Textdaten in eine IStringResource wandelt.
+/// </summary>
 public interface IStringResourceDeserializer : IResourceDeserializer<IStringResource> { }
