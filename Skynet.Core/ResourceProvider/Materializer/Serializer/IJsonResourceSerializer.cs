@@ -1,9 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Serializers/IJsonResourceSerializer.cs
-using Skynet.Core.Tenant;
-using Skynet.Core.ResourceProvider;
+namespace Skynet.Core.ResourceProvider;
 
-namespace Skynet.Core.Materialization;
-
-// Serializer für IJsonResource (UTF-8, z. B. "application/json")
+/// <summary>
+/// Serializer für IJsonResource (schreibt JSON, UTF-8, typischerweise "application/json").
+/// </summary>
 public interface IJsonResourceSerializer : IResourceSerializer<IJsonResource> { }

@@ -11,10 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/ICsvResourceDeserializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/ICsvResourceDeserializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IIniResourceDeserializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IIniResourceDeserializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IJsonResourceDeserializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IJsonResourceDeserializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IStringResourceDeserializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IStringResourceDeserializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/ICsvResourceSerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/ICsvResourceSerializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IIniResourceSerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IIniResourceSerializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IJsonResourceSerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IJsonResourceSerializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IXmlResourceSerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Serializer/IXmlResourceSerializer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -273,15 +273,7 @@
       <workItem from="1763641488305" duration="18000" />
       <workItem from="1764065346695" duration="312000" />
       <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="3664000" />
-    </task>
-    <task id="LOCAL-00020" summary="test(io): OpenReadWithHashAsync respektiert CancellationToken">
-      <option name="closed" value="true" />
-      <created>1761030678650</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1761030678650</updated>
+      <workItem from="1764146445444" duration="3811000" />
     </task>
     <task id="LOCAL-00021" summary="test(io): BuildSafeFullPath wirft ArgumentNullException bei Null/Whitespace-Parametern">
       <option name="closed" value="true" />
@@ -667,7 +659,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764149987006</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Deserializer">
+      <option name="closed" value="true" />
+      <created>1764150192004</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1764150192004</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -677,7 +677,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests" />
     <MESSAGE value="Logging: Add FileLogSink with support for file-based streaming, rotation, and retention policies, including integration tests" />
     <MESSAGE value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
     <MESSAGE value="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests" />
@@ -702,7 +701,8 @@
     <MESSAGE value="FileSystemResourceWriter" />
     <MESSAGE value="Materializer" />
     <MESSAGE value="Resourcen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Resourcen" />
+    <MESSAGE value="Deserializer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deserializer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

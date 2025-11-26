@@ -1,9 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Serializers/IXmlResourceSerializer.cs
-using Skynet.Core.Tenant;
-using Skynet.Core.ResourceProvider;
+namespace Skynet.Core.ResourceProvider;
 
-namespace Skynet.Core.Materialization;
-
-// Serializer für IXmlResource (UTF-8, z. B. "application/xml")
+/// <summary>
+/// Serializer für IXmlResource (schreibt XML, UTF-8, typischerweise "application/xml").
+/// </summary>
 public interface IXmlResourceSerializer : IResourceSerializer<IXmlResource> { }

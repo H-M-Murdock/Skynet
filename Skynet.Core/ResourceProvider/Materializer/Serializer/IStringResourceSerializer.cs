@@ -1,7 +1,6 @@
-// C#
-// Skynet.Core.Materialization/Serializers/IStringResourceSerializer.cs
-
 namespace Skynet.Core.ResourceProvider;
 
-// Serializer für IStringResource (UTF-8)
+/// <summary>
+/// Basis-Serializer für reine Text-Ressourcen (UTF-8).
+/// </summary>
 public interface IStringResourceSerializer : IResourceSerializer<IStringResource> { }
