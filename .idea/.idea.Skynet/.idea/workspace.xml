@@ -10,17 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IBinaryToStringConverter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/BinaryToStringConverter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/ICsvToDomainConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/ICsvToDomainConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IJsonToDomainConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IJsonToDomainConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToBinaryConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToBinaryConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToCsvConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToCsvConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToIniConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToIniConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToJsonConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToJsonConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToXmlConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/IStringToXmlConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/XmlToDomainConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/XmlToDomainConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/MemoryResourceReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/MemoryResourceReader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceListResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/ResourceListResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceLocator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/ResourceLocator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/ResourceResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Internal/ResourceResult.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -279,15 +273,7 @@
       <workItem from="1763641488305" duration="18000" />
       <workItem from="1764065346695" duration="312000" />
       <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="4018000" />
-    </task>
-    <task id="LOCAL-00022" summary="test(io): BuildSafeFullPath verhindert Pfad-Escape (.., absolute Segmente)">
-      <option name="closed" value="true" />
-      <created>1761030749984</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1761030749984</updated>
+      <workItem from="1764146445444" duration="5356000" />
     </task>
     <task id="LOCAL-00023" summary="feat(io): strikte subFolder-Validierung (Zeichen + Segmente wie bei key)">
       <option name="closed" value="true" />
@@ -673,7 +659,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764150305191</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="Converter">
+      <option name="closed" value="true" />
+      <created>1764150517700</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1764150517700</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -683,7 +677,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Add MemoryLogSink (in-memory, thread-safe, bounded capacity) with unit tests" />
     <MESSAGE value="Logging: Add SingleSinkRouter (minimal, single-sink log router) with unit tests" />
     <MESSAGE value="Logging: Add DayRotationPolicy with daily rotation logic, integration with FileLogSink, and unit tests" />
     <MESSAGE value="Logging: Add NdjsonLogEventEncoder for NDJSON formatting, including encoding/decoding logic and comprehensive tests" />
@@ -708,7 +701,8 @@
     <MESSAGE value="Resourcen" />
     <MESSAGE value="Deserializer" />
     <MESSAGE value="Serializer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Serializer" />
+    <MESSAGE value="Converter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Converter" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
