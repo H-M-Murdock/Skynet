@@ -9,7 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="" />
+    <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceDeserializerTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceSerializerTestsIntHandling.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/ResourceEnvelope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/ResourceEnvelope.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +49,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/53428d95742549e8968df3e76ebd1d7de8e928/_cc311/IAsyncDisposable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8bfc57955751d07e3fad13bb97d5f66af412d7a34486ec29ad916547ec8ce6b/Path.Windows.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/GlobalUsingsAndInternals.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
@@ -156,7 +162,10 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Logging/SizeLimiterTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/EnvironmentResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceReaderTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/FileSystemResourceWriterTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceDeserializerTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceLocatorTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Tests/ResourceProvider/ResourceSerializerTestsIntHandling.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -262,15 +271,7 @@
       <workItem from="1763641488305" duration="18000" />
       <workItem from="1764065346695" duration="312000" />
       <workItem from="1764146314244" duration="47000" />
-      <workItem from="1764146445444" duration="2574000" />
-    </task>
-    <task id="LOCAL-00017" summary="test(io): korrigiere xUnit Assert-Parameterreihenfolge (StartsWith/EndsWith)">
-      <option name="closed" value="true" />
-      <created>1761030301365</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1761030301365</updated>
+      <workItem from="1764146445444" duration="3078000" />
     </task>
     <task id="LOCAL-00018" summary="test(io): robuste ETag-Assertion (SHA-256 aus Datei) und korrekte xUnit-Assertions">
       <option name="closed" value="true" />
@@ -656,7 +657,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764148926942</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="FileSystemResourceWriter">
+      <option name="closed" value="true" />
+      <created>1764149096236</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1764149096236</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -666,7 +675,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Logging: Add SimpleLineLogTextFormatter (compact, schema-less) with tests" />
     <MESSAGE value="Logging: SimpleLineLogTextFormatter emit 'Z' for UTC timestamps to satisfy tests" />
     <MESSAGE value="Logging: Ensure exceptions are rendered as single-line strings, add comprehensive tests for SimpleLineLogTextFormatter" />
     <MESSAGE value="Logging: Add DefaultPathTemplateRenderer with support for customizable templates and comprehensive unit tests" />
@@ -691,7 +699,8 @@
     <MESSAGE value="feat(resource): Add `ResourceLocatorTests` and extend resource provider capabilities&#10;&#10;- Introduced unit tests for `ResourceLocator`, covering provider priority, tenant chain traversal, key deduplication, and writer selection.&#10;- Enhanced `ResourceKind` with additional types and default MIME-Type logic.&#10;- Refined `MemoryResourceReader` with improved paging, sorting, and duplication handling for key listing.&#10;- Added new capabilities and safety features to `ProviderId`, making it sortable and easier to parse.&#10;- Broadened `IResourceResult` to include content disposal responsibility and enriched metadata.&#10;- Minor adjustments in IntelliJ workspace for test organization and consistency." />
     <MESSAGE value="EnvironmentResourceReaderTests.cs" />
     <MESSAGE value="FileSystemResourceReader" />
-    <option name="LAST_COMMIT_MESSAGE" value="FileSystemResourceReader" />
+    <MESSAGE value="FileSystemResourceWriter" />
+    <option name="LAST_COMMIT_MESSAGE" value="FileSystemResourceWriter" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
