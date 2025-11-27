@@ -10,42 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapExitCode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapResult.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetApp.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetDefaultPipeline.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/InitFilesystemStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/InitTimeServicesStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterCryptoServicesStep.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/App.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/AppCancellation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BarrierBootStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IStepReport.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapConfigStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapCryptoServicesStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLogger.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerOptions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLifecycleHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapPhaseOverview.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapTempDirectoryHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapVersionInfoStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterLocalAesProtectorStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/SystemTenantContext.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTenantScopeFormatter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Runner/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Runner/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Time/BootstrapClockStepDiTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/i18n/DefaultTenantScopeFormatterTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetDefaultPipeline.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,8 +55,11 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetBootstrapRunner.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetDefaultPipeline.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetApp.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/InitFilesystemStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/InitTimeServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterCryptoServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
@@ -270,7 +242,7 @@
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1760596106841" duration="11458000" />
-      <workItem from="1764227928161" duration="6870000" />
+      <workItem from="1764227928161" duration="9019000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -344,7 +316,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760528825499</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Remove Skynet.Core bootstrap implementations and related tests&#10;&#10;- Deleted the entire Skynet.Core bootstrap directory, including classes like `App`, `BarrierBootStep`, `BootstrapClockStep`, `BootstrapConfigStep`, and others.&#10;- Removed associated logging, lifecycle, configuration, and cryptographic service registration steps.&#10;- Deleted all bootstrap-related test cases, including `BootstrapClockStepDiTests`.&#10;- Updated Skynet.Core to remove dependencies on bootstrap-related components.">
+      <option name="closed" value="true" />
+      <created>1764235339454</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1764235339454</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -363,7 +343,8 @@
     <MESSAGE value="Add `FileSystemResourceWriter` for resource management and enhance provider ID handling in readers and writers." />
     <MESSAGE value="Add `TenantContextAccessor` implementation, register tenant services, and introduce `IConfigProvider` for tenant-aware configuration management." />
     <MESSAGE value="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `IResourceMaterializer` and `DefaultResourceMaterializer` for tenant-aware, format-agnostic resource management. Update IntelliJ workspace settings." />
+    <MESSAGE value="Remove Skynet.Core bootstrap implementations and related tests&#10;&#10;- Deleted the entire Skynet.Core bootstrap directory, including classes like `App`, `BarrierBootStep`, `BootstrapClockStep`, `BootstrapConfigStep`, and others.&#10;- Removed associated logging, lifecycle, configuration, and cryptographic service registration steps.&#10;- Deleted all bootstrap-related test cases, including `BootstrapClockStepDiTests`.&#10;- Updated Skynet.Core to remove dependencies on bootstrap-related components." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove Skynet.Core bootstrap implementations and related tests&#10;&#10;- Deleted the entire Skynet.Core bootstrap directory, including classes like `App`, `BarrierBootStep`, `BootstrapClockStep`, `BootstrapConfigStep`, and others.&#10;- Removed associated logging, lifecycle, configuration, and cryptographic service registration steps.&#10;- Deleted all bootstrap-related test cases, including `BootstrapClockStepDiTests`.&#10;- Updated Skynet.Core to remove dependencies on bootstrap-related components." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
