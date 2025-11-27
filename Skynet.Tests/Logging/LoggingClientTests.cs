@@ -88,10 +88,14 @@ public sealed class LoggingClientTests
         var transportFactory   = new InMemoryEventTransportFactory(listener, defaultCapacity: 16);
         var backpressurePolicy = new SimpleBackpressurePolicy(); // nutzt DropNewest/DropOldest heuristisch
 
+        // FIX: Neue optionale Parameter mit null/default übergeben
         var client = new LoggingClient(
             transportFactory,
             encoder,
             backpressurePolicy,
+            enrichers: null,
+            redactionPolicy: null,
+            sizeLimiter: null,
             new LoggingClientOptions
             {
                 QueueCapacity = 64,
@@ -128,8 +132,10 @@ public sealed class LoggingClientTests
         // Policy: ab 50% volle Queue reagieren, ab 80% aggressiver.
         var policy  = new SimpleBackpressurePolicy(lowerThreshold: 0.5, upperThreshold: 0.8);
 
+        // FIX: Neue optionale Parameter
         var client = new LoggingClient(
             tf, encoder, policy,
+            enrichers: null, redactionPolicy: null, sizeLimiter: null,
             new LoggingClientOptions
             {
                 QueueCapacity = 2,   // sehr klein, damit sofort greift
@@ -150,9 +156,6 @@ public sealed class LoggingClientTests
         await client.StartAsync(CancellationToken.None);
         await client.StopAsync(drain: false, CancellationToken.None);
     }
-
-
-
 
     [Fact]
     public async Task Flush_Empties_Client_Queue_And_Transport()
@@ -177,8 +180,10 @@ public sealed class LoggingClientTests
         var tf     = new InMemoryEventTransportFactory(listener, defaultCapacity: 4);
         var policy = new SimpleBackpressurePolicy();
 
+        // FIX: Neue optionale Parameter
         var client = new LoggingClient(
             tf, encoder, policy,
+            enrichers: null, redactionPolicy: null, sizeLimiter: null,
             new LoggingClientOptions
             {
                 QueueCapacity = 8,
@@ -217,7 +222,9 @@ public sealed class LoggingClientTests
         var tf       = new InMemoryEventTransportFactory(listener, defaultCapacity: 2);
         var policy   = new AlwaysDropOldestPolicy();
 
-        var client = new LoggingClient(tf, encoder, policy,
+        // FIX: Neue optionale Parameter
+        var client = new LoggingClient(tf, encoder, policy, 
+            enrichers: null, redactionPolicy: null, sizeLimiter: null,
             new LoggingClientOptions { QueueCapacity = 2 });
 
         // zwei passen rein:

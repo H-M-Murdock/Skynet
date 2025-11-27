@@ -1,14 +1,7 @@
-namespace Skynet.Core.Logging;
-
 using System.Threading.Channels;
 
-/// <summary>
-/// Verantwortlich für:
-/// - Pufferung und asynchrones Senden von LogEvents.
-/// - Nutzung von IBackpressurePolicy zur Entscheidung über Drop/Block-Verhalten.
-/// - Batch-Verarbeitung und periodisches Flush.
-/// - Integration in lokale InMemory-Transports.
-/// </summary>
+namespace Skynet.Core.Logging;
+
 public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
 {
     private readonly IEventTransportFactory _transportFactory;
@@ -16,10 +9,10 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
     private readonly IBackpressurePolicy _backpressurePolicy;
     private readonly LoggingClientOptions _options;
 
-    // Enricher und Redaction Policies könnten hier optional injiziert werden (fehlen im aktuellen Konstruktor noch)
-    // private readonly IEnumerable<IEnricher> _enrichers;
-    // private readonly IRedactionPolicy _redactionPolicy;
-    // private readonly ISizeLimiter _sizeLimiter;
+    // NEU: Eingefügte Abhängigkeiten
+    private readonly IEnumerable<IEnricher>? _enrichers;
+    private readonly IRedactionPolicy? _redactionPolicy;
+    private readonly ISizeLimiter? _sizeLimiter;
 
     private readonly Channel<ILogEvent> _queue;
     private readonly CancellationTokenSource _cts = new();
@@ -29,8 +22,7 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
 
     private long _droppedQueue;
     private long _droppedTransport;
-    
-    // NEU: Metriken als Properties implementieren
+
     public long DroppedCount => Interlocked.Read(ref _droppedQueue) + Interlocked.Read(ref _droppedTransport);
     public int QueueLength => _queue.Reader.Count;
     public int QueueCapacity => _options.QueueCapacity;
@@ -39,11 +31,20 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
         IEventTransportFactory transportFactory,
         ILogEventEncoder encoder,
         IBackpressurePolicy backpressurePolicy,
+        // Optionale Abhängigkeiten für die Log-Pipeline
+        IEnumerable<IEnricher>? enrichers = null,
+        IRedactionPolicy? redactionPolicy = null,
+        ISizeLimiter? sizeLimiter = null,
         LoggingClientOptions? options = null)
     {
         _transportFactory = transportFactory ?? throw new ArgumentNullException(nameof(transportFactory));
         _encoder = encoder ?? throw new ArgumentNullException(nameof(encoder));
         _backpressurePolicy = backpressurePolicy ?? new SimpleBackpressurePolicy();
+        
+        _enrichers = enrichers;
+        _redactionPolicy = redactionPolicy;
+        _sizeLimiter = sizeLimiter;
+        
         _options = options ?? new LoggingClientOptions();
 
         var boundedOptions = new BoundedChannelOptions(Math.Max(1, _options.QueueCapacity))
@@ -66,15 +67,34 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
         _senderTask = Task.Run(() => SenderLoopAsync(_cts.Token), CancellationToken.None);
     }
 
-    // Refaktorisiertes LogAsync (siehe vorherigen Schritt)
     public async ValueTask LogAsync(ILogEvent evt, CancellationToken ct)
     {
         if (evt == null) return;
 
-        // Hier würden normalerweise Enricher, Redaction und Limiter aufgerufen werden:
-        // foreach(var enr in _enrichers) enr.Enrich(evt);
-        // _redactionPolicy.Redact(evt);
-        // _sizeLimiter.Truncate(evt);
+        // --- NEU: Die Pre-Processing Pipeline ---
+        
+        // 1. Enrich (z.B. TraceId, AppVersion, UserId hinzufügen)
+        if (_enrichers != null)
+        {
+            foreach (var enr in _enrichers)
+            {
+                try { enr.Enrich(evt); } catch { /* Enricher sollten nicht crashen, ignorieren */ }
+            }
+        }
+
+        // 2. Redact (Passwörter, Tokens maskieren)
+        if (_redactionPolicy != null)
+        {
+            try { _redactionPolicy.Redact(evt); } catch { /* Best effort */ }
+        }
+
+        // 3. Truncate (Zu lange Strings abschneiden)
+        if (_sizeLimiter != null)
+        {
+            try { _sizeLimiter.Truncate(evt); } catch { /* Best effort */ }
+        }
+
+        // -----------------------------------------
 
         if (_queue.Writer.TryWrite(evt)) return;
         await HandleBackpressureAsync(evt, ct).ConfigureAwait(false);
@@ -123,32 +143,24 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
         }
     }
 
-    // NEU: Implementierung von StopAsync mit Drain-Option
     public async Task StopAsync(bool drain, CancellationToken ct)
     {
-        // 1. Queue schließen, damit keine neuen Events mehr angenommen werden.
-        // Das führt dazu, dass der SenderLoop "zu Ende" läuft, sobald die Queue leer ist.
         _queue.Writer.TryComplete();
 
         if (!drain)
         {
-            // Sofortiger Abbruch: Cancellation Token feuern
             _cts.Cancel();
         }
 
-        // 2. Auf den Sender-Loop warten
         if (_senderTask != null)
         {
             if (drain)
             {
-                // Warten, bis der Loop von alleine fertig ist (Queue leer)
-                // Optional: Ein Timeout für das Drain setzen, damit wir nicht ewig hängen
                 var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10), ct);
                 await Task.WhenAny(_senderTask, timeoutTask).ConfigureAwait(false);
             }
             else
             {
-                // Bei Sofort-Abbruch nur kurz warten, ob er sauber rauskommt
                 try 
                 { 
                     await _senderTask.WaitAsync(ct).ConfigureAwait(false); 
@@ -157,12 +169,10 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
             }
         }
 
-        // 3. Transport schließen
         if (_transport != null)
         {
             try { await _transport.CloseAsync(ct).ConfigureAwait(false); } catch { /* Best effort */ }
-            
-            // Bei Drain noch versuchen, den Transport zu flushen
+        
             if (drain)
             {
                 try { await _transport.FlushAsync(ct).ConfigureAwait(false); } catch { /* Best effort */ }
@@ -172,7 +182,6 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
 
     public async Task FlushAsync(CancellationToken ct)
     {
-        // Warten, bis die Queue leer ist (Polling mit Delay ist hier oft das einfachste Mittel)
         while (_queue.Reader.Count > 0)
         {
             ct.ThrowIfCancellationRequested();
@@ -187,8 +196,7 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
     {
         var transport = _transport ?? throw new InvalidOperationException("Client not started.");
         var batch = new List<ReadOnlyMemory<byte>>(_options.BatchSize);
-        var flushInterval = _options.FlushInterval;
-
+        
         // Wir nutzen WaitToReadAsync, das false zurückgibt, wenn Writer.Complete() gerufen wurde UND Queue leer ist.
         while (await _queue.Reader.WaitToReadAsync(ct).ConfigureAwait(false))
         {
@@ -208,24 +216,18 @@ public sealed class LoggingClient : ILoggingClient, IAsyncDisposable
                     }
                 }
                 batch.Clear();
-                
-                // Flush nach jedem Batch oder Intervall? Hier vereinfacht nach Batch.
-                // In Hochlast-Szenarien würde man das Entkoppeln (Timer für Flush).
+            
                 await transport.FlushAsync(ct).ConfigureAwait(false);
             }
             else
             {
-                // Wenn WaitToRead true war, aber TryRead false (Race), kurz warten
                  await Task.Delay(1, ct).ConfigureAwait(false);
             }
         }
-        
-        // Loop Ende (Queue completed & empty oder Cancelled)
     }
 
     public async ValueTask DisposeAsync()
     {
-        // Dispose macht standardmäßig keinen langen Drain, um Hänger beim GC zu vermeiden.
         await StopAsync(drain: false, CancellationToken.None).ConfigureAwait(false);
         _cts.Dispose();
     }
