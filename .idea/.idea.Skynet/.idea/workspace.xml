@@ -10,22 +10,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/AssetDataTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/ProgramTenantContextTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/SystemTenantResourcesTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Tests/tenant/TenantIdTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapExitCode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetApp.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetDefaultPipeline.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/AssetData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/AssetData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantContextAccessor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResolver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/ITenantResources.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/ProgramTenantContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/Internal/ProgramTenantContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/SystemTenantResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/Internal/SystemTenantResources.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantContextAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/Internal/TenantContextAccessor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Tenant/TenantId.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Tests/Skynet.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/App.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/AppCancellation.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BarrierBootStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/IStepReport.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/RuntimeLevelEnum.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapClockStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapConfigStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapCryptoServicesStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLogger.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerOptions.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapFileLoggerProvider.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLifecycleHandler.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingState.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapLoggingStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapPhaseOverview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapTempDirectoryHandler.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/BootstrapVersionInfoStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Bootstrap/RegisterSystemTenantResourcesStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/BootstrapPipelineInitializer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterAllResourceProvidersStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterLocalAesProtectorStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/RegisterSystemTenantContextStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Steps/Init/SystemTenantContext.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTenantScopeFormatter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Runner/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Runner/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/Time/BootstrapClockStepDiTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Tests/i18n/DefaultTenantScopeFormatterTests.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +57,7 @@
   </component>
   <component name="EmbeddingIndexingInfo">
     <option name="cachedIndexableFilesCount" value="10" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -59,9 +80,14 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/53428d95742549e8968df3e76ebd1d7de8e928/_cc311/IAsyncDisposable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8bfc57955751d07e3fad13bb97d5f66af412d7a34486ec29ad916547ec8ce6b/Path.Windows.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Bootstrapper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/IBootStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetBootstrapRunner.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/SkynetDefaultPipeline.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
@@ -89,7 +115,6 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IStringResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Deserializer/IXmlResourceDeserializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceConverter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://E:/Rider/Kns/Skynet/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceSerializer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Resources/IBinaryResource.cs" root0="FORCE_HIGHLIGHTING" />
@@ -140,12 +165,14 @@
   "keyToString": {
     ".NET Project.Skynet.LicenseGrant.executor": "Run",
     ".NET Project.Skynet.LicenseRequest.executor": "Run",
+    ".NET Project.Skynet.Runner.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "XThreadsFramesViewSplitterKey": "0.49963424",
-    "git-widget-placeholder": "feat/tenant",
+    "git-widget-placeholder": "feat/bootstrap",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -155,7 +182,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Project.Skynet.LicenseRequest">
+  <component name="RunManager" selected=".NET Project.Skynet.Runner">
     <configuration name="Skynet.LicenseGrant" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.LicenseGrant/bin/Debug/net9.0/Skynet.LicenseGrant.exe" />
       <option name="PROGRAM_PARAMETERS" value="c --req license-request.json" />
@@ -198,10 +225,37 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="Skynet.Runner" type="DotNetProject" factoryName=".NET Project" temporary="true">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/Skynet.Runner/bin/Debug/net9.0/Skynet.Runner.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Skynet.Runner/bin/Debug/net9.0" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/Skynet.Runner/Skynet.Runner.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="DotNetCore" />
+      <option name="PROJECT_TFM" value="net9.0" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue=".NET Project.Skynet.LicenseGrant" />
       <item itemvalue=".NET Project.Skynet.LicenseRequest" />
+      <item itemvalue=".NET Project.Skynet.Runner" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue=".NET Project.Skynet.Runner" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -216,6 +270,7 @@
       <workItem from="1760515750077" duration="5148000" />
       <workItem from="1760521726213" duration="388000" />
       <workItem from="1760596106841" duration="11458000" />
+      <workItem from="1764227928161" duration="6870000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />

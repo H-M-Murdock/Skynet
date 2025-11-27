@@ -1,139 +1,61 @@
-// Skynet.Boot/Bootstrapper.cs
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
 
 namespace Skynet.Core.Bootstrap;
 
 public sealed class Bootstrapper
 {
-    public RuntimeLevel CurrentLevel { get; private set; } = RuntimeLevel.Bootstrap;
+    private readonly List<IBootStep> _steps = new();
 
-    private bool _diLoggerReady = false;
-    private ILogger? _logger;
-    private bool _switchNoticePrinted = false;
-
-    private void Log(IServiceProvider? sp, LogLevel level, string message)
+    public Bootstrapper AddStep(IBootStep step)
     {
-        if (!_diLoggerReady && sp is not null)
-        {
-            try
-            {
-                var factory = sp.GetService<ILoggerFactory>();
-                if (factory is not null)
-                {
-                    _logger = factory.CreateLogger("Bootstrapper");
-                    _diLoggerReady = true;
-
-                    if (!_switchNoticePrinted)
-                    {
-                        // Umschalt-Hinweis nur in Development/Non-Prod
-                        var env = ResolveEnvironment(sp);
-                        if (!string.Equals(env, "Production", StringComparison.OrdinalIgnoreCase))
-                        {
-                            Console.WriteLine($"[{DateTime.UtcNow:O}] Switching to DI logging … (env={env})");
-                        }
-                        _switchNoticePrinted = true;
-                    }
-                }
-            }
-            catch
-            {
-                // stay on console
-            }
-        }
-
-        if (_diLoggerReady && _logger is not null)
-            _logger.Log(level, "{Message}", message);
-        else
-            Console.WriteLine($"[{DateTime.UtcNow:O}] {message}");
+        _steps.Add(step);
+        return this;
     }
 
-    private static string ResolveEnvironment(IServiceProvider sp)
+    public async Task<BootstrapResult> RunAsync()
     {
+        BootstrapContext? context = null;
         try
         {
-            var cfg = sp.GetService<IConfiguration>();
-            var env = cfg?["Environment:Name"]
-                      ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                      ?? "Development";
-            return env;
-        }
-        catch
-        {
-            return "Development";
-        }
-    }
+            context = new BootstrapContext();
+            context.Logger.LogInformation("=== Bootstrapper Started ===");
 
-    public async Task<IServiceProvider> RunAsync(
-        IEnumerable<IBootStep> steps,
-        CancellationToken ct = default)
-    {
-        ArgumentNullException.ThrowIfNull(steps);
-
-        var barriers = steps.OfType<BarrierBootStep>().ToList();
-        if (barriers.Count == 0)
-            throw new InvalidOperationException("Es wurden keine BarrierBootSteps übergeben.");
-
-        var dupGroup = barriers.GroupBy(b => b.TargetLevel).FirstOrDefault(g => g.Count() > 1);
-        if (dupGroup is not null)
-        {
-            var targets = string.Join(", ", dupGroup.Select(b => b.GetType().Name));
-            throw new InvalidOperationException($"Mehr als eine Barrier für TargetLevel={dupGroup.Key}: {targets}");
-        }
-
-        var ordered = barriers.OrderBy(b => b.TargetLevel).ToList();
-
-        ServiceProvider? lastProvider = null;
-        var services = new ServiceCollection();
-
-        foreach (var barrier in ordered)
-        {
-            ct.ThrowIfCancellationRequested();
-
-            if (barrier.MinLevel != CurrentLevel)
-                throw new InvalidOperationException(
-                    $"BarrierBootStep erwartet MinLevel={barrier.MinLevel}, aktueller Level ist {CurrentLevel}.");
-
-            if (barrier.TargetLevel <= CurrentLevel)
-                throw new InvalidOperationException(
-                    $"BarrierBootStep TargetLevel={barrier.TargetLevel} muss größer als CurrentLevel={CurrentLevel} sein.");
-
-            Log(lastProvider, LogLevel.Information, $"Starting barrier {barrier.GetType().Name} ({CurrentLevel} -> {barrier.TargetLevel})");
-
-            var innerSteps = barrier.GetInnerSteps();
-            foreach (var step in innerSteps)
+            foreach (var step in _steps)
             {
-                ct.ThrowIfCancellationRequested();
-                Log(lastProvider, LogLevel.Information, $" Starting step {step.GetType().Name}");
-                await step.ExecuteAsync(services, ct).ConfigureAwait(false);
-
-                if (step is IStepReport reporter)
+                using (context.Logger.BeginScope("Component: {ComponentName}", step.Name))
                 {
-                    var report = reporter.GetReport();
-                    if (!string.IsNullOrWhiteSpace(report))
-                        Log(lastProvider, LogLevel.Information, $"  Report: {report}");
+                    context.Logger.LogInformation("[Begin] Initializing component");
+
+                    string report;
+                    try
+                    {
+                        report = await step.ExecuteAsync(context);
+                    }
+                    catch (Exception stepEx)
+                    {
+                        context.Logger.LogCritical(stepEx, "[FATAL] Initialization failed.");
+                        return BootstrapResult.Failure(stepEx, BootstrapExitCode.GeneralError, context);
+                    }
+
+                    // Logge Complete MIT dem Bericht aus dem Step
+                    context.Logger.LogInformation("[Complete] {Report}", report);
                 }
-
-                Log(lastProvider, LogLevel.Information, $" Started  step {step.GetType().Name}");
             }
+            
+            // Wir übergeben die Factory (die wir mühsam aufgebaut haben) an den Container
+            context.Services.AddSingleton<ILoggerFactory>(context.LoggerFactory);
+            
+            // Wir ermöglichen ILogger<T> Injection in der fertigen App
+            context.Services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
-            var provider = services.BuildServiceProvider(validateScopes: true);
+            context.Logger.LogInformation("=== Bootstrapper Completed ===");
 
-            CurrentLevel = barrier.TargetLevel;
-            Log(provider, LogLevel.Information, $"Started  barrier {barrier.GetType().Name} (CurrentLevel={CurrentLevel})");
-
-            if (lastProvider is not null)
-            {
-                await lastProvider.DisposeAsync().ConfigureAwait(false);
-            }
-            lastProvider = provider;
+            return BootstrapResult.Success(context.Services.BuildServiceProvider(), context);
         }
-
-        var finalProvider = lastProvider ?? new ServiceCollection().BuildServiceProvider(validateScopes: true);
-        Log(finalProvider, LogLevel.Information, $"Bootstrap finished. CurrentLevel={CurrentLevel}");
-
-        return finalProvider;
+        catch (Exception globalEx)
+        {
+            return BootstrapResult.Failure(globalEx, BootstrapExitCode.GeneralError, context);
+        }
     }
 }

@@ -1,17 +1,21 @@
-// C#
-
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace Skynet.Core.Bootstrap;
 
+/// <summary>
+/// Repräsentiert einen einzelnen Schritt im Initialisierungsprozess.
+/// </summary>
 public interface IBootStep
 {
-    // Ab welchem Level darf dieser Schritt ausgeführt werden (z. B. Bootstrap)?
-    RuntimeLevel MinLevel { get; }
+    /// <summary>
+    /// Der lesbare Name der Komponente (z.B. "Initialize Logging").
+    /// </summary>
+    string Name { get; }
 
-    // Welchen Ziel-Level erreicht man nach erfolgreichem Schritt (z. B. Core)?
-    RuntimeLevel TargetLevel { get; }
-
-    // Führt die Registrierung/Initialisierung aus (kann Services hinzufügen oder starten).
-    Task ExecuteAsync(IServiceCollection services, CancellationToken ct);
+    /// <summary>
+    /// Führt die Logik aus.
+    /// </summary>
+    /// <param name="context">Der Bootstrap Context.</param>
+    /// <returns>Einen Status-Bericht (String), der nach Erfolg geloggt wird (z.B. "LogPath: /tmp/logs").</returns>
+    Task<string> ExecuteAsync(BootstrapContext context);
 }
