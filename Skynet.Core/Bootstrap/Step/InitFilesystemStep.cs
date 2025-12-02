@@ -57,8 +57,9 @@ public class InitFilesystemStep : IBootStep
             EnsureDirectory(dir, context);
         }
 
-        TouchFile(Path.Combine(basePath, "bootstrap.log"));
-        TouchFile(Path.Combine(basePath, "bootstrap.cfg"));
+        // Teste Schreibrechte für Dateien im Root, aber hinterlasse keinen Müll
+        EnsureWritable(Path.Combine(basePath, "bootstrap.pid"));
+        EnsureFileExists(Path.Combine(basePath, "bootstrap.cfg"));
 
         // --- ÄNDERUNG: Direkter Zugriff auf das Dictionary ---
         context.Items["Path:Root"] = basePath;
@@ -88,8 +89,41 @@ public class InitFilesystemStep : IBootStep
         }
     }
 
-    private void TouchFile(string path)
+    // Umbenannt und Logik angepasst: Prüfen & Aufräumen
+    private void EnsureFileExists(string path)
     {
-        if (!File.Exists(path)) File.WriteAllText(path, string.Empty);
+        // Wenn die Datei schon existiert, gehen wir davon aus, dass sie okay ist (oder wir fassen sie nicht an)
+        if (File.Exists(path)) return;
+
+        try
+        {
+            // Erstellen
+            File.WriteAllText(path, string.Empty);
+            // Und sofort wieder löschen, damit der echte Logger ein frisches File erstellen kann
+            File.Delete(path);
+        }
+        catch (Exception ex)
+        {
+             throw new UnauthorizedAccessException($"Access denied for file '{path}'.", ex);
+        }
+    }
+    
+    private void EnsureWritable(string path)
+    {
+        try
+        {
+            // Falls eine alte PID/Lock-Datei da ist -> weg damit
+            if (File.Exists(path)) File.Delete(path);
+
+            // Schreib-Test
+            File.WriteAllText(path, "init_check");
+                
+            // Aufräumen
+            File.Delete(path);
+        }
+        catch (Exception ex)
+        {
+            throw new UnauthorizedAccessException($"Write check failed for '{path}'. Check filesystem permissions.", ex);
+        }
     }
 }

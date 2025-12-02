@@ -10,13 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/EnableFileLoggingBootstrapStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/BootstrapLogger.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/BootstrapLoggerProvider.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleFileLogSink.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/IFileRetentionPolicy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/BasicFileRetentionPolicy.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/BootstrapContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/InitFilesystemStep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/InitFilesystemStep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleFileLogSink.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleFileLogSink.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +50,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/53428d95742549e8968df3e76ebd1d7de8e928/_cc311/IAsyncDisposable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8bfc57955751d07e3fad13bb97d5f66af412d7a34486ec29ad916547ec8ce6b/Path.Windows.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1ff12748f9cf237ee59518603564fda4aeff2655358e148a39e284766c2b2/ILoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
@@ -80,7 +80,10 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/LocalizationOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ValidatedLocalizationStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/FileRetentionPolicy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/BasicFileRetentionPolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/BootstrapLoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/BootstrapRotationPolicy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/LoggerProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Logging/Internal/SimpleFileLogSink.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/Converter/ICsvToDomainConverter.cs" root0="FORCE_HIGHLIGHTING" />
@@ -258,7 +261,7 @@
       <workItem from="1764241621108" duration="201000" />
       <workItem from="1764242307926" duration="6317000" />
       <workItem from="1764656354162" duration="342000" />
-      <workItem from="1764656787867" duration="3295000" />
+      <workItem from="1764656787867" duration="9167000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -356,7 +359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764248611748</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Bootstrap filelogger">
+      <option name="closed" value="true" />
+      <created>1764660212497</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1764660212497</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -378,7 +389,8 @@
     <MESSAGE value="Remove Skynet.Core bootstrap implementations and related tests&#10;&#10;- Deleted the entire Skynet.Core bootstrap directory, including classes like `App`, `BarrierBootStep`, `BootstrapClockStep`, `BootstrapConfigStep`, and others.&#10;- Removed associated logging, lifecycle, configuration, and cryptographic service registration steps.&#10;- Deleted all bootstrap-related test cases, including `BootstrapClockStepDiTests`.&#10;- Updated Skynet.Core to remove dependencies on bootstrap-related components." />
     <MESSAGE value="Introduce and integrate modular bootstrapping steps in Skynet.Core&#10;&#10;- Added `InitFilesystemStep`, `InitTimeServicesStep`, and `RegisterCryptoServicesStep` to reintroduce modular bootstrapping functionality.&#10;- Refactored `SkynetDefaultPipeline` to utilize new bootstrapping steps for streamlined initialization.&#10;- Adjusted IntelliJ workspace settings to reflect the new bootstrapping structure." />
     <MESSAGE value="Add LoggingClient and LoggingServer services with configurability for enrichment and redaction policies&#10;&#10;- Introduced `LoggingClientService` and `LoggingServerService` to manage the lifecycle of logging components.&#10;- Added optional dependencies (`enrichers`, `redactionPolicy`, `sizeLimiter`) to `LoggingClient` for enhanced flexibility.&#10;- Updated `LoggingClientTests` to reflect new optional parameters and verify consistent functionality.&#10;- Addressed potential memory leaks in `LoggingServer` by replacing `ConcurrentBag` with `ConcurrentDictionary` for reader tasks.&#10;- Adjusted IntelliJ workspace and metadata to integrate logging-related changes seamlessly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add LoggingClient and LoggingServer services with configurability for enrichment and redaction policies&#10;&#10;- Introduced `LoggingClientService` and `LoggingServerService` to manage the lifecycle of logging components.&#10;- Added optional dependencies (`enrichers`, `redactionPolicy`, `sizeLimiter`) to `LoggingClient` for enhanced flexibility.&#10;- Updated `LoggingClientTests` to reflect new optional parameters and verify consistent functionality.&#10;- Addressed potential memory leaks in `LoggingServer` by replacing `ConcurrentBag` with `ConcurrentDictionary` for reader tasks.&#10;- Adjusted IntelliJ workspace and metadata to integrate logging-related changes seamlessly." />
+    <MESSAGE value="Bootstrap filelogger" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bootstrap filelogger" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

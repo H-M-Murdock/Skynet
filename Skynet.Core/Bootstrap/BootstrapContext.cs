@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Skynet.Core.Logging;
+using Skynet.Core.Time;
 
 namespace Skynet.Core.Bootstrap;
 
@@ -11,7 +12,6 @@ public sealed class BootstrapContext : IAsyncDisposable
     
     public ILoggerFactory LoggerFactory { get; private set; }
     public ILogger Logger { get; private set; }
-    
     // Wir merken uns die Sink, um sie am Ende sauber zu disposen
     private ILogSink? _currentSink;
 
@@ -34,23 +34,39 @@ public sealed class BootstrapContext : IAsyncDisposable
             return;
         }
 
-        var logPath = Path.Combine(rootPath, "bootstrap.log");
-        
-        // Formatter und Sink manuell erstellen (kein DI vorhanden)
-        var formatter = new SimpleLineLogTextFormatter(useUtcTimestamps: true, includeState: true);
-        var fileSink = new SimpleFileSink(logPath, formatter);
-        
-        // Sink merken für Dispose
-        _currentSink = fileSink;
-
-        // Upgrade durchführen
-        UpgradeLogging(builder =>
+        try 
         {
-            // Wir fügen unseren eigenen Provider hinzu
-            builder.AddProvider(new BootstrapLoggerProvider(fileSink));
-        });
-        
-        Logger.LogInformation($"Switched logging to file: {logPath}");
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMdd");
+            var logFileName  = Path.Combine(rootPath, $"bootstrap.{timestamp}.log");
+
+            var retention = new BasicRetentionPolicy(maxFiles: 5);
+
+            var formatter = new SimpleLineLogTextFormatter(useUtcTimestamps: true, includeState: true);
+            
+            // Der Sink schreibt in targetFile und räumt im rootPath auf, basierend auf dem Pattern
+            var fileSink = new SimpleFileSink(
+                targetFilePath: logFileName,
+                retentionRootPath: rootPath,
+                retentionSearchPattern: "bootstrap*.log",
+                formatter: formatter,
+                retentionPolicy: retention
+            );
+            
+            // 5. Start (triggert Retention)
+            fileSink.StartAsync(CancellationToken.None).Wait();
+            _currentSink = fileSink;
+
+            UpgradeLogging(builder =>
+            {
+                builder.AddProvider(new BootstrapLoggerProvider(fileSink));
+            });
+
+            Logger.LogInformation($"Switched logging to file: {logFileName}");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to initialize file logging.");
+        }
     }
 
     public void UpgradeLogging(Action<ILoggingBuilder> configure)
