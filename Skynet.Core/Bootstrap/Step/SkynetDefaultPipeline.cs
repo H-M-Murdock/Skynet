@@ -10,7 +10,10 @@ internal static class SkynetDefaultPipeline
     {
         bootstrapper.AddStep(new InitTimeServicesStep());
         bootstrapper.AddStep(new RegisterCryptoServicesStep());
+        
         bootstrapper.AddStep(new InitFilesystemStep()); 
+        bootstrapper.AddStep(new EnableBootstrapLoggingStep());
+        
         bootstrapper.AddStep(new RegisterLoggingStackStep());
     }
 }
