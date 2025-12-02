@@ -40,7 +40,7 @@ public sealed class ResourceLocator : IResourceLocator
         ArgumentNullException.ThrowIfNull(providers);
         _readProviders = [..providers.OrderBy(p => p.Priority)];
         _writeProviders = writers is null ? ImmutableArray<IResourceWriter>.Empty : [..writers];
-        _tenantContext = tenantContext ?? ProgramTenantContext.Instance;
+        _tenantContext = tenantContext ?? GlobalTenantContext.Instance;
         _cultureScopeFactory = cultureScopeFactory;
     }
 

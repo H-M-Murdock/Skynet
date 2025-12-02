@@ -13,7 +13,7 @@ using System.Globalization;
 /// </para>
 /// Die ID ist <see cref="TenantId.Empty"/> (0000...).
 /// </summary>
-public sealed class ProgramTenantContext : ITenantContext
+public sealed class GlobalTenantContext : ITenantContext
 {
     public TenantId CurrentTenantId { get; }
     public IReadOnlyList<TenantId> ResolutionChain { get; }
@@ -25,9 +25,9 @@ public sealed class ProgramTenantContext : ITenantContext
     /// <summary>
     /// Die Singleton-Instanz des System-Kontexts.
     /// </summary>
-    public static ProgramTenantContext Instance { get; } = new ProgramTenantContext();
+    public static GlobalTenantContext Instance { get; } = new GlobalTenantContext();
 
-    private ProgramTenantContext()
+    private GlobalTenantContext()
     {
         // Nutzung von TenantId.Empty statt einer zufälligen Magic-GUID
         CurrentTenantId = TenantId.Empty;
@@ -40,6 +40,6 @@ public sealed class ProgramTenantContext : ITenantContext
         ParentTenantId = null;
 
         // Die Chain enthält nur sich selbst, da System keinen Parent hat.
-        ResolutionChain = ImmutableArray.Create(CurrentTenantId);
+        ResolutionChain = [CurrentTenantId];
     }
 }
