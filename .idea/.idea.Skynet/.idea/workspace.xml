@@ -10,10 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterLocalizationServicesStep.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Localization/Internal/DefaultLocalizationChangeNotifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Configuration/IConfigProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Skynet.Core.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterLicensingServicesStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseServerPublicKeyOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,11 +59,13 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/LoggingServerService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterCryptoServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterI18nServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterLicensingServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterLocalizationServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterLoggingStackStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterResourceProviderStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterTenantServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Licensing/Internal/LicenseServerPublicKeyOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/ApplicationBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureCatalog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Localization/CultureMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
@@ -254,7 +256,7 @@
       <workItem from="1764227928161" duration="13011000" />
       <workItem from="1764241621108" duration="201000" />
       <workItem from="1764242307926" duration="6174000" />
-      <workItem from="1764683320739" duration="7181000" />
+      <workItem from="1764683320739" duration="7553000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -368,7 +370,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764690254246</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Localisierungs featrue">
+      <option name="closed" value="true" />
+      <created>1764690561768</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1764690561768</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -392,7 +402,8 @@
     <MESSAGE value="Bootstrp TenantContext" />
     <MESSAGE value="ResourceProvider" />
     <MESSAGE value="i18n feature" />
-    <option name="LAST_COMMIT_MESSAGE" value="i18n feature" />
+    <MESSAGE value="Localisierungs featrue" />
+    <option name="LAST_COMMIT_MESSAGE" value="Localisierungs featrue" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
