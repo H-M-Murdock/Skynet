@@ -1,7 +1,3 @@
-// Skynet.Core.Materialization/IResourceMaterializer.cs
-
-using Skynet.Core.Tenant;
-
 namespace Skynet.Core.ResourceProvider;
 
 /// <summary>
@@ -10,8 +6,6 @@ namespace Skynet.Core.ResourceProvider;
 /// </summary>
 public interface IResourceMaterializer
 {
-    // --- READ (Tenant implizit via ITenantContextAccessor.Current) ---
-
     /// <summary>
     /// Versucht, eine Ressource abzurufen und in Typ T zu wandeln.
     /// Gibt (true, value) bei Erfolg zurück, oder (false, default) bei NotFound/Fehler.
