@@ -19,7 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Configuration\" />
       <Folder Include="i18n\Internal\" />
       <Folder Include="Licensing\Internal\" />
       <Folder Include="ResourceProvider\Materializer\Converter\" />
