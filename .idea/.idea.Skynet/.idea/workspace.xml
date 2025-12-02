@@ -10,10 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e1d3ef9-6651-4c0c-b2c7-215d9fb9769e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterResourceProviderStep.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Skynet/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterI18nServicesStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultLocalizationContextAccessor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultLocalizationService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTemplateLookupService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTenantScopeFormatter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/SkynetDefaultPipeline.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Skynet.Core/ResourceProvider/Materializer/IResourceMaterializer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +60,7 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/LoggingClientService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/LoggingServerService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterCryptoServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterI18nServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterLoggingStackStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterResourceProviderStep.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Bootstrap/Step/RegisterTenantServicesStep.cs" root0="FORCE_HIGHLIGHTING" />
@@ -113,6 +116,10 @@
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/FrozenClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/IClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Core/Time/SystemClock.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultLocalizationContextAccessor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultLocalizationService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTemplateLookupService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Skynet.Core/i18n/Internal/DefaultTenantScopeFormatter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseGrant/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.LicenseRequest/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Skynet.Tests/Time/ClockTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -248,7 +255,7 @@
       <workItem from="1764227928161" duration="13011000" />
       <workItem from="1764241621108" duration="201000" />
       <workItem from="1764242307926" duration="6174000" />
-      <workItem from="1764683320739" duration="6157000" />
+      <workItem from="1764683320739" duration="6792000" />
     </task>
     <task id="LOCAL-00001" summary="Add Projekts">
       <option name="closed" value="true" />
@@ -346,7 +353,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764687101185</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="ResourceProvider">
+      <option name="closed" value="true" />
+      <created>1764689590370</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1764689590370</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -368,7 +383,8 @@
     <MESSAGE value="Remove Skynet.Core bootstrap implementations and related tests&#10;&#10;- Deleted the entire Skynet.Core bootstrap directory, including classes like `App`, `BarrierBootStep`, `BootstrapClockStep`, `BootstrapConfigStep`, and others.&#10;- Removed associated logging, lifecycle, configuration, and cryptographic service registration steps.&#10;- Deleted all bootstrap-related test cases, including `BootstrapClockStepDiTests`.&#10;- Updated Skynet.Core to remove dependencies on bootstrap-related components." />
     <MESSAGE value="Introduce and integrate modular bootstrapping steps in Skynet.Core&#10;&#10;- Added `InitFilesystemStep`, `InitTimeServicesStep`, and `RegisterCryptoServicesStep` to reintroduce modular bootstrapping functionality.&#10;- Refactored `SkynetDefaultPipeline` to utilize new bootstrapping steps for streamlined initialization.&#10;- Adjusted IntelliJ workspace settings to reflect the new bootstrapping structure." />
     <MESSAGE value="Bootstrp TenantContext" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bootstrp TenantContext" />
+    <MESSAGE value="ResourceProvider" />
+    <option name="LAST_COMMIT_MESSAGE" value="ResourceProvider" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

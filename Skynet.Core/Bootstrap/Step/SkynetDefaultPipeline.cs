@@ -17,6 +17,8 @@ internal static class SkynetDefaultPipeline
         bootstrapper.AddStep(new RegisterResourceProviderStep());
         bootstrapper.AddStep(new RegisterTenantServicesStep());
         
+        bootstrapper.AddStep(new RegisterI18NServicesStep());
+        
         bootstrapper.AddStep(new RegisterLoggingStackStep());
     }
 }
